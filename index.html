@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Alex.Studio — Montage Vidéo & Stratégie de contenu pour créateurs et entrepreneurs.">
+  <title>Alex.Studio</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fffcf2;
+      --text: #252422;
+      --muted: #403d39;
+      --line: #ccc5b9;
+      --dark: #252422;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: 64px; padding: 0 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.5s var(--ease), border-color 0.5s var(--ease);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.scrolled {
+      background: rgba(255,252,242,0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom-color: var(--line);
+    }
+    .nav-wordmark {
+      font-size: 17px; font-weight: 600; letter-spacing: -0.04em;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { font-size: 15px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero-wrapper { height: 180vh; position: relative; }
+    .hero {
+      position: sticky; top: 0; height: 100vh;
+      overflow: hidden; display: grid; place-items: center;
+    }
+    .hero-text {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center; width: 100%; padding: 0 48px;
+      will-change: transform, opacity;
+      z-index: 2;
+    }
+    .hero-headline {
+      font-size: clamp(36px, 5.5vw, 80px);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 1.06;
+      color: var(--text); margin-bottom: 20px;
+    }
+    .hero-headline .word {
+      display: inline-block; opacity: 0;
+      transform: translateY(20px); filter: blur(4px);
+      transition: opacity 700ms var(--ease), transform 700ms var(--ease), filter 700ms var(--ease);
+    }
+    .hero-headline .word.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .hero-subline {
+      font-size: 18px; color: var(--muted); letter-spacing: -0.01em;
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+    }
+    .hero-subline.visible { opacity: 1; transform: translateY(0); }
+    .hero-vsl {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.83);
+      width: min(820px, 88vw); aspect-ratio: 16/9;
+      border-radius: 20px; overflow: hidden;
+      opacity: 0; filter: blur(16px);
+      will-change: transform, opacity, filter;
+      z-index: 1;
+      box-shadow: 0 32px 80px rgba(37,36,34,0.32), 0 8px 24px rgba(37,36,34,0.18);
+    }
+    .vsl-inner {
+      width: 100%; height: 100%;
+      background: linear-gradient(145deg, #1c1a18 0%, #252422 60%, #1a1917 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .vsl-play-btn {
+      width: 80px; height: 80px; border-radius: 999px;
+      border: 1.5px solid rgba(255,252,242,0.75);
+      backdrop-filter: blur(4px); display: flex;
+      align-items: center; justify-content: center;
+      cursor: pointer; background: transparent;
+      transition: transform 0.35s var(--ease), background 0.3s;
+    }
+    .vsl-play-btn:hover { transform: scale(1.1); background: rgba(255,252,242,0.08); }
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); opacity: 1; transition: opacity 0.4s;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .scroll-hint::after {
+      content: ''; display: block; width: 1px; height: 32px;
+      background: var(--muted); opacity: 0.4;
+      animation: scrollline 1.6s var(--ease) infinite;
+    }
+    @keyframes scrollline {
+      0%, 100% { transform: scaleY(1); opacity: 0.4; }
+      50% { transform: scaleY(0.4); opacity: 0.1; }
+    }
+    .scroll-hint.hidden { opacity: 0; pointer-events: none; }
+
+    /* ─── AVIS ─── */
+    .avis-section { padding: 80px 0 100px; }
+    .avis-header { max-width: 1200px; margin: 0 auto; padding: 0 48px 52px; }
+    .avis-slider {
+      position: relative;
+      overflow-x: clip;   /* clip horizontal seulement — laisse l'ombre verticale visible */
+      overflow-y: visible;
+      user-select: none;
+      padding: 8px 0 32px;
+    }
+    .avis-fade-l, .avis-fade-r {
+      position: absolute; top: 0; bottom: 0; width: 180px;
+      z-index: 2; pointer-events: none;
+    }
+    .avis-fade-l { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+    .avis-fade-r { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+    .avis-track {
+      display: flex; gap: 32px; width: max-content; padding: 12px 0;
+      will-change: transform;
+    }
+    .avis-card {
+      width: 280px; flex-shrink: 0;
+      border: 1px solid var(--line); border-radius: 24px;
+      padding: 36px 28px 30px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      box-shadow: 0 12px 48px rgba(37,36,34,0.22), 0 3px 12px rgba(37,36,34,0.12);
+      transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+      background: var(--bg);
+    }
+    .avis-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(37,36,34,0.12), 0 4px 12px rgba(37,36,34,0.06); }
+    .avis-photo {
+      width: 110px; height: 110px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+      border: 2px solid var(--line);
+      margin-bottom: 20px;
+      box-shadow: 0 8px 28px rgba(37,36,34,0.16);
+    }
+    .avis-stars { font-size: 20px; color: #f0b429; letter-spacing: 3px; margin-bottom: 16px; line-height: 1; }
+    .avis-name { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 5px; }
+    .avis-role { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ─── COMMON SECTION ─── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 100px 48px; }
+    .section-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+    .section-h2 { font-size: clamp(28px, 3.8vw, 52px); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 14px; }
+    .section-lead { font-size: 18px; color: var(--muted); line-height: 1.65; max-width: 520px; margin-bottom: 60px; }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease), transform 700ms var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 80ms; }
+    .d2 { transition-delay: 160ms; }
+    .d3 { transition-delay: 240ms; }
+
+    /* ─── APPROCHE ─── */
+    .approche-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .service-card {
+      border: 1px solid var(--line); border-radius: 22px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(37,36,34,0.06), 0 1px 4px rgba(37,36,34,0.03);
+      transition: transform 0.55s var(--ease), box-shadow 0.55s var(--ease);
+    }
+    .service-card:hover { transform: translateY(-5px); box-shadow: 0 24px 64px rgba(37,36,34,0.11), 0 4px 16px rgba(37,36,34,0.06); }
+    .card-visual {
+      height: 280px; background: #1a1917; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* dot grid overlay */
+    .card-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(204,197,185,0.18) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    /* counter display */
+    .ctr-wrap { position: relative; z-index: 1; text-align: center; }
+    .ctr-num {
+      font-size: clamp(72px, 9vw, 96px); font-weight: 800;
+      letter-spacing: -0.05em; line-height: 1;
+      color: #ef4444; font-variant-numeric: tabular-nums;
+    }
+    .ctr-label {
+      font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,252,242,0.45); margin-top: 12px;
+    }
+    .card-content { padding: 32px; }
+    .card-num { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .card-title { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 14px; }
+    .card-desc { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+    .card-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .card-list li { font-size: 14px; color: var(--muted); }
+    .card-list li::before { content: "— "; }
+
+    /* ─── RÉALISATIONS ─── */
+    .reals-row2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .reals-row4 { display: grid; grid-template-columns: repeat(2, 280px); gap: 16px; margin-top: 48px; justify-content: center; }
+    .rc {
+      border-radius: 16px; overflow: hidden; cursor: pointer;
+      opacity: 0; transform: translateY(22px) scale(0.97);
+      transition: opacity 700ms var(--ease), transform 700ms var(--ease), box-shadow 0.4s var(--ease);
+      box-shadow: 0 6px 28px rgba(37,36,34,0.1), 0 2px 8px rgba(37,36,34,0.06);
+    }
+    .rc.visible { opacity: 1; transform: none; }
+    .rc:hover { box-shadow: 0 20px 56px rgba(37,36,34,0.16), 0 4px 16px rgba(37,36,34,0.08); }
+    .rc-media {
+      background: linear-gradient(150deg, #1d1b19, #252422, #1a1917);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .rc-media video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; pointer-events: none;
+    }
+    .rc-media--land { aspect-ratio: 16/9; }
+    .rc-media--port { aspect-ratio: 9/16; }
+    /* fullscreen : fond noir, vidéo centrée à son ratio naturel */
+    .rc-media:fullscreen,
+    .rc-media:-webkit-full-screen {
+      background: #000 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      aspect-ratio: unset !important;
+    }
+    .rc-media:fullscreen video,
+    .rc-media:-webkit-full-screen video {
+      position: static !important;
+      width: auto !important;
+      height: auto !important;
+      max-width: 100vw !important;
+      max-height: 100vh !important;
+      object-fit: contain !important;
+      pointer-events: auto !important;
+    }
+    .rc-media:fullscreen .rc-vol,
+    .rc-media:-webkit-full-screen .rc-vol {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    /* contrôle volume */
+    .rc-vol {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+      padding: 24px 14px 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+      display: flex; align-items: center; gap: 8px;
+      opacity: 0; transition: opacity 0.25s; pointer-events: none;
+    }
+    .rc:hover .rc-vol { opacity: 1; pointer-events: auto; }
+    .rc-vol-btn {
+      background: none; border: none; cursor: pointer; padding: 2px; flex-shrink: 0;
+      color: rgba(255,252,242,0.9); display: flex; align-items: center;
+    }
+    .rc-vol-btn svg { display: block; }
+    .rc-vol-range {
+      -webkit-appearance: none; appearance: none;
+      flex: 1; height: 3px; border-radius: 2px; outline: none; cursor: pointer;
+      background: rgba(255,252,242,0.3);
+    }
+    .rc-vol-range::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 13px; height: 13px;
+      border-radius: 50%; background: rgba(255,252,242,0.95); cursor: pointer;
+    }
+    .rc-vol-range::-moz-range-thumb {
+      width: 13px; height: 13px; border: none;
+      border-radius: 50%; background: rgba(255,252,242,0.95); cursor: pointer;
+    }
+    .rc-overlay {
+      position: relative; z-index: 1;
+      display: flex; gap: 12px; align-items: center;
+      opacity: 0; transition: opacity 0.25s, transform 0.3s var(--ease);
+      transform: translateY(4px);
+    }
+    .rc:hover .rc-overlay { opacity: 1; transform: translateY(0); }
+    .rc-play-btn, .rc-fs-btn {
+      width: 50px; height: 50px; border-radius: 50%;
+      border: 1.5px solid rgba(255,252,242,0.55);
+      background: rgba(0,0,0,0.18); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s var(--ease), background 0.2s;
+      flex-shrink: 0;
+    }
+    .rc-play-btn:hover, .rc-fs-btn:hover { background: rgba(0,0,0,0.35); transform: scale(1.1); }
+    .rc-media:fullscreen .rc-overlay,
+    .rc-media:-webkit-full-screen .rc-overlay { display: none !important; }
+    .rc-info {
+      padding: 14px 16px 18px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .rc-format { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .rc-title { font-size: 14px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 3px; }
+    .rc-meta { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+
+    /* ─── BUTTON ─── */
+    .btn-pill {
+      display: inline-flex; align-items: center;
+      padding: 9px 22px; background: var(--text); color: var(--bg);
+      border-radius: 999px; font-family: inherit; font-size: 14px;
+      font-weight: 500; text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.3s var(--ease), opacity 0.3s; letter-spacing: -0.01em;
+    }
+    .btn-pill:hover { transform: scale(0.96); opacity: 0.82; }
+
+    /* ─── CONTACT ─── */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; margin-top: 60px; }
+    .contact-form { display: flex; flex-direction: column; gap: 32px; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .form-group input, .form-group textarea {
+      width: 100%; background: transparent; border: none;
+      border-bottom: 1px solid var(--line); padding: 10px 0;
+      font-family: inherit; font-size: 15px; color: var(--text);
+      outline: none; transition: border-color 0.3s var(--ease);
+      resize: none; -webkit-appearance: none;
+    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(64,61,57,0.4); }
+    .form-group textarea { min-height: 96px; line-height: 1.6; }
+    .form-group input:focus, .form-group textarea:focus { border-bottom-color: var(--text); }
+    .calendly-wrapper { border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      border-top: 1px solid var(--line); padding: 28px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copy { font-size: 14px; color: var(--muted); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 960px) {
+      .nav { padding: 0 24px; }
+      .nav-links { gap: 20px; }
+      .container { padding: 80px 24px; }
+      .hero-text { padding: 0 24px; }
+      .approche-grid { grid-template-columns: 1fr; }
+      .reals-row2 { grid-template-columns: 1fr; }
+      .reals-row4 { grid-template-columns: repeat(2, 1fr) !important; }
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .footer { padding: 24px; flex-direction: column; gap: 16px; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero-wrapper { height: 130vh; }
+      .hero-vsl { width: 92vw; }
+      .container { padding: 56px 20px; }
+      .avis-section { padding: 48px 0 60px; }
+      .avis-header { padding: 0 20px 36px; }
+      .reals-row4 { grid-template-columns: 1fr; }
+      .avis-card { width: 190px; padding: 24px 16px 18px; }
+      .avis-photo { width: 76px; height: 76px; }
+    }
+
+    /* ─── REDUCED MOTION ─── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      .hero-headline .word { opacity: 1 !important; transform: none !important; filter: none !important; }
+      .hero-subline { opacity: 1 !important; transform: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .rc { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="nav" id="nav" aria-label="Navigation principale">
+  <a href="#" class="nav-wordmark">Alex.Studio</a>
+  <ul class="nav-links" role="list">
+    <li><a href="#approche">Approche</a></li>
+    <li><a href="#projets">Projets</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero-wrapper" id="heroWrapper">
+  <section class="hero" aria-label="Introduction">
+    <div class="hero-text" id="heroText">
+      <h1 class="hero-headline" id="heroHeadline">Construis ta marque. Convertis ton audience.</h1>
+      <p class="hero-subline" id="heroSubline">Montage Vidéo &amp; Stratégie de contenu</p>
+    </div>
+    <div class="hero-vsl" id="heroVSL" aria-hidden="true">
+      <div class="vsl-inner">
+        <button class="vsl-play-btn" aria-label="Regarder la vidéo de présentation">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="scroll-hint" id="scrollHint" aria-hidden="true">Scroll</div>
+  </section>
+</div>
+
+<!-- ─── AVIS ─── -->
+<section class="avis-section" aria-label="Témoignages clients">
+  <div class="avis-header">
+    <h2 class="section-h2 reveal">Ils m'ont fait confiance.</h2>
+  </div>
+  <div class="avis-slider">
+    <div class="avis-fade-l" aria-hidden="true"></div>
+    <div class="avis-fade-r" aria-hidden="true"></div>
+    <div class="avis-track" id="avisTrack" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ─── APPROCHE ─── -->
+<section id="approche" aria-label="Approche">
+  <div class="container">
+    <p class="section-label reveal">Approche</p>
+    <h2 class="section-h2 reveal d1">Poster ne suffit pas.</h2>
+    <p class="section-lead reveal d2">Ce qui convertit, c'est un positionnement clair, un contenu cohérent, et un montage qui retient l'attention.</p>
+
+    <div class="approche-grid" id="approcheGrid">
+
+      <!-- Card 01 -->
+      <article class="service-card reveal d1">
+        <div class="card-visual">
+          <div class="ctr-wrap">
+            <div class="ctr-num" id="counterLeads">0</div>
+            <div class="ctr-label">leads générés / mois</div>
+          </div>
+        </div>
+        <div class="card-content">
+          <p class="card-num">01</p>
+          <h3 class="card-title">Stratégie de contenu</h3>
+          <p class="card-desc">Positionnement, ligne éditoriale, piliers de contenu. On construit le système qui transforme ta présence en canal d'acquisition.</p>
+          <ul class="card-list">
+            <li>Audit &amp; diagnostic stratégique</li>
+            <li>Positionnement &amp; personal brand</li>
+            <li>Plan éditorial 90 jours</li>
+            <li>Système de conversion intégré</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Card 02 -->
+      <article class="service-card reveal d2">
+        <div class="card-visual">
+          <div class="ctr-wrap">
+            <div class="ctr-num" id="counterViews">0</div>
+            <div class="ctr-label">vues organiques / mois</div>
+          </div>
+        </div>
+        <div class="card-content">
+          <p class="card-num">02</p>
+          <h3 class="card-title">Montage</h3>
+          <p class="card-desc">Chaque vidéo pensée pour capter l'attention, transmettre ton message et déclencher l'action.</p>
+          <ul class="card-list">
+            <li>Vidéo Longue</li>
+            <li>Reels</li>
+            <li>Podcast</li>
+            <li>VSL</li>
+            <li>Ads</li>
+            <li>Repurposing</li>
+          </ul>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── RÉALISATIONS ─── -->
+<section id="projets" aria-label="Réalisations">
+  <div class="container" style="padding-bottom:0;">
+    <p class="section-label reveal">Réalisations</p>
+    <h2 class="section-h2 reveal d1">Mes derniers projets.</h2>
+    <p class="section-lead reveal d2">Deux formats, une même obsession : capter l'attention et convertir.</p>
+  </div>
+
+  <div class="container" style="padding-top:40px;" id="realsGrid">
+
+    <!-- 2 landscape videos -->
+    <div class="reals-row2">
+
+      <div class="rc">
+        <div class="rc-media rc-media--land">
+          <video src="clients/VSL%20Cl%C3%A9mentGeynet.mp4" muted loop playsinline preload="none"></video>
+          <div class="rc-overlay">
+            <button class="rc-play-btn" title="Lecture / Pause">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
+              </svg>
+            </button>
+            <button class="rc-fs-btn" title="Plein écran">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="rc-vol">
+            <button class="rc-vol-btn" title="Muet / Son">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
+                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
+          </div>
+        </div>
+        <div class="rc-info">
+          <p class="rc-format">VSL</p>
+          <h4 class="rc-title">Clément Geynet</h4>
+          <p class="rc-meta">2025</p>
+          <button class="btn-pill">Regarder</button>
+        </div>
+      </div>
+
+      <div class="rc">
+        <div class="rc-media rc-media--land">
+          <video src="clients/Intro1.mp4" muted loop playsinline preload="none"></video>
+          <div class="rc-overlay">
+            <button class="rc-play-btn" title="Lecture / Pause">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
+              </svg>
+            </button>
+            <button class="rc-fs-btn" title="Plein écran">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="rc-vol">
+            <button class="rc-vol-btn" title="Muet / Son">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
+                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
+          </div>
+        </div>
+        <div class="rc-info">
+          <p class="rc-format">YouTube · Intro Podcast</p>
+          <h4 class="rc-title">Mathéo Vidal</h4>
+          <p class="rc-meta">2025</p>
+          <button class="btn-pill">Regarder</button>
+        </div>
+      </div>
+
+      <div class="rc">
+        <div class="rc-media rc-media--land">
+          <video src="clients/Tunnel%20de%20vente%20WA.mp4" muted loop playsinline preload="none"></video>
+          <div class="rc-overlay">
+            <button class="rc-play-btn" title="Lecture / Pause">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
+              </svg>
+            </button>
+            <button class="rc-fs-btn" title="Plein écran">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="rc-vol">
+            <button class="rc-vol-btn" title="Muet / Son">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
+                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
+          </div>
+        </div>
+        <div class="rc-info">
+          <p class="rc-format">Vidéo tunnel de vente</p>
+          <h4 class="rc-title">Clément Geynet</h4>
+          <p class="rc-meta">2025</p>
+          <button class="btn-pill">Regarder</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2 portrait vertical videos -->
+    <div class="reals-row4">
+
+      <div class="rc">
+        <div class="rc-media rc-media--port">
+          <video src="clients/Reel3.mp4" muted loop playsinline preload="none"></video>
+          <div class="rc-overlay">
+            <button class="rc-play-btn" title="Lecture / Pause">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
+              </svg>
+            </button>
+            <button class="rc-fs-btn" title="Plein écran">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="rc-vol">
+            <button class="rc-vol-btn" title="Muet / Son">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
+                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
+          </div>
+        </div>
+        <div class="rc-info">
+          <p class="rc-format">Instagram · Reel</p>
+          <h4 class="rc-title">Mathéo Vidal</h4>
+          <p class="rc-meta">2025</p>
+          <button class="btn-pill">Regarder</button>
+        </div>
+      </div>
+
+      <div class="rc">
+        <div class="rc-media rc-media--port">
+          <video src="clients/Ads2%201080.mp4" muted loop playsinline preload="none"></video>
+          <div class="rc-overlay">
+            <button class="rc-play-btn" title="Lecture / Pause">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
+              </svg>
+            </button>
+            <button class="rc-fs-btn" title="Plein écran">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="rc-vol">
+            <button class="rc-vol-btn" title="Muet / Son">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
+                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
+          </div>
+        </div>
+        <div class="rc-info">
+          <p class="rc-format">Meta Ads</p>
+          <h4 class="rc-title">Clément Geynet</h4>
+          <p class="rc-meta">2025</p>
+          <button class="btn-pill">Regarder</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact" aria-label="Contact">
+  <div class="container">
+    <p class="section-label reveal">Contact</p>
+    <h2 class="section-h2 reveal d1">Discutons de ton projet.</h2>
+    <div class="contact-grid">
+      <!-- Calendly LEFT -->
+      <div class="reveal d2">
+        <div class="calendly-wrapper">
+          <div class="calendly-inline-widget"
+               data-url="https://calendly.com/alex-studio/30min?hide_gdpr_banner=1&background_color=fffcf2&text_color=252422&primary_color=252422"
+               style="min-width:320px;height:700px;"></div>
+        </div>
+      </div>
+      <!-- Form RIGHT -->
+      <form class="contact-form reveal d3" id="contactForm" novalidate>
+        <div class="form-group">
+          <label for="f-nom">Nom</label>
+          <input type="text" id="f-nom" name="nom" placeholder="Ton prénom" autocomplete="given-name"/>
+        </div>
+        <div class="form-group">
+          <label for="f-email">Email</label>
+          <input type="email" id="f-email" name="email" placeholder="ton@email.com" autocomplete="email"/>
+        </div>
+        <div class="form-group">
+          <label for="f-projet">Ton projet</label>
+          <textarea id="f-projet" name="projet" rows="4" placeholder="Dis-moi en quelques lignes ce que tu fais et ce que tu cherches à accomplir…"></textarea>
+        </div>
+        <button type="submit" class="btn-pill" style="align-self:flex-start;">Envoyer</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+  <p class="footer-copy">© 2026 Alex.Studio</p>
+  <div class="footer-links">
+    <a href="https://instagram.com/alex.editspr" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a href="mailto:hello@alex.studio">Email</a>
+  </div>
+</footer>
+
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+<script>
+  // ─── NAV ───
+  const navEl = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // ─── HERO HEADLINE WORD SPLIT ───
+  const headlineEl = document.getElementById('heroHeadline');
+  const sublineEl  = document.getElementById('heroSubline');
+  const rawText    = headlineEl.textContent.trim();
+  headlineEl.innerHTML = rawText.split(/\s+/).map(w => `<span class="word">${w}</span>`).join(' ');
+  const wordSpans = headlineEl.querySelectorAll('.word');
+  wordSpans.forEach((span, i) => {
+    setTimeout(() => span.classList.add('visible'), 300 + i * 80);
+  });
+  setTimeout(() => sublineEl.classList.add('visible'), 300 + wordSpans.length * 80 + 100);
+
+  // ─── HERO SCROLL — texte monte, VSL entre ───
+  const heroWrapper = document.getElementById('heroWrapper');
+  const heroText    = document.getElementById('heroText');
+  const heroVSL     = document.getElementById('heroVSL');
+  const scrollHint  = document.getElementById('scrollHint');
+
+  function easeIO(t) { return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t; }
+  function easeOut3(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function onHeroScroll() {
+    const rect    = heroWrapper.getBoundingClientRect();
+    const scrollH = heroWrapper.offsetHeight - window.innerHeight;
+    const raw     = Math.max(0, Math.min(1, -rect.top / scrollH));
+
+    scrollHint.classList.toggle('hidden', raw > 0.015);
+
+    // Hero disparaît vers le haut EN MÊME TEMPS que la VSL monte depuis le bas
+    const tP = easeIO(Math.max(0, Math.min(1, raw / 0.75)));
+    heroText.style.transform = `translate(-50%, calc(-50% - ${tP * 180}px))`;
+    heroText.style.opacity   = String(1 - tP);
+
+    // VSL remonte depuis 70vh en dessous — démarre légèrement après
+    const vP = easeIO(Math.max(0, Math.min(1, (raw - 0.1) / 0.75)));
+    heroVSL.style.opacity   = String(vP);
+    heroVSL.style.transform = `translate(-50%, calc(-50% + ${70 * (1 - vP)}vh)) scale(${0.9 + 0.1 * vP})`;
+    heroVSL.style.filter    = `blur(${10 * (1 - vP)}px)`;
+  }
+
+  window.addEventListener('scroll', onHeroScroll, { passive: true });
+  onHeroScroll();
+
+  // ─── AVIS — bande infinie sans saut ───
+  const AVIS = [
+    { photo: 'clients/clement.jpg', pos: 'center top',  name: 'Clément Geynet', role: 'Entrepreneur'        },
+    { photo: 'clients/alexis.jpg',  pos: 'center top',  name: 'Alexis Dodin',   role: 'Créateur de contenu' },
+    { photo: 'clients/matheo.png',  pos: '38% center',  name: 'Mathéo Vidal',   role: 'Entrepreneur'        },
+  ];
+  const avisTrack = document.getElementById('avisTrack');
+  [...AVIS, ...AVIS, ...AVIS].forEach(({ photo, pos, name, role }) => {
+    const card = document.createElement('div');
+    card.className = 'avis-card';
+    card.innerHTML = `
+      <img class="avis-photo" src="${photo}" alt="${name}" style="object-position:${pos};" loading="lazy"/>
+      <div class="avis-stars">★★★★★</div>
+      <div class="avis-name">${name}</div>
+      <div class="avis-role">${role}</div>`;
+    avisTrack.appendChild(card);
+  });
+
+  let avisOff = 0;
+  let avisSetW = 0;
+  let avisRafId = null;
+
+  function initAvisSetW() {
+    // Largeur exacte d'un set : (largeur carte + gap) × nb cartes
+    const card = avisTrack.children[0];
+    if (!card) return;
+    const gap = parseInt(getComputedStyle(avisTrack).gap) || 32;
+    avisSetW = (card.offsetWidth + gap) * AVIS.length;
+  }
+
+  function avisStep() {
+    const speed = window.innerWidth < 600 ? 0.45 : 0.25;
+    avisOff += speed;
+    if (avisOff >= avisSetW) avisOff -= avisSetW;
+    avisTrack.style.transform = `translateX(-${avisOff}px)`;
+    avisRafId = requestAnimationFrame(avisStep);
+  }
+
+  // Démarre après layout complet (images chargées ou non)
+  window.addEventListener('load', () => { initAvisSetW(); avisRafId = requestAnimationFrame(avisStep); });
+  // Pause quand onglet invisible pour éviter drift
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { cancelAnimationFrame(avisRafId); avisRafId = null; }
+    else if (!avisRafId) avisRafId = requestAnimationFrame(avisStep);
+  });
+
+  // ─── REVEAL ───
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // ─── COMPTEURS APPROCHE (indépendants) ───
+  const leadsEl = document.getElementById('counterLeads');
+  const viewsEl = document.getElementById('counterViews');
+  const C0 = [239, 68, 68];
+  const C1 = [34, 197, 94];
+  function lerpC(a, b, t) { return Math.round(a + (b - a) * t); }
+
+  function animateCounter(el, target, isK, duration) {
+    const t0 = performance.now();
+    function tick(now) {
+      const p  = Math.min(1, (now - t0) / duration);
+      const ep = 1 - Math.pow(1 - p, 3);
+      const v  = Math.round(ep * target);
+      el.textContent = '+' + (isK && v >= 1000 ? Math.round(v / 1000) + 'k' : v);
+      el.style.color = `rgb(${lerpC(C0[0],C1[0],ep)},${lerpC(C0[1],C1[1],ep)},${lerpC(C0[2],C1[2],ep)})`;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function resetEl(el) { el.textContent = '+0'; el.style.color = 'rgb(239,68,68)'; }
+  resetEl(leadsEl); resetEl(viewsEl);
+
+  // Chaque compteur a son propre observer — animations indépendantes
+  function makeCounterObs(el, target, isK) {
+    let inView = false;
+    return new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !inView) {
+          inView = true;
+          animateCounter(el, target, isK, 1500);
+        } else if (!e.isIntersecting && inView) {
+          inView = false;
+          resetEl(el);
+        }
+      });
+    }, { threshold: 0.4 });
+  }
+  makeCounterObs(leadsEl, 100,    false).observe(leadsEl.closest('.service-card'));
+  makeCounterObs(viewsEl, 500000, true ).observe(viewsEl.closest('.service-card'));
+
+  // ─── RÉALISATIONS — reveal + vidéo au scroll ───
+  const rcObs = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (!entry.isIntersecting) return;
+      const card = entry.target;
+      setTimeout(() => card.classList.add('visible'), i * 80);
+      rcObs.unobserve(card);
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.rc').forEach(el => rcObs.observe(el));
+
+  // ─── VIDÉO : plein écran + volume ───
+  let activeVid = null; // vidéo actuellement en plein écran avec son
+
+  function muteAllExcept(except) {
+    document.querySelectorAll('.rc video').forEach(v => {
+      if (v !== except) {
+        v.muted = true;
+        const s = v.closest('.rc')?.querySelector('.rc-vol-range');
+        if (s) s.value = 0;
+        const b = v.closest('.rc')?.querySelector('.rc-vol-btn');
+        if (b) updateVolIconFor(v, b);
+      }
+    });
+  }
+
+  function updateVolIconFor(vid, btn) {
+    if (!btn) return;
+    const muted = vid.muted || vid.volume === 0;
+    btn.innerHTML = muted
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/><line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2"/><line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2"/></svg>`
+      : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+  }
+
+  function openFullscreen(vid) {
+    const slider = vid.closest('.rc')?.querySelector('.rc-vol-range');
+    const vol    = slider && parseFloat(slider.value) > 0 ? parseFloat(slider.value) : 0.7;
+    // Couper le son de toutes les autres vidéos
+    muteAllExcept(vid);
+    // removeAttribute est nécessaire : Chrome ignore vid.muted=false si l'attribut HTML est présent
+    vid.removeAttribute('muted');
+    vid.muted  = false;
+    vid.volume = vol;
+    if (slider) slider.value = vol;
+    const volBtn = vid.closest('.rc')?.querySelector('.rc-vol-btn');
+    updateVolIconFor(vid, volBtn);
+    activeVid = vid;
+    // Fullscreener le conteneur pour garder le bon ratio (portrait ou paysage)
+    const fsEl  = vid.closest('.rc-media') || vid;
+    const fsReq = fsEl.requestFullscreen || fsEl.webkitRequestFullscreen || fsEl.mozRequestFullScreen;
+    if (fsReq) fsReq.call(fsEl).then(() => { vid.play().catch(() => {}); }).catch(() => {});
+    else vid.play().catch(() => {});
+  }
+
+  // Quand on quitte le fullscreen, on laisse le son — il se coupera à la prochaine vidéo lancée
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) activeVid = null;
+  });
+
+  const PLAY_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/></svg>`;
+  const PAUSE_ICON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1" fill="rgba(255,252,242,0.9)"/><rect x="14" y="4" width="4" height="16" rx="1" fill="rgba(255,252,242,0.9)"/></svg>`;
+
+  document.querySelectorAll('.rc').forEach(card => {
+    const vid      = card.querySelector('video');
+    const slider   = card.querySelector('.rc-vol-range');
+    const volBtn   = card.querySelector('.rc-vol-btn');
+    const playBtn  = card.querySelector('.rc-play-btn');
+    const fsBtn    = card.querySelector('.rc-fs-btn');
+    if (!vid) return;
+
+    // Sync icône play/pause
+    function syncPlayIcon() {
+      if (playBtn) playBtn.innerHTML = vid.paused ? PLAY_ICON : PAUSE_ICON;
+    }
+    vid.addEventListener('play',  syncPlayIcon);
+    vid.addEventListener('pause', syncPlayIcon);
+
+    // Bouton play/pause
+    if (playBtn) {
+      playBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (vid.paused) vid.play().catch(() => {});
+        else vid.pause();
+      });
+    }
+
+    // Bouton plein écran
+    if (fsBtn) {
+      fsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        openFullscreen(vid);
+      });
+    }
+
+    // Bouton "Regarder"
+    card.querySelector('.btn-pill').addEventListener('click', e => {
+      e.stopPropagation();
+      openFullscreen(vid);
+    });
+
+    // Clic sur la zone vidéo (hors contrôles) → play/pause
+    card.querySelector('.rc-media').addEventListener('click', e => {
+      if (e.target.closest('.rc-vol') || e.target.closest('.rc-overlay')) return;
+      if (vid.paused) vid.play().catch(() => {});
+      else vid.pause();
+    });
+
+    // Slider volume
+    if (slider) {
+      slider.value = 0;
+      slider.addEventListener('input', e => {
+        e.stopPropagation();
+        const v = parseFloat(slider.value);
+        vid.volume = v;
+        vid.muted  = (v === 0);
+        updateVolIconFor(vid, volBtn);
+      });
+    }
+
+    // Bouton mute/unmute
+    if (volBtn) {
+      volBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (vid.muted || vid.volume === 0) {
+          const target = slider && parseFloat(slider.value) > 0 ? parseFloat(slider.value) : 0.7;
+          vid.muted  = false;
+          vid.volume = target;
+          if (slider) slider.value = target;
+        } else {
+          vid.muted = true;
+          if (slider) slider.value = 0;
+        }
+        updateVolIconFor(vid, volBtn);
+      });
+    }
+
+  });
+
+  // ─── THUMBNAILS AUTO-GÉNÉRÉS ───
+  // Traitement séquentiel pour ne pas surcharger le serveur single-thread
+  const POSTER_CONFIG = [
+    { src: 'VSL%20Cl%C3%A9mentGeynet', time: 5  },  // VSL : début présentation
+    { src: 'Intro1',                   time: 3  },  // Intro podcast : face caméra
+    { src: 'Tunnel%20de%20vente%20WA', time: 4  },  // Tunnel : accroche visuelle
+    { src: 'Reel3',                    time: 1  },  // Reel : première image forte
+    { src: 'Ads2%201080',              time: 1  },  // Ads : visuel d'entrée
+  ];
+
+  (function processPosterQueue(i) {
+    if (i >= POSTER_CONFIG.length) return;
+    const { src, time } = POSTER_CONFIG[i];
+    const vid = document.querySelector(`video[src*="${src}"]`);
+    if (!vid) { processPosterQueue(i + 1); return; }
+
+    vid.preload = 'auto';
+
+    function capture() {
+      try {
+        const w = vid.videoWidth, h = vid.videoHeight;
+        if (w && h) {
+          const c = document.createElement('canvas');
+          c.width = w; c.height = h;
+          c.getContext('2d').drawImage(vid, 0, 0, w, h);
+          const url = c.toDataURL('image/jpeg', 0.82);
+          if (url.length > 200) vid.poster = url; // ignore image vide
+        }
+      } catch(e) {}
+      vid.preload = 'none';
+      setTimeout(() => processPosterQueue(i + 1), 300);
+    }
+
+    if (vid.readyState >= 2 && vid.videoWidth) {
+      // Frames déjà dispo
+      vid.currentTime = time;
+      vid.addEventListener('seeked', capture, { once: true });
+    } else {
+      vid.addEventListener('loadeddata', () => {
+        vid.currentTime = time;
+        vid.addEventListener('seeked', capture, { once: true });
+      }, { once: true });
+    }
+  })(0);
+
+  // ─── FORM ───
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-pill');
+    btn.textContent = 'Message envoyé ✓';
+    btn.disabled = true;
+    btn.style.opacity = '0.55';
+  });
+</script>
+</body>
+</html>

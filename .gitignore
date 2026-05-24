@@ -1,0 +1,7 @@
+# Vidéos trop lourdes pour GitHub (hébergées sur CDN)
+clients/*.mp4
+clients/*.mov
+clients/*.webm
+
+# Serveur local
+.claude/
