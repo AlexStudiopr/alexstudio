@@ -386,6 +386,35 @@
     .form-group input:focus, .form-group textarea:focus { border-bottom-color: var(--text); }
     .calendly-wrapper { border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
 
+    /* ─── PROCESS ─── */
+    .process-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      margin-top: 64px; border: 1px solid var(--line); border-radius: 24px; overflow: hidden;
+    }
+    .process-step {
+      padding: 44px 40px;
+      border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      transition: background 0.3s var(--ease);
+    }
+    .process-step:hover { background: rgba(37,36,34,0.025); }
+    .process-step:nth-child(3n) { border-right: none; }
+    .process-step:nth-child(n+4) { border-bottom: none; }
+    .process-num { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; font-weight: 500; }
+    .process-title { font-size: 17px; font-weight: 650; letter-spacing: -.025em; margin-bottom: 12px; color: var(--text); }
+    .process-desc { font-size: 14px; color: var(--muted); line-height: 1.65; }
+    @media (max-width: 960px) {
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .process-step:nth-child(3n) { border-right: 1px solid var(--line); }
+      .process-step:nth-child(2n) { border-right: none; }
+      .process-step:nth-child(n+4) { border-bottom: 1px solid var(--line); }
+      .process-step:nth-child(n+5) { border-bottom: none; }
+    }
+    @media (max-width: 600px) {
+      .process-grid { grid-template-columns: 1fr; border-radius: 16px; }
+      .process-step { padding: 28px 24px; border-right: none !important; }
+      .process-step:last-child { border-bottom: none !important; }
+    }
+
     /* ─── FOOTER ─── */
     .footer {
       border-top: 1px solid var(--line); padding: 28px 48px;
@@ -726,6 +755,48 @@
 
     </div>
 
+  </div>
+</section>
+
+<!-- ─── PROCESS ─── -->
+<section id="process" aria-label="Process">
+  <div class="container">
+    <p class="section-label reveal">Comment ça marche</p>
+    <h2 class="section-h2 reveal d1">Du brief à la publication.</h2>
+    <p class="section-lead reveal d2">Un process clair, sans friction — pour que tu saches exactement à quoi t'attendre à chaque étape.</p>
+
+    <div class="process-grid">
+      <div class="process-step reveal d1">
+        <p class="process-num">01</p>
+        <h3 class="process-title">Call de découverte</h3>
+        <p class="process-desc">30 minutes pour comprendre ta situation, ton audience et tes objectifs business. On pose les bases avant de produire quoi que ce soit.</p>
+      </div>
+      <div class="process-step reveal d2">
+        <p class="process-num">02</p>
+        <h3 class="process-title">Audit & diagnostic</h3>
+        <p class="process-desc">État des lieux honnête de ton compte, ton positionnement et ta concurrence. Ce qui fonctionne, ce qui fuit, ce qui est inexploité.</p>
+      </div>
+      <div class="process-step reveal d3">
+        <p class="process-num">03</p>
+        <h3 class="process-title">Stratégie & brand book</h3>
+        <p class="process-desc">Ton positionnement, tes piliers de contenu et ton univers visuel mis noir sur blanc. La bible de tout ce qui sera produit ensuite.</p>
+      </div>
+      <div class="process-step reveal d1">
+        <p class="process-num">04</p>
+        <h3 class="process-title">Plan éditorial</h3>
+        <p class="process-desc">Un calendrier sur 30 à 90 jours avec les sujets, les formats et les intentions. Un système, pas une liste de posts au hasard.</p>
+      </div>
+      <div class="process-step reveal d2">
+        <p class="process-num">05</p>
+        <h3 class="process-title">Production & livraison</h3>
+        <p class="process-desc">Montage, motion design, direction artistique. Tout exécuté en interne, avec un soin particulier au rythme, aux hooks et à l'esthétique.</p>
+      </div>
+      <div class="process-step reveal d3">
+        <p class="process-num">06</p>
+        <h3 class="process-title">Reporting & itération</h3>
+        <p class="process-desc">Chaque mois : ce qui a performé, pourquoi, et ce qu'on ajuste. Le contenu évolue en permanence selon les résultats réels.</p>
+      </div>
+    </div>
   </div>
 </section>
 

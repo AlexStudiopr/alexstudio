@@ -28,7 +28,7 @@
     .nav-back:hover { color: var(--text); }
 
     /* ── PROGRESS ── */
-    .progress-wrap { max-width: 600px; margin: 48px auto 0; padding: 0 24px; }
+    .progress-wrap { max-width: 760px; margin: 48px auto 0; padding: 0 24px; }
     .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .progress-step-label { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
     .progress-pct { font-size: 12px; color: var(--muted); }
@@ -36,28 +36,33 @@
     .progress-fill { height: 100%; background: var(--text); border-radius: 2px; transition: width .5s var(--ease); width: 0%; }
 
     /* ── WRAPPER ── */
-    .form-outer { max-width: 600px; margin: 0 auto; padding: 48px 24px 120px; overflow: hidden; }
+    .form-outer { max-width: 760px; margin: 0 auto; padding: 48px 24px 120px; overflow: hidden; }
 
     /* ── STEPS ── */
     .step { display: none; animation: stepIn .4s var(--ease) both; }
     .step.active { display: block; }
     @keyframes stepIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
-    @keyframes stepOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(-40px); } }
 
-    .step-title { font-size: clamp(24px, 5vw, 32px); font-weight: 700; letter-spacing: -.03em; line-height: 1.15; margin-bottom: 8px; }
-    .step-sub { font-size: 15px; color: var(--muted); margin-bottom: 40px; line-height: 1.55; }
+    .step-title { font-size: clamp(26px, 5vw, 36px); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; margin-bottom: 8px; }
+    .step-sub { font-size: 15px; color: var(--muted); margin-bottom: 44px; line-height: 1.55; }
 
     /* ── FORM FIELDS ── */
-    .field { margin-bottom: 28px; }
-    .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; letter-spacing: -.01em; }
+    .field { margin-bottom: 32px; }
+    .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 10px; letter-spacing: -.01em; }
     .field input, .field select, .field textarea {
-      width: 100%; padding: 14px 16px; border: 1.5px solid var(--line);
-      border-radius: 12px; background: var(--bg); color: var(--text);
+      width: 100%; padding: 16px 20px; border: 1.5px solid var(--line);
+      border-radius: 14px; background: var(--bg); color: var(--text);
       font-family: inherit; font-size: 15px; outline: none;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
+      box-shadow: 0 4px 16px rgba(37,36,34,0.07), 0 1px 4px rgba(37,36,34,0.05);
+      text-align: center;
     }
-    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--text); }
-    .field textarea { resize: none; min-height: 120px; line-height: 1.6; }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--text);
+      box-shadow: 0 8px 32px rgba(37,36,34,0.12), 0 2px 8px rgba(37,36,34,0.07);
+    }
+    .field textarea { resize: none; min-height: 120px; line-height: 1.6; text-align: left; }
+    .field select { text-align: left; cursor: pointer; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
     /* ── CHOICE CARDS ── */
@@ -67,27 +72,39 @@
     .choice-card { position: relative; }
     .choice-card input { position: absolute; opacity: 0; pointer-events: none; }
     .choice-card label {
-      display: flex; flex-direction: column; gap: 4px;
-      border: 1.5px solid var(--line); border-radius: 14px;
-      padding: 18px 20px; cursor: pointer;
-      transition: border-color .2s, background .2s, transform .2s var(--ease);
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      border: 1.5px solid var(--line); border-radius: 18px;
+      padding: 24px 18px; cursor: pointer; text-align: center;
+      transition: border-color .2s, background .2s, transform .25s var(--ease), box-shadow .25s;
       user-select: none;
+      box-shadow: 0 6px 24px rgba(37,36,34,0.09), 0 2px 6px rgba(37,36,34,0.05);
     }
-    .choice-card label:hover { border-color: #8a8480; transform: translateY(-1px); }
-    .choice-card input:checked + label { border-color: var(--text); background: rgba(37,36,34,0.04); }
-    .choice-icon { font-size: 22px; margin-bottom: 4px; }
+    .choice-card label:hover {
+      border-color: #8a8480; transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(37,36,34,0.14), 0 3px 10px rgba(37,36,34,0.07);
+    }
+    .choice-card input:checked + label {
+      border-color: var(--text); background: rgba(37,36,34,0.04);
+      box-shadow: 0 8px 32px rgba(37,36,34,0.13), 0 2px 8px rgba(37,36,34,0.07);
+    }
+    .choice-icon { font-size: 26px; margin-bottom: 6px; }
     .choice-title { font-size: 14px; font-weight: 600; }
-    .choice-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .choice-desc { font-size: 12px; color: var(--muted); line-height: 1.4; margin-top: 2px; }
 
-    /* ── CHECKBOXES ── */
+    /* ── SERVICE CHECKBOXES ── */
     .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .check-item { position: relative; }
     .check-item input { position: absolute; opacity: 0; pointer-events: none; }
     .check-item label {
-      display: flex; align-items: center; gap: 10px;
-      border: 1.5px solid var(--line); border-radius: 12px;
-      padding: 14px 16px; cursor: pointer; font-size: 14px; font-weight: 500;
-      transition: border-color .2s, background .2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      border: 1.5px solid var(--line); border-radius: 14px;
+      padding: 18px 20px; cursor: pointer; font-size: 14px; font-weight: 500; text-align: center;
+      transition: border-color .2s, background .2s, box-shadow .2s, transform .2s var(--ease);
+      box-shadow: 0 4px 16px rgba(37,36,34,0.08), 0 1px 4px rgba(37,36,34,0.05);
+    }
+    .check-item label:hover {
+      border-color: #8a8480; transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(37,36,34,0.13), 0 2px 7px rgba(37,36,34,0.06);
     }
     .check-item label::before {
       content: ''; width: 18px; height: 18px; flex-shrink: 0;
@@ -95,38 +112,83 @@
       transition: background .15s, border-color .15s;
     }
     .check-item input:checked + label { border-color: var(--text); background: rgba(37,36,34,0.04); }
-    .check-item input:checked + label::before { background: var(--text); border-color: var(--text); background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='%23fffcf2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; }
+    .check-item input:checked + label::before {
+      background: var(--text); border-color: var(--text);
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='%23fffcf2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: center;
+    }
     .check-service-icon { font-size: 16px; }
 
-    /* ── VOLUME SELECTOR ── */
-    .volume-wrap { display: flex; gap: 8px; flex-wrap: wrap; }
-    .vol-btn {
-      border: 1.5px solid var(--line); border-radius: 10px;
-      padding: 10px 18px; font-size: 14px; font-weight: 500;
-      cursor: pointer; background: var(--bg); color: var(--text);
-      transition: border-color .2s, background .2s;
+    /* ── SERVICE DETAIL PANELS ── */
+    .svc-details-wrap { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .svc-detail {
+      border: 1.5px solid var(--line); border-radius: 16px;
+      padding: 22px 24px; background: rgba(37,36,34,0.015);
+      box-shadow: 0 4px 16px rgba(37,36,34,0.07), 0 1px 4px rgba(37,36,34,0.04);
+      animation: stepIn .3s var(--ease) both;
     }
-    .vol-btn.active { border-color: var(--text); background: rgba(37,36,34,0.05); }
+    .svc-detail-head {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600; color: var(--text);
+      margin-bottom: 14px; letter-spacing: -.01em;
+    }
+    .svc-detail-head-icon { font-size: 16px; }
+    .svc-detail-note { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 
-    /* ── PRICE ESTIMATE ── */
-    .price-box {
-      border: 1.5px solid var(--line); border-radius: 20px;
-      padding: 32px; margin-bottom: 32px; background: rgba(37,36,34,0.02);
+    /* ── VOL TAGS ── */
+    .vol-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .vol-tag {
+      border: 1.5px solid var(--line); border-radius: 10px;
+      padding: 9px 18px; font-size: 13px; font-weight: 500;
+      cursor: pointer; background: var(--bg); color: var(--text);
+      transition: border-color .2s, background .2s, box-shadow .2s;
+      box-shadow: 0 2px 8px rgba(37,36,34,0.06);
+      font-family: inherit;
     }
-    .price-label { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-    .price-amount { font-size: 48px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-bottom: 4px; }
+    .vol-tag:hover { border-color: #8a8480; }
+    .vol-tag.active {
+      border-color: var(--text); background: rgba(37,36,34,0.06);
+      box-shadow: 0 4px 14px rgba(37,36,34,0.10);
+    }
+
+    /* ── PRICE BOX ── */
+    .price-box {
+      border: 1.5px solid var(--line); border-radius: 24px;
+      padding: 40px; margin-bottom: 36px; background: rgba(37,36,34,0.02);
+      box-shadow: 0 12px 48px rgba(37,36,34,0.12), 0 3px 12px rgba(37,36,34,0.06);
+    }
+    .price-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
+    .price-amount { font-size: 56px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-bottom: 4px; }
     .price-period { font-size: 14px; color: var(--muted); }
-    .price-detail { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
-    .price-line { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-    .price-line-label { color: var(--muted); }
-    .price-line-val { font-weight: 600; }
-    .price-disclaimer { font-size: 12px; color: var(--muted); margin-top: 20px; line-height: 1.5; }
+    .price-detail { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--line); }
+
+    .price-svc-block { padding: 18px 0; border-bottom: 1px solid var(--line); }
+    .price-svc-block:last-child { border-bottom: none; padding-bottom: 0; }
+    .price-svc-name {
+      font-size: 13px; font-weight: 700; letter-spacing: -.01em;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+    .price-svc-badge {
+      font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      background: rgba(37,36,34,0.08); border-radius: 6px; padding: 2px 8px; color: var(--muted);
+    }
+    .price-svc-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; }
+    .price-svc-row-label { color: var(--muted); }
+    .price-svc-row-val { font-weight: 600; }
+    .price-svc-row-val.alt { color: var(--muted); font-weight: 500; font-style: italic; }
+    .price-urgency-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; color: #b45309; }
+    .price-green-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; color: #16a34a; }
+    .price-disclaimer { font-size: 12px; color: var(--muted); margin-top: 24px; line-height: 1.55; }
 
     /* ── SUMMARY ── */
-    .summary-grid { display: flex; flex-direction: column; gap: 0; margin-bottom: 40px; border: 1.5px solid var(--line); border-radius: 20px; overflow: hidden; }
+    .summary-grid {
+      display: flex; flex-direction: column; margin-bottom: 40px;
+      border: 1.5px solid var(--line); border-radius: 20px; overflow: hidden;
+      box-shadow: 0 8px 32px rgba(37,36,34,0.09), 0 2px 8px rgba(37,36,34,0.05);
+    }
     .summary-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 16px 24px; border-bottom: 1px solid var(--line); }
     .summary-item:last-child { border-bottom: none; }
-    .summary-key { font-size: 13px; color: var(--muted); flex-shrink: 0; padding-top: 1px; }
+    .summary-key { font-size: 13px; color: var(--muted); flex-shrink: 0; }
     .summary-val { font-size: 13px; font-weight: 500; text-align: right; }
 
     /* ── BUTTONS ── */
@@ -134,7 +196,7 @@
     .btn-next {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--text); color: var(--bg);
-      border: none; border-radius: 50px; padding: 15px 32px;
+      border: none; border-radius: 50px; padding: 17px 38px;
       font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
       transition: opacity .2s, transform .2s var(--ease);
     }
@@ -142,7 +204,7 @@
     .btn-next:disabled { opacity: .45; cursor: not-allowed; transform: none; }
     .btn-prev {
       background: none; border: 1.5px solid var(--line); border-radius: 50px;
-      padding: 14px 24px; font-size: 14px; font-weight: 500; cursor: pointer;
+      padding: 16px 28px; font-size: 14px; font-weight: 500; cursor: pointer;
       font-family: inherit; color: var(--muted); transition: border-color .2s, color .2s;
     }
     .btn-prev:hover { border-color: var(--text); color: var(--text); }
@@ -156,15 +218,18 @@
     .success-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); text-decoration: none; transition: color .2s; }
     .success-link:hover { color: var(--text); }
 
-    /* ── SECTION LABEL ── */
-    .field-section { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; margin-top: 8px; }
+    /* ── MISC ── */
+    .field-section { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-weight: 600; }
 
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       .nav { padding: 0 20px; }
       .form-outer { padding: 32px 20px 100px; }
       .choices.cols-2, .choices.cols-3 { grid-template-columns: 1fr; }
       .check-grid { grid-template-columns: 1fr; }
       .field-row { grid-template-columns: 1fr; }
+      .progress-wrap { margin-top: 32px; }
+      .price-box { padding: 28px 24px; }
+      .price-amount { font-size: 40px; }
     }
   </style>
 </head>
@@ -195,20 +260,20 @@
     <div class="field-row">
       <div class="field">
         <label for="prenom">Prénom *</label>
-        <input type="text" id="prenom" name="prenom" placeholder="Alexandre" autocomplete="given-name" required>
+        <input type="text" id="prenom" name="prenom" placeholder="Thomas" autocomplete="given-name" required>
       </div>
       <div class="field">
         <label for="email">Email *</label>
-        <input type="email" id="email" name="email" placeholder="alex@gmail.com" autocomplete="email" required>
+        <input type="email" id="email" name="email" placeholder="thomas@gmail.com" autocomplete="email" required>
       </div>
     </div>
 
     <div class="field">
       <label>Ton activité *</label>
       <div class="choices cols-2">
-        <div class="choice-card"><input type="radio" name="activite" id="a1" value="Coach / Consultant"><label for="a1"><span class="choice-icon">🎯</span><span class="choice-title">Coach / Consultant</span><span class="choice-desc">Tu vends de l'accompagnement ou des formations</span></label></div>
+        <div class="choice-card"><input type="radio" name="activite" id="a1" value="Créateur de contenu"><label for="a1"><span class="choice-icon">🎬</span><span class="choice-title">Créateur de contenu</span><span class="choice-desc">Le contenu est ton cœur de métier</span></label></div>
         <div class="choice-card"><input type="radio" name="activite" id="a2" value="Entrepreneur / CEO"><label for="a2"><span class="choice-icon">🚀</span><span class="choice-title">Entrepreneur / CEO</span><span class="choice-desc">Tu as une entreprise et tu veux développer ta marque</span></label></div>
-        <div class="choice-card"><input type="radio" name="activite" id="a3" value="Créateur de contenu"><label for="a3"><span class="choice-icon">🎬</span><span class="choice-title">Créateur de contenu</span><span class="choice-desc">Le contenu est ton cœur de métier</span></label></div>
+        <div class="choice-card"><input type="radio" name="activite" id="a3" value="Coach / Consultant"><label for="a3"><span class="choice-icon">🎯</span><span class="choice-title">Coach / Consultant</span><span class="choice-desc">Tu vends de l'accompagnement ou des formations</span></label></div>
         <div class="choice-card"><input type="radio" name="activite" id="a4" value="Agence / Marque"><label for="a4"><span class="choice-icon">🏢</span><span class="choice-title">Agence / Marque</span><span class="choice-desc">Tu représentes une structure ou une équipe</span></label></div>
       </div>
     </div>
@@ -238,9 +303,9 @@
     <div class="field">
       <label>Taille de ta communauté *</label>
       <div class="choices cols-2">
-        <div class="choice-card"><input type="radio" name="communaute" id="c1" value="Je démarre (0 - 1 000 abonnés)"><label for="c1"><span class="choice-icon">🌱</span><span class="choice-title">Je démarre</span><span class="choice-desc">0 – 1 000 abonnés</span></label></div>
-        <div class="choice-card"><input type="radio" name="communaute" id="c2" value="En croissance (1 000 - 10 000 abonnés)"><label for="c2"><span class="choice-icon">📈</span><span class="choice-title">En croissance</span><span class="choice-desc">1 000 – 10 000 abonnés</span></label></div>
-        <div class="choice-card"><input type="radio" name="communaute" id="c3" value="Établi (10 000 - 100 000 abonnés)"><label for="c3"><span class="choice-icon">⚡</span><span class="choice-title">Établi</span><span class="choice-desc">10 000 – 100 000 abonnés</span></label></div>
+        <div class="choice-card"><input type="radio" name="communaute" id="c1" value="Je démarre (0 – 1 000 abonnés)"><label for="c1"><span class="choice-icon">🌱</span><span class="choice-title">Je démarre</span><span class="choice-desc">0 – 1 000 abonnés</span></label></div>
+        <div class="choice-card"><input type="radio" name="communaute" id="c2" value="En croissance (1 000 – 10 000 abonnés)"><label for="c2"><span class="choice-icon">📈</span><span class="choice-title">En croissance</span><span class="choice-desc">1 000 – 10 000 abonnés</span></label></div>
+        <div class="choice-card"><input type="radio" name="communaute" id="c3" value="Établi (10 000 – 100 000 abonnés)"><label for="c3"><span class="choice-icon">⚡</span><span class="choice-title">Établi</span><span class="choice-desc">10 000 – 100 000 abonnés</span></label></div>
         <div class="choice-card"><input type="radio" name="communaute" id="c4" value="Grande audience (100 000+ abonnés)"><label for="c4"><span class="choice-icon">🔥</span><span class="choice-title">Grande audience</span><span class="choice-desc">100 000+ abonnés</span></label></div>
       </div>
     </div>
@@ -257,7 +322,7 @@
     <div class="field">
       <label>Ta douleur principale *</label>
       <div class="choices cols-2">
-        <div class="choice-card"><input type="radio" name="douleur" id="d1" value="Pas le temps de créer du contenu"><label for="d1"><span class="choice-icon">⏱️</span><span class="choice-title">Pas le temps</span><span class="choice-desc">Je veux créer mais je n'ai pas la bande passante</span></label></div>
+        <div class="choice-card"><input type="radio" name="douleur" id="d1" value="Je veux créer mais je n'ai pas le temps de m'occuper du contenu"><label for="d1"><span class="choice-icon">⏱️</span><span class="choice-title">Pas le temps</span><span class="choice-desc">Je veux créer mais je n'ai pas le temps de m'occuper du contenu</span></label></div>
         <div class="choice-card"><input type="radio" name="douleur" id="d2" value="Mon contenu ne convertit pas"><label for="d2"><span class="choice-icon">📉</span><span class="choice-title">Ça ne convertit pas</span><span class="choice-desc">Je publie mais ça ne génère pas de clients</span></label></div>
         <div class="choice-card"><input type="radio" name="douleur" id="d3" value="Manque de stratégie et de direction"><label for="d3"><span class="choice-icon">🧭</span><span class="choice-title">Manque de stratégie</span><span class="choice-desc">Je ne sais pas quoi publier ni comment</span></label></div>
         <div class="choice-card"><input type="radio" name="douleur" id="d4" value="Qualité visuelle insuffisante"><label for="d4"><span class="choice-icon">🎨</span><span class="choice-title">Qualité insuffisante</span><span class="choice-desc">Mes vidéos ne reflètent pas mon niveau</span></label></div>
@@ -286,9 +351,9 @@
     </div>
 
     <div class="field">
-      <label>Dans quel délai veux-tu voir des résultats ? *</label>
+      <label>Dans quel délai veux-tu démarrer ? *</label>
       <div class="choices cols-2">
-        <div class="choice-card"><input type="radio" name="horizon" id="h1" value="Le plus vite possible (urgence)"><label for="h1"><span class="choice-icon">🚨</span><span class="choice-title">Le plus vite possible</span><span class="choice-desc">J'ai un lancement ou une deadline</span></label></div>
+        <div class="choice-card"><input type="radio" name="horizon" id="h1" value="Le plus vite possible (urgence)"><label for="h1"><span class="choice-icon">🚨</span><span class="choice-title">Le plus vite possible</span><span class="choice-desc">J'ai un lancement ou une deadline — supplément urgence appliqué</span></label></div>
         <div class="choice-card"><input type="radio" name="horizon" id="h2" value="Dans 1 à 3 mois"><label for="h2"><span class="choice-icon">📅</span><span class="choice-title">1 – 3 mois</span><span class="choice-desc">Je veux démarrer rapidement mais sereinement</span></label></div>
         <div class="choice-card"><input type="radio" name="horizon" id="h3" value="Dans 3 à 6 mois"><label for="h3"><span class="choice-icon">🗓️</span><span class="choice-title">3 – 6 mois</span><span class="choice-desc">Je veux construire sur le long terme</span></label></div>
         <div class="choice-card"><input type="radio" name="horizon" id="h4" value="Je planifie pour la suite (6 mois+)"><label for="h4"><span class="choice-icon">🌅</span><span class="choice-title">6 mois et plus</span><span class="choice-desc">Je prépare l'avenir de ma marque</span></label></div>
@@ -304,30 +369,104 @@
   <!-- ── ÉTAPE 4 — PROJET ── -->
   <div class="step" id="step-4">
     <h1 class="step-title">Ton projet en détail.</h1>
-    <p class="step-sub">Dis-moi exactement ce dont tu as besoin — je calcule une estimation sur mesure.</p>
+    <p class="step-sub">Sélectionne tes services — les options de volume s'affichent pour chacun.</p>
 
     <div class="field">
       <p class="field-section">Services souhaités *</p>
       <div class="check-grid">
-        <div class="check-item"><input type="checkbox" id="s1" name="services" value="Stratégie de contenu"><label for="s1"><span class="check-service-icon">🧭</span> Stratégie de contenu</label></div>
-        <div class="check-item"><input type="checkbox" id="s2" name="services" value="Reels / Courts formats"><label for="s2"><span class="check-service-icon">📱</span> Reels / Courts formats</label></div>
-        <div class="check-item"><input type="checkbox" id="s3" name="services" value="YouTube / Long-form"><label for="s3"><span class="check-service-icon">🎬</span> YouTube / Long-form</label></div>
-        <div class="check-item"><input type="checkbox" id="s4" name="services" value="Podcast"><label for="s4"><span class="check-service-icon">🎙️</span> Podcast</label></div>
-        <div class="check-item"><input type="checkbox" id="s5" name="services" value="VSL (vidéo de vente)"><label for="s5"><span class="check-service-icon">💼</span> VSL (vidéo de vente)</label></div>
-        <div class="check-item"><input type="checkbox" id="s6" name="services" value="Meta Ads (publicités)"><label for="s6"><span class="check-service-icon">📢</span> Meta Ads</label></div>
+        <div class="check-item"><input type="checkbox" id="s-strategie" name="services" value="Stratégie de contenu" data-detail="svc-strategie"><label for="s-strategie"><span class="check-service-icon">🧭</span> Stratégie de contenu</label></div>
+        <div class="check-item"><input type="checkbox" id="s-audit" name="services" value="Audit stratégique" data-detail="svc-audit"><label for="s-audit"><span class="check-service-icon">🔍</span> Audit stratégique</label></div>
+        <div class="check-item"><input type="checkbox" id="s-youtube" name="services" value="YouTube / Long-Form" data-detail="svc-youtube"><label for="s-youtube"><span class="check-service-icon">🎬</span> YouTube / Long-Form</label></div>
+        <div class="check-item"><input type="checkbox" id="s-vsl" name="services" value="VSL (vidéo de vente)" data-detail="svc-vsl"><label for="s-vsl"><span class="check-service-icon">💼</span> VSL (vidéo de vente)</label></div>
+        <div class="check-item"><input type="checkbox" id="s-reels" name="services" value="Reels / Courts formats" data-detail="svc-reels"><label for="s-reels"><span class="check-service-icon">📱</span> Reels / Courts formats</label></div>
+        <div class="check-item"><input type="checkbox" id="s-ads" name="services" value="Meta Ads (publicités)" data-detail="svc-ads"><label for="s-ads"><span class="check-service-icon">📢</span> Meta Ads</label></div>
+        <div class="check-item"><input type="checkbox" id="s-podcast" name="services" value="Podcast" data-detail="svc-podcast"><label for="s-podcast"><span class="check-service-icon">🎙️</span> Podcast</label></div>
+        <div class="check-item"><input type="checkbox" id="s-motion" name="services" value="Motion design" data-detail="svc-motion"><label for="s-motion"><span class="check-service-icon">✨</span> Motion design</label></div>
       </div>
-    </div>
 
-    <div class="field" id="volume-field">
-      <label>Volume mensuel souhaité</label>
-      <div class="volume-wrap" id="volumeWrap">
-        <button type="button" class="vol-btn" data-val="1 à 2 vidéos / mois">1–2 vidéos</button>
-        <button type="button" class="vol-btn" data-val="3 à 4 vidéos / mois">3–4 vidéos</button>
-        <button type="button" class="vol-btn" data-val="5 à 8 vidéos / mois">5–8 vidéos</button>
-        <button type="button" class="vol-btn" data-val="9 vidéos et plus / mois">9+ vidéos</button>
-        <button type="button" class="vol-btn" data-val="À définir ensemble">À définir</button>
+      <!-- Sub-volume panels, revealed on checkbox check -->
+      <div class="svc-details-wrap" id="svcDetailsWrap">
+
+        <div class="svc-detail" id="svc-strategie" style="display:none;">
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">🧭</span>Stratégie de contenu — Accompagnement mensuel</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.55;">Positionnement, piliers de contenu, calendrier éditorial 90 jours, scripts, plan mensuel et reporting. Forfait mensuel fixe.</p>
+        </div>
+
+        <div class="svc-detail" id="svc-audit" style="display:none;">
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">🔍</span>Audit stratégique — Prestation one-shot</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.55;">Analyse complète du compte, benchmark 5 concurrents, 10 actions prioritaires. Livrable : Loom 15–20 min + document écrit.</p>
+        </div>
+
+        <div class="svc-detail" id="svc-youtube" style="display:none;">
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">🎬</span>Volume mensuel — YouTube Long-Form</div>
+          <div class="vol-tags" id="vt-youtube">
+            <button type="button" class="vol-tag" data-svc="youtube" data-val="1">1 vidéo</button>
+            <button type="button" class="vol-tag" data-svc="youtube" data-val="2">2 vidéos</button>
+            <button type="button" class="vol-tag" data-svc="youtube" data-val="3">3 vidéos</button>
+            <button type="button" class="vol-tag" data-svc="youtube" data-val="4">4 vidéos</button>
+            <button type="button" class="vol-tag" data-svc="youtube" data-val="5">5+ vidéos</button>
+          </div>
+          <p class="svc-detail-note">💡 Tarif : <strong>250 €/vidéo</strong> (moins de 10 min) · <strong>250 € + 30 €/min suppl.</strong> (plus de 10 min) · Supplément urgence : <strong>+250 €/vidéo</strong></p>
+        </div>
+
+        <div class="svc-detail" id="svc-vsl" style="display:none;">
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">💼</span>Volume — VSL (vidéo de vente)</div>
+          <div class="vol-tags" id="vt-vsl">
+            <button type="button" class="vol-tag" data-svc="vsl" data-val="1">1 VSL</button>
+            <button type="button" class="vol-tag" data-svc="vsl" data-val="2">2 VSL</button>
+            <button type="button" class="vol-tag" data-svc="vsl" data-val="3">3 VSL</button>
+          </div>
+          <p class="svc-detail-note">💡 Tarif : <strong>300 €</strong> (moins de 3 min) · <strong>300 € + 35 €/min suppl.</strong> (3–10 min) · <strong>600 € + 30 €/min suppl.</strong> (plus de 10 min) · Supplément urgence : <strong>+250 €/VSL</strong></p>
+        </div>
+
+        <div class="svc-detail" id="svc-reels" style="display:none;">
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">📱</span>Volume mensuel — Reels / Courts formats</div>
+          <div class="vol-tags" id="vt-reels">
+            <button type="button" class="vol-tag" data-svc="reels" data-val="2">1–2 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="4">3–4 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="6">5–6 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="8">7–8 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="12">9–12 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="15">13+ reels</button>
+          </div>
+          <p class="svc-detail-note">💡 Tarif : <strong>40 €/reel</strong> (moins de 1 min) · <strong>60 €/reel</strong> (plus de 1 min) · Supplément urgence : <strong>+80 €/reel</strong></p>
+        </div>
+
+        <div class="svc-detail" id="svc-ads" style="display:none;">
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">📢</span>Volume mensuel — Meta Ads</div>
+          <div class="vol-tags" id="vt-ads">
+            <button type="button" class="vol-tag" data-svc="ads" data-val="2">1–2 pubs</button>
+            <button type="button" class="vol-tag" data-svc="ads" data-val="4">3–4 pubs</button>
+            <button type="button" class="vol-tag" data-svc="ads" data-val="6">5–6 pubs</button>
+            <button type="button" class="vol-tag" data-svc="ads" data-val="8">7–8 pubs</button>
+            <button type="button" class="vol-tag" data-svc="ads" data-val="10">9+ pubs</button>
+          </div>
+          <p class="svc-detail-note">💡 Tarif : <strong>40 €/pub</strong> (moins de 1 min) · <strong>60 €/pub</strong> (plus de 1 min) · Supplément urgence : <strong>+80 €/pub</strong></p>
+        </div>
+
+        <div class="svc-detail" id="svc-podcast" style="display:none;">
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">🎙️</span>Volume mensuel — Podcast</div>
+          <div class="vol-tags" id="vt-podcast">
+            <button type="button" class="vol-tag" data-svc="podcast" data-val="1">1 épisode</button>
+            <button type="button" class="vol-tag" data-svc="podcast" data-val="2">2 épisodes</button>
+            <button type="button" class="vol-tag" data-svc="podcast" data-val="3">3–4 épisodes</button>
+            <button type="button" class="vol-tag" data-svc="podcast" data-val="5">5+ épisodes</button>
+          </div>
+          <p class="svc-detail-note">💡 Tarif : <strong>200 €/épisode</strong> (moins de 1h) · <strong>300 € avec intro animée</strong> · <strong>+100 €/heure suppl.</strong> (plus de 1h) · Supplément urgence : <strong>+250 €/épisode</strong></p>
+        </div>
+
+        <div class="svc-detail" id="svc-motion" style="display:none;">
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">✨</span>Volume estimé — Motion design</div>
+          <div class="vol-tags" id="vt-motion">
+            <button type="button" class="vol-tag" data-svc="motion" data-val="2">1–3 min</button>
+            <button type="button" class="vol-tag" data-svc="motion" data-val="5">3–7 min</button>
+            <button type="button" class="vol-tag" data-svc="motion" data-val="10">7–15 min</button>
+            <button type="button" class="vol-tag" data-svc="motion" data-val="20">15+ min</button>
+          </div>
+          <p class="svc-detail-note">💡 Tarif : <strong>280 €/min</strong> de motion design (titres animés, transitions, graphiques, séquences After Effects).</p>
+        </div>
+
       </div>
-      <input type="hidden" id="volume" name="volume" value="">
     </div>
 
     <div class="field">
@@ -353,22 +492,21 @@
     </div>
   </div>
 
-  <!-- ── ÉTAPE 5 — RÉCAPITULATIF + ESTIMATION ── -->
+  <!-- ── ÉTAPE 5 — RÉCAPITULATIF ── -->
   <div class="step" id="step-5">
     <h1 class="step-title">Ton estimation.</h1>
-    <p class="step-sub">Voici un récapitulatif de ton brief et une fourchette de prix indicative.</p>
+    <p class="step-sub">Récapitulatif de ton brief et fourchette de prix indicative selon tes choix.</p>
 
     <div class="price-box">
-      <div class="price-label">Investissement mensuel estimé</div>
+      <div class="price-label">Investissement estimé (base)</div>
       <div class="price-amount" id="priceAmount">—</div>
       <div class="price-period" id="pricePeriod">par mois</div>
       <div class="price-detail" id="priceDetail"></div>
-      <p class="price-disclaimer">💡 Cette estimation est indicative et basée sur tes réponses. Le tarif final sera défini lors de notre échange, en fonction des détails de ton projet.</p>
+      <p class="price-disclaimer">💡 Cette estimation est indicative. Le tarif final sera défini lors de notre échange, en fonction de la durée réelle des vidéos et des détails de ton projet.</p>
     </div>
 
     <div class="summary-grid" id="summaryGrid"></div>
 
-    <!-- Champs cachés pour Netlify -->
     <form id="briefForm" name="brief" netlify style="display:none;">
       <input type="hidden" name="form-name" value="brief">
     </form>
@@ -390,28 +528,33 @@
 </div>
 
 <script>
-  // ─── CONFIG TARIFS (modifie selon tes prix) ───
+  // ─── TARIFS ───
   const TARIFS = {
-    strategie:   900,   // €/mois
-    reels_low:   400,   // 1-4 reels/mois
-    reels_mid:   650,   // 5-8 reels/mois
-    reels_high:  900,   // 9+ reels/mois
-    youtube_low: 500,   // 1-2 vidéos/mois
-    youtube_mid: 800,   // 3-4 vidéos/mois
-    youtube_high:1100,  // 5+/mois
-    podcast_low: 350,   // 1-4 épisodes/mois
-    podcast_high:600,   // 5+/mois
-    vsl:         650,   // à l'unité
-    ads_low:     400,   // 1-4 pubs/mois
-    ads_high:    700,   // 5+/mois
-    remise_combo:0.12,  // 12% si plusieurs services
+    strategie:        900,   // €/mois
+    audit:            350,   // one-shot
+    yt_short:         250,   // YouTube < 10 min / vidéo
+    yt_long:          310,   // YouTube > 10 min (estimation ~12 min : 250 + 2×30)
+    reel_short:        40,   // Reel < 1 min
+    reel_long:         60,   // Reel > 1 min
+    vsl_short:        300,   // VSL < 3 min
+    vsl_mid:          405,   // VSL 3–10 min (300 + 3×35)
+    vsl_long:         750,   // VSL > 10 min (600 + 5×30, ~15 min)
+    podcast_short:    200,   // Podcast < 1h
+    podcast_long:     300,   // Podcast > 1h (200 + 1×100)
+    ads_short:         40,   // Ad < 1 min
+    ads_long:          60,   // Ad > 1 min
+    motion_per_min:   280,   // Motion design /min
+    urgency_long:     250,   // Supplément urgence /vidéo longue
+    urgency_short:     80,   // Supplément urgence /vidéo courte
+    remise_combo:    0.12,   // 12% remise multi-services
   };
 
   let currentStep = 1;
-  const TOTAL_STEPS = 4; // 5ème = récap
-
+  const TOTAL_STEPS = 4;
   const STEPS_LABELS = ['Profil', 'Situation', 'Objectif', 'Projet'];
+  const svcVols = {};
 
+  // ─── PROGRESS ───
   function updateProgress(step) {
     const pct = Math.round(((step - 1) / TOTAL_STEPS) * 100);
     document.getElementById('progressFill').style.width = pct + '%';
@@ -422,56 +565,41 @@
   }
 
   function getVal(name) {
-    const el = document.querySelector(`[name="${name}"]:checked`) ||
-               document.querySelector(`[name="${name}"]`);
-    if (!el) return '';
-    if (el.type === 'radio') {
-      const checked = document.querySelector(`[name="${name}"]:checked`);
-      return checked ? checked.value : '';
-    }
-    return el.value;
+    const checked = document.querySelector(`[name="${name}"]:checked`);
+    if (checked) return checked.value;
+    const el = document.querySelector(`[name="${name}"]`);
+    return el ? el.value : '';
   }
 
   function getChecked(name) {
     return [...document.querySelectorAll(`[name="${name}"]:checked`)].map(e => e.value);
   }
 
+  // ─── VALIDATION ───
   function validateStep(step) {
     if (step === 1) {
       const prenom = document.getElementById('prenom').value.trim();
       const email  = document.getElementById('email').value.trim();
-      const activite = getVal('activite');
-      const plateforme = getVal('plateforme');
-      if (!prenom || !email || !activite || !plateforme) {
-        alert('Merci de remplir tous les champs obligatoires.');
-        return false;
+      if (!prenom || !email || !getVal('activite') || !getVal('plateforme')) {
+        alert('Merci de remplir tous les champs obligatoires.'); return false;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert('Adresse email invalide.');
-        return false;
+        alert('Adresse email invalide.'); return false;
       }
     }
-    if (step === 2) {
-      if (!getVal('communaute') || !getVal('regularite') || !getVal('douleur')) {
-        alert('Merci de répondre à toutes les questions.');
-        return false;
-      }
+    if (step === 2 && (!getVal('communaute') || !getVal('regularite') || !getVal('douleur'))) {
+      alert('Merci de répondre à toutes les questions.'); return false;
     }
-    if (step === 3) {
-      if (!getVal('objectif') || !getVal('horizon')) {
-        alert('Merci de répondre à toutes les questions.');
-        return false;
-      }
+    if (step === 3 && (!getVal('objectif') || !getVal('horizon'))) {
+      alert('Merci de répondre à toutes les questions.'); return false;
     }
-    if (step === 4) {
-      if (getChecked('services').length === 0) {
-        alert('Sélectionne au moins un service.');
-        return false;
-      }
+    if (step === 4 && getChecked('services').length === 0) {
+      alert('Sélectionne au moins un service.'); return false;
     }
     return true;
   }
 
+  // ─── NAVIGATION ───
   function nextStep(from) {
     if (!validateStep(from)) return;
     document.getElementById('step-' + from).classList.remove('active');
@@ -493,141 +621,222 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ── Volume buttons ──
-  document.querySelectorAll('.vol-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.vol-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('volume').value = btn.dataset.val;
+  // ─── SERVICE CHECKBOXES → toggle sub-panels ───
+  document.querySelectorAll('[name="services"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const el = document.getElementById(cb.dataset.detail);
+      if (!el) return;
+      el.style.display = cb.checked ? 'block' : 'none';
+      if (cb.checked) { el.style.animation = 'none'; requestAnimationFrame(() => { el.style.animation = ''; }); }
     });
   });
 
-  // ── Pricing calc ──
+  // ─── VOL TAG clicks ───
+  document.querySelectorAll('.vol-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const svc = btn.dataset.svc;
+      document.querySelectorAll(`.vol-tag[data-svc="${svc}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      svcVols[svc] = parseFloat(btn.dataset.val);
+    });
+  });
+
+  // ─── DEFAULT VOL ───
+  function vol(svc, def) { return svcVols[svc] !== undefined ? svcVols[svc] : def; }
+
+  // ─── PRICE CALC ───
   function calcPrice() {
     const services = getChecked('services');
-    const volume   = document.getElementById('volume').value;
-    let total = 0;
+    const isUrgent = getVal('horizon').includes('Le plus vite possible');
     const lines = [];
+    let base = 0;
 
     if (services.includes('Stratégie de contenu')) {
-      total += TARIFS.strategie;
-      lines.push({ label: 'Stratégie de contenu', val: TARIFS.strategie });
+      base += TARIFS.strategie;
+      lines.push({ type: 'fixed', label: 'Stratégie de contenu', price: TARIFS.strategie, badge: '/mois' });
     }
-    if (services.includes('Reels / Courts formats')) {
-      const p = volume.includes('5–8') || volume.includes('5 à 8') ? TARIFS.reels_mid
-               : volume.includes('9') ? TARIFS.reels_high : TARIFS.reels_low;
-      total += p; lines.push({ label: 'Reels / Courts formats', val: p });
+    if (services.includes('Audit stratégique')) {
+      base += TARIFS.audit;
+      lines.push({ type: 'fixed', label: 'Audit stratégique', price: TARIFS.audit, badge: 'one-shot' });
     }
-    if (services.includes('YouTube / Long-form')) {
-      const p = volume.includes('3–4') || volume.includes('3 à 4') ? TARIFS.youtube_mid
-               : volume.includes('5') || volume.includes('9') ? TARIFS.youtube_high : TARIFS.youtube_low;
-      total += p; lines.push({ label: 'YouTube / Long-form', val: p });
-    }
-    if (services.includes('Podcast')) {
-      const p = volume.includes('5') || volume.includes('9') ? TARIFS.podcast_high : TARIFS.podcast_low;
-      total += p; lines.push({ label: 'Podcast', val: p });
+    if (services.includes('YouTube / Long-Form')) {
+      const v = vol('youtube', 1);
+      const priceShort = v * TARIFS.yt_short;
+      const priceLong  = v * TARIFS.yt_long;
+      const urg = isUrgent ? v * TARIFS.urgency_long : 0;
+      base += priceShort + urg;
+      lines.push({ type: 'dual', label: 'YouTube Long-Form', badge: `${v} vidéo${v > 1 ? 's' : ''}/mois`,
+        short: priceShort, long: priceLong, labelShort: '< 10 min', labelLong: '> 10 min',
+        perShort: TARIFS.yt_short, perLong: TARIFS.yt_long, v, urg,
+        urgLabel: `⚡ Urgence (${v} × 250 €)` });
     }
     if (services.includes('VSL (vidéo de vente)')) {
-      total += TARIFS.vsl; lines.push({ label: 'VSL (vidéo de vente)', val: TARIFS.vsl, unit: '/ unité' });
+      const v = vol('vsl', 1);
+      const priceShort = v * TARIFS.vsl_short;
+      const priceLong  = v * TARIFS.vsl_mid;
+      const urg = isUrgent ? v * TARIFS.urgency_long : 0;
+      base += priceShort + urg;
+      lines.push({ type: 'dual', label: 'VSL (vidéo de vente)', badge: `${v} VSL`,
+        short: priceShort, long: priceLong, labelShort: '< 3 min', labelLong: '3–10 min',
+        perShort: TARIFS.vsl_short, perLong: TARIFS.vsl_mid, v, urg,
+        urgLabel: `⚡ Urgence (${v} × 250 €)` });
+    }
+    if (services.includes('Reels / Courts formats')) {
+      const v = vol('reels', 4);
+      const priceShort = v * TARIFS.reel_short;
+      const priceLong  = v * TARIFS.reel_long;
+      const urg = isUrgent ? v * TARIFS.urgency_short : 0;
+      base += priceShort + urg;
+      lines.push({ type: 'dual', label: 'Reels / Courts formats', badge: `${v} reels/mois`,
+        short: priceShort, long: priceLong, labelShort: '< 1 min', labelLong: '> 1 min',
+        perShort: TARIFS.reel_short, perLong: TARIFS.reel_long, v, urg,
+        urgLabel: `⚡ Urgence (${v} × 80 €)` });
     }
     if (services.includes('Meta Ads (publicités)')) {
-      const p = volume.includes('5') || volume.includes('9') ? TARIFS.ads_high : TARIFS.ads_low;
-      total += p; lines.push({ label: 'Meta Ads', val: p });
+      const v = vol('ads', 4);
+      const priceShort = v * TARIFS.ads_short;
+      const priceLong  = v * TARIFS.ads_long;
+      const urg = isUrgent ? v * TARIFS.urgency_short : 0;
+      base += priceShort + urg;
+      lines.push({ type: 'dual', label: 'Meta Ads', badge: `${v} pubs/mois`,
+        short: priceShort, long: priceLong, labelShort: '< 1 min', labelLong: '> 1 min',
+        perShort: TARIFS.ads_short, perLong: TARIFS.ads_long, v, urg,
+        urgLabel: `⚡ Urgence (${v} × 80 €)` });
+    }
+    if (services.includes('Podcast')) {
+      const v = vol('podcast', 1);
+      const priceShort = v * TARIFS.podcast_short;
+      const priceLong  = v * TARIFS.podcast_long;
+      const urg = isUrgent ? v * TARIFS.urgency_long : 0;
+      base += priceShort + urg;
+      lines.push({ type: 'dual', label: 'Podcast', badge: `${v} épisode${v > 1 ? 's' : ''}/mois`,
+        short: priceShort, long: priceLong, labelShort: '< 1h', labelLong: '> 1h',
+        perShort: TARIFS.podcast_short, perLong: TARIFS.podcast_long, v, urg,
+        urgLabel: `⚡ Urgence (${v} × 250 €)` });
+    }
+    if (services.includes('Motion design')) {
+      const mins = vol('motion', 5);
+      const price = mins * TARIFS.motion_per_min;
+      base += price;
+      lines.push({ type: 'fixed', label: `Motion design (~${mins} min)`, price, badge: '' });
     }
 
-    // Remise combo si plusieurs services
+    // Combo discount (sur services production, hors audit)
+    const prodCount = services.filter(s => s !== 'Audit stratégique').length;
     let remise = 0;
-    if (services.length >= 2) {
-      remise = Math.round(total * TARIFS.remise_combo);
-      total -= remise;
-    }
+    if (prodCount >= 2) { remise = Math.round(base * TARIFS.remise_combo); base -= remise; }
 
-    return { total, lines, remise };
+    return { total: base, lines, remise, isUrgent };
   }
 
+  // ─── BUILD RECAP ───
   function buildRecap() {
-    const { total, lines, remise } = calcPrice();
-
-    // Prix
+    const { total, lines, remise, isUrgent } = calcPrice();
     const fmt = v => v.toLocaleString('fr-FR') + ' €';
+    const svcs = getChecked('services');
+    const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
+
     document.getElementById('priceAmount').textContent = fmt(total);
-    const vsl = getChecked('services').includes('VSL (vidéo de vente)') && getChecked('services').length === 1;
-    document.getElementById('pricePeriod').textContent = vsl ? 'à l\'unité' : 'par mois';
+    document.getElementById('pricePeriod').textContent = isVSLOnly ? 'à l\'unité' : 'par mois';
 
-    let detailHtml = lines.map(l =>
-      `<div class="price-line"><span class="price-line-label">${l.label}</span><span class="price-line-val">${l.val.toLocaleString('fr-FR')} €${l.unit ? ' '+l.unit : ''}</span></div>`
-    ).join('');
+    let html = '';
+    lines.forEach(l => {
+      if (l.type === 'fixed') {
+        html += `<div class="price-svc-block">
+          <div class="price-svc-name">${l.label}${l.badge ? ` <span class="price-svc-badge">${l.badge}</span>` : ''}</div>
+          <div class="price-svc-row"><span class="price-svc-row-label">Forfait</span><span class="price-svc-row-val">${fmt(l.price)}</span></div>
+        </div>`;
+      } else {
+        html += `<div class="price-svc-block">
+          <div class="price-svc-name">${l.label} <span class="price-svc-badge">${l.badge}</span></div>
+          <div class="price-svc-row">
+            <span class="price-svc-row-label">${l.labelShort} — ${l.v} × ${fmt(l.perShort)}</span>
+            <span class="price-svc-row-val">${fmt(l.short)}/mois</span>
+          </div>
+          <div class="price-svc-row">
+            <span class="price-svc-row-label">${l.labelLong} — ${l.v} × à partir de ${fmt(l.perLong)}</span>
+            <span class="price-svc-row-val alt">à partir de ${fmt(l.long)}/mois</span>
+          </div>
+          ${l.urg > 0 ? `<div class="price-urgency-row"><span>${l.urgLabel}</span><span>+${fmt(l.urg)}</span></div>` : ''}
+        </div>`;
+      }
+    });
+
     if (remise > 0) {
-      detailHtml += `<div class="price-line"><span class="price-line-label" style="color:#16a34a;">Remise multi-services</span><span class="price-line-val" style="color:#16a34a;">− ${remise.toLocaleString('fr-FR')} €</span></div>`;
+      html += `<div class="price-svc-block">
+        <div class="price-green-row"><span>🎁 Remise multi-services (−12%)</span><span>−${fmt(remise)}</span></div>
+      </div>`;
     }
-    document.getElementById('priceDetail').innerHTML = detailHtml;
 
-    // Résumé
+    document.getElementById('priceDetail').innerHTML = html;
+
+    // Summary
+    const volStr = Object.entries(svcVols).length
+      ? Object.entries(svcVols).map(([k, v]) => `${k}: ${v}`).join(' · ')
+      : 'Non précisés';
+
     const rows = [
-      ['Prénom',       document.getElementById('prenom').value],
-      ['Email',        document.getElementById('email').value],
-      ['Activité',     getVal('activite')],
-      ['Plateforme',   getVal('plateforme')],
-      ['Communauté',   getVal('communaute')],
-      ['Régularité',   getVal('regularite')],
-      ['Douleur',      getVal('douleur')],
-      ['Objectif',     getVal('objectif')],
-      ['Horizon',      getVal('horizon')],
-      ['Services',     getChecked('services').join(', ')],
-      ['Volume',       document.getElementById('volume').value || 'Non précisé'],
-      ['Budget',       document.getElementById('budget').value || 'Non précisé'],
-      ['Estimation',   fmt(total) + (vsl ? ' / unité' : ' / mois')],
+      ['Prénom',     document.getElementById('prenom').value],
+      ['Email',      document.getElementById('email').value],
+      ['Activité',   getVal('activite')],
+      ['Plateforme', getVal('plateforme')],
+      ['Communauté', getVal('communaute')],
+      ['Régularité', getVal('regularite')],
+      ['Douleur',    getVal('douleur')],
+      ['Objectif',   getVal('objectif')],
+      ['Horizon',    getVal('horizon')],
+      ['Services',   svcs.join(', ')],
+      ['Volumes',    volStr],
+      ['Budget',     document.getElementById('budget').value || 'Non précisé'],
+      ['Estimation', fmt(total) + (isVSLOnly ? ' / unité' : ' / mois')],
     ];
+
     document.getElementById('summaryGrid').innerHTML = rows.map(([k, v]) =>
       `<div class="summary-item"><span class="summary-key">${k}</span><span class="summary-val">${v || '—'}</span></div>`
     ).join('');
   }
 
-  // ── Submit ──
+  // ─── SUBMIT ───
   function submitBrief() {
     const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = 'Envoi…';
+    btn.disabled = true; btn.textContent = 'Envoi…';
 
-    const { total } = calcPrice();
-    const vsl = getChecked('services').includes('VSL (vidéo de vente)') && getChecked('services').length === 1;
-    const estimation = total.toLocaleString('fr-FR') + ' €' + (vsl ? ' / unité' : ' / mois');
-
-    const fields = {
-      'form-name':  'brief',
-      'Prénom':      document.getElementById('prenom').value,
-      'Email':       document.getElementById('email').value,
-      'Activité':    getVal('activite'),
-      'Plateforme':  getVal('plateforme'),
-      'Communauté':  getVal('communaute'),
-      'Régularité':  getVal('regularite'),
-      'Douleur principale': getVal('douleur'),
-      'Objectif':    getVal('objectif'),
-      'Horizon':     getVal('horizon'),
-      'Services':    getChecked('services').join(', '),
-      'Volume':      document.getElementById('volume').value || 'Non précisé',
-      'Budget envisagé': document.getElementById('budget').value || 'Non précisé',
-      'Estimation':  estimation,
-      'Message':     document.getElementById('message').value || '',
-    };
+    const { total, isUrgent } = calcPrice();
+    const svcs = getChecked('services');
+    const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
+    const estimation = total.toLocaleString('fr-FR') + ' €' + (isVSLOnly ? ' / unité' : ' / mois');
+    const volStr = Object.entries(svcVols).map(([k, v]) => `${k}: ${v}`).join(', ') || 'Non précisés';
 
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(fields).toString()
+      body: new URLSearchParams({
+        'form-name':         'brief',
+        'Prénom':             document.getElementById('prenom').value,
+        'Email':              document.getElementById('email').value,
+        'Activité':           getVal('activite'),
+        'Plateforme':         getVal('plateforme'),
+        'Communauté':         getVal('communaute'),
+        'Régularité':         getVal('regularite'),
+        'Douleur principale': getVal('douleur'),
+        'Objectif':           getVal('objectif'),
+        'Horizon':            getVal('horizon'),
+        'Services':           svcs.join(', '),
+        'Volumes':            volStr,
+        'Budget envisagé':    document.getElementById('budget').value || 'Non précisé',
+        'Estimation':         estimation,
+        'Urgence':            isUrgent ? 'Oui' : 'Non',
+        'Message':            document.getElementById('message').value || '',
+      }).toString()
     })
     .then(() => {
       document.querySelector('.form-outer').style.display = 'none';
       document.getElementById('successScreen').classList.add('visible');
       document.getElementById('progressWrap').style.display = 'none';
     })
-    .catch(() => {
-      btn.disabled = false;
-      btn.textContent = 'Erreur — réessaie';
-    });
+    .catch(() => { btn.disabled = false; btn.textContent = 'Erreur — réessaie'; });
   }
 
-  // Init
   updateProgress(1);
 </script>
 </body>
