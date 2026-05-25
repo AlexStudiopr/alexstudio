@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brief Client — Alex.Studio</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fffcf2; --text: #252422; --muted: #403d39;
+      --line: #ccc5b9; --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      -webkit-font-smoothing: antialiased; min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px; border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; background: var(--bg); z-index: 10;
+    }
+    .nav-logo { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; color: var(--text); }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color .2s; }
+    .nav-back:hover { color: var(--text); }
+
+    /* ── PROGRESS ── */
+    .progress-wrap { max-width: 600px; margin: 48px auto 0; padding: 0 24px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .progress-step-label { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .progress-pct { font-size: 12px; color: var(--muted); }
+    .progress-track { height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--text); border-radius: 2px; transition: width .5s var(--ease); width: 0%; }
+
+    /* ── WRAPPER ── */
+    .form-outer { max-width: 600px; margin: 0 auto; padding: 48px 24px 120px; overflow: hidden; }
+
+    /* ── STEPS ── */
+    .step { display: none; animation: stepIn .4s var(--ease) both; }
+    .step.active { display: block; }
+    @keyframes stepIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+    @keyframes stepOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(-40px); } }
+
+    .step-title { font-size: clamp(24px, 5vw, 32px); font-weight: 700; letter-spacing: -.03em; line-height: 1.15; margin-bottom: 8px; }
+    .step-sub { font-size: 15px; color: var(--muted); margin-bottom: 40px; line-height: 1.55; }
+
+    /* ── FORM FIELDS ── */
+    .field { margin-bottom: 28px; }
+    .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; letter-spacing: -.01em; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 14px 16px; border: 1.5px solid var(--line);
+      border-radius: 12px; background: var(--bg); color: var(--text);
+      font-family: inherit; font-size: 15px; outline: none;
+      transition: border-color .2s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--text); }
+    .field textarea { resize: none; min-height: 120px; line-height: 1.6; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── CHOICE CARDS ── */
+    .choices { display: grid; gap: 12px; }
+    .choices.cols-2 { grid-template-columns: 1fr 1fr; }
+    .choices.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .choice-card { position: relative; }
+    .choice-card input { position: absolute; opacity: 0; pointer-events: none; }
+    .choice-card label {
+      display: flex; flex-direction: column; gap: 4px;
+      border: 1.5px solid var(--line); border-radius: 14px;
+      padding: 18px 20px; cursor: pointer;
+      transition: border-color .2s, background .2s, transform .2s var(--ease);
+      user-select: none;
+    }
+    .choice-card label:hover { border-color: #8a8480; transform: translateY(-1px); }
+    .choice-card input:checked + label { border-color: var(--text); background: rgba(37,36,34,0.04); }
+    .choice-icon { font-size: 22px; margin-bottom: 4px; }
+    .choice-title { font-size: 14px; font-weight: 600; }
+    .choice-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* ── CHECKBOXES ── */
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check-item { position: relative; }
+    .check-item input { position: absolute; opacity: 0; pointer-events: none; }
+    .check-item label {
+      display: flex; align-items: center; gap: 10px;
+      border: 1.5px solid var(--line); border-radius: 12px;
+      padding: 14px 16px; cursor: pointer; font-size: 14px; font-weight: 500;
+      transition: border-color .2s, background .2s;
+    }
+    .check-item label::before {
+      content: ''; width: 18px; height: 18px; flex-shrink: 0;
+      border: 1.5px solid var(--line); border-radius: 5px;
+      transition: background .15s, border-color .15s;
+    }
+    .check-item input:checked + label { border-color: var(--text); background: rgba(37,36,34,0.04); }
+    .check-item input:checked + label::before { background: var(--text); border-color: var(--text); background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='%23fffcf2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; }
+    .check-service-icon { font-size: 16px; }
+
+    /* ── VOLUME SELECTOR ── */
+    .volume-wrap { display: flex; gap: 8px; flex-wrap: wrap; }
+    .vol-btn {
+      border: 1.5px solid var(--line); border-radius: 10px;
+      padding: 10px 18px; font-size: 14px; font-weight: 500;
+      cursor: pointer; background: var(--bg); color: var(--text);
+      transition: border-color .2s, background .2s;
+    }
+    .vol-btn.active { border-color: var(--text); background: rgba(37,36,34,0.05); }
+
+    /* ── PRICE ESTIMATE ── */
+    .price-box {
+      border: 1.5px solid var(--line); border-radius: 20px;
+      padding: 32px; margin-bottom: 32px; background: rgba(37,36,34,0.02);
+    }
+    .price-label { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .price-amount { font-size: 48px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-bottom: 4px; }
+    .price-period { font-size: 14px; color: var(--muted); }
+    .price-detail { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+    .price-line { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+    .price-line-label { color: var(--muted); }
+    .price-line-val { font-weight: 600; }
+    .price-disclaimer { font-size: 12px; color: var(--muted); margin-top: 20px; line-height: 1.5; }
+
+    /* ── SUMMARY ── */
+    .summary-grid { display: flex; flex-direction: column; gap: 0; margin-bottom: 40px; border: 1.5px solid var(--line); border-radius: 20px; overflow: hidden; }
+    .summary-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 16px 24px; border-bottom: 1px solid var(--line); }
+    .summary-item:last-child { border-bottom: none; }
+    .summary-key { font-size: 13px; color: var(--muted); flex-shrink: 0; padding-top: 1px; }
+    .summary-val { font-size: 13px; font-weight: 500; text-align: right; }
+
+    /* ── BUTTONS ── */
+    .btn-row { display: flex; gap: 12px; align-items: center; }
+    .btn-next {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--text); color: var(--bg);
+      border: none; border-radius: 50px; padding: 15px 32px;
+      font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: opacity .2s, transform .2s var(--ease);
+    }
+    .btn-next:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-next:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+    .btn-prev {
+      background: none; border: 1.5px solid var(--line); border-radius: 50px;
+      padding: 14px 24px; font-size: 14px; font-weight: 500; cursor: pointer;
+      font-family: inherit; color: var(--muted); transition: border-color .2s, color .2s;
+    }
+    .btn-prev:hover { border-color: var(--text); color: var(--text); }
+
+    /* ── SUCCESS ── */
+    .success-screen { display: none; text-align: center; padding: 80px 24px; }
+    .success-screen.visible { display: block; }
+    .success-icon { font-size: 56px; margin-bottom: 24px; }
+    .success-title { font-size: 32px; font-weight: 700; letter-spacing: -.03em; margin-bottom: 12px; }
+    .success-sub { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 400px; margin: 0 auto 40px; }
+    .success-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .success-link:hover { color: var(--text); }
+
+    /* ── SECTION LABEL ── */
+    .field-section { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; margin-top: 8px; }
+
+    @media (max-width: 600px) {
+      .nav { padding: 0 20px; }
+      .form-outer { padding: 32px 20px 100px; }
+      .choices.cols-2, .choices.cols-3 { grid-template-columns: 1fr; }
+      .check-grid { grid-template-columns: 1fr; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">Alex.Studio</a>
+  <a href="/" class="nav-back">← Retour au site</a>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" id="progressWrap">
+  <div class="progress-header">
+    <span class="progress-step-label" id="progressLabel">Étape 1 sur 4</span>
+    <span class="progress-pct" id="progressPct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<!-- FORM -->
+<div class="form-outer">
+
+  <!-- ── ÉTAPE 1 — PROFIL ── -->
+  <div class="step active" id="step-1">
+    <h1 class="step-title">Parlons de toi.</h1>
+    <p class="step-sub">Quelques infos pour que je comprenne qui tu es et ce que tu fais.</p>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="prenom">Prénom *</label>
+        <input type="text" id="prenom" name="prenom" placeholder="Alexandre" autocomplete="given-name" required>
+      </div>
+      <div class="field">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" placeholder="alex@gmail.com" autocomplete="email" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Ton activité *</label>
+      <div class="choices cols-2">
+        <div class="choice-card"><input type="radio" name="activite" id="a1" value="Coach / Consultant"><label for="a1"><span class="choice-icon">🎯</span><span class="choice-title">Coach / Consultant</span><span class="choice-desc">Tu vends de l'accompagnement ou des formations</span></label></div>
+        <div class="choice-card"><input type="radio" name="activite" id="a2" value="Entrepreneur / CEO"><label for="a2"><span class="choice-icon">🚀</span><span class="choice-title">Entrepreneur / CEO</span><span class="choice-desc">Tu as une entreprise et tu veux développer ta marque</span></label></div>
+        <div class="choice-card"><input type="radio" name="activite" id="a3" value="Créateur de contenu"><label for="a3"><span class="choice-icon">🎬</span><span class="choice-title">Créateur de contenu</span><span class="choice-desc">Le contenu est ton cœur de métier</span></label></div>
+        <div class="choice-card"><input type="radio" name="activite" id="a4" value="Agence / Marque"><label for="a4"><span class="choice-icon">🏢</span><span class="choice-title">Agence / Marque</span><span class="choice-desc">Tu représentes une structure ou une équipe</span></label></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Plateforme principale *</label>
+      <div class="choices cols-3">
+        <div class="choice-card"><input type="radio" name="plateforme" id="p1" value="Instagram"><label for="p1"><span class="choice-icon">📸</span><span class="choice-title">Instagram</span></label></div>
+        <div class="choice-card"><input type="radio" name="plateforme" id="p2" value="YouTube"><label for="p2"><span class="choice-icon">▶️</span><span class="choice-title">YouTube</span></label></div>
+        <div class="choice-card"><input type="radio" name="plateforme" id="p3" value="LinkedIn"><label for="p3"><span class="choice-icon">💼</span><span class="choice-title">LinkedIn</span></label></div>
+        <div class="choice-card"><input type="radio" name="plateforme" id="p4" value="TikTok"><label for="p4"><span class="choice-icon">🎵</span><span class="choice-title">TikTok</span></label></div>
+        <div class="choice-card"><input type="radio" name="plateforme" id="p5" value="Podcast"><label for="p5"><span class="choice-icon">🎙️</span><span class="choice-title">Podcast</span></label></div>
+        <div class="choice-card"><input type="radio" name="plateforme" id="p6" value="Plusieurs plateformes"><label for="p6"><span class="choice-icon">🌐</span><span class="choice-title">Plusieurs</span></label></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-next" onclick="nextStep(1)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ── ÉTAPE 2 — SITUATION ── -->
+  <div class="step" id="step-2">
+    <h1 class="step-title">Où tu en es aujourd'hui.</h1>
+    <p class="step-sub">Je veux comprendre ta situation réelle pour construire la bonne stratégie.</p>
+
+    <div class="field">
+      <label>Taille de ta communauté *</label>
+      <div class="choices cols-2">
+        <div class="choice-card"><input type="radio" name="communaute" id="c1" value="Je démarre (0 - 1 000 abonnés)"><label for="c1"><span class="choice-icon">🌱</span><span class="choice-title">Je démarre</span><span class="choice-desc">0 – 1 000 abonnés</span></label></div>
+        <div class="choice-card"><input type="radio" name="communaute" id="c2" value="En croissance (1 000 - 10 000 abonnés)"><label for="c2"><span class="choice-icon">📈</span><span class="choice-title">En croissance</span><span class="choice-desc">1 000 – 10 000 abonnés</span></label></div>
+        <div class="choice-card"><input type="radio" name="communaute" id="c3" value="Établi (10 000 - 100 000 abonnés)"><label for="c3"><span class="choice-icon">⚡</span><span class="choice-title">Établi</span><span class="choice-desc">10 000 – 100 000 abonnés</span></label></div>
+        <div class="choice-card"><input type="radio" name="communaute" id="c4" value="Grande audience (100 000+ abonnés)"><label for="c4"><span class="choice-icon">🔥</span><span class="choice-title">Grande audience</span><span class="choice-desc">100 000+ abonnés</span></label></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Tu publies du contenu régulièrement ? *</label>
+      <div class="choices cols-3">
+        <div class="choice-card"><input type="radio" name="regularite" id="r1" value="Non, jamais ou presque"><label for="r1"><span class="choice-icon">😅</span><span class="choice-title">Non / jamais</span></label></div>
+        <div class="choice-card"><input type="radio" name="regularite" id="r2" value="Parfois, sans régularité"><label for="r2"><span class="choice-icon">🤔</span><span class="choice-title">Parfois</span></label></div>
+        <div class="choice-card"><input type="radio" name="regularite" id="r3" value="Oui, régulièrement"><label for="r3"><span class="choice-icon">✅</span><span class="choice-title">Régulièrement</span></label></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Ta douleur principale *</label>
+      <div class="choices cols-2">
+        <div class="choice-card"><input type="radio" name="douleur" id="d1" value="Pas le temps de créer du contenu"><label for="d1"><span class="choice-icon">⏱️</span><span class="choice-title">Pas le temps</span><span class="choice-desc">Je veux créer mais je n'ai pas la bande passante</span></label></div>
+        <div class="choice-card"><input type="radio" name="douleur" id="d2" value="Mon contenu ne convertit pas"><label for="d2"><span class="choice-icon">📉</span><span class="choice-title">Ça ne convertit pas</span><span class="choice-desc">Je publie mais ça ne génère pas de clients</span></label></div>
+        <div class="choice-card"><input type="radio" name="douleur" id="d3" value="Manque de stratégie et de direction"><label for="d3"><span class="choice-icon">🧭</span><span class="choice-title">Manque de stratégie</span><span class="choice-desc">Je ne sais pas quoi publier ni comment</span></label></div>
+        <div class="choice-card"><input type="radio" name="douleur" id="d4" value="Qualité visuelle insuffisante"><label for="d4"><span class="choice-icon">🎨</span><span class="choice-title">Qualité insuffisante</span><span class="choice-desc">Mes vidéos ne reflètent pas mon niveau</span></label></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-prev" onclick="prevStep(2)">← Retour</button>
+      <button class="btn-next" onclick="nextStep(2)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ── ÉTAPE 3 — OBJECTIF ── -->
+  <div class="step" id="step-3">
+    <h1 class="step-title">Ce que tu veux accomplir.</h1>
+    <p class="step-sub">Ton objectif dicte tout — la stratégie, les formats, le rythme.</p>
+
+    <div class="field">
+      <label>Ton objectif principal *</label>
+      <div class="choices cols-2">
+        <div class="choice-card"><input type="radio" name="objectif" id="o1" value="Générer des leads et des clients"><label for="o1"><span class="choice-icon">🎯</span><span class="choice-title">Générer des leads</span><span class="choice-desc">Transformer mon contenu en machine à prospects qualifiés</span></label></div>
+        <div class="choice-card"><input type="radio" name="objectif" id="o2" value="Lancer et vendre une offre"><label for="o2"><span class="choice-icon">💰</span><span class="choice-title">Lancer une offre</span><span class="choice-desc">Promouvoir et vendre une formation, un service ou un produit</span></label></div>
+        <div class="choice-card"><input type="radio" name="objectif" id="o3" value="Développer ma notoriété et ma visibilité"><label for="o3"><span class="choice-icon">📢</span><span class="choice-title">Développer ma visibilité</span><span class="choice-desc">Toucher plus de monde et augmenter mes vues</span></label></div>
+        <div class="choice-card"><input type="radio" name="objectif" id="o4" value="Construire mon personal brand sur le long terme"><label for="o4"><span class="choice-icon">👑</span><span class="choice-title">Personal brand</span><span class="choice-desc">Devenir une référence dans mon domaine</span></label></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Dans quel délai veux-tu voir des résultats ? *</label>
+      <div class="choices cols-2">
+        <div class="choice-card"><input type="radio" name="horizon" id="h1" value="Le plus vite possible (urgence)"><label for="h1"><span class="choice-icon">🚨</span><span class="choice-title">Le plus vite possible</span><span class="choice-desc">J'ai un lancement ou une deadline</span></label></div>
+        <div class="choice-card"><input type="radio" name="horizon" id="h2" value="Dans 1 à 3 mois"><label for="h2"><span class="choice-icon">📅</span><span class="choice-title">1 – 3 mois</span><span class="choice-desc">Je veux démarrer rapidement mais sereinement</span></label></div>
+        <div class="choice-card"><input type="radio" name="horizon" id="h3" value="Dans 3 à 6 mois"><label for="h3"><span class="choice-icon">🗓️</span><span class="choice-title">3 – 6 mois</span><span class="choice-desc">Je veux construire sur le long terme</span></label></div>
+        <div class="choice-card"><input type="radio" name="horizon" id="h4" value="Je planifie pour la suite (6 mois+)"><label for="h4"><span class="choice-icon">🌅</span><span class="choice-title">6 mois et plus</span><span class="choice-desc">Je prépare l'avenir de ma marque</span></label></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-prev" onclick="prevStep(3)">← Retour</button>
+      <button class="btn-next" onclick="nextStep(3)">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- ── ÉTAPE 4 — PROJET ── -->
+  <div class="step" id="step-4">
+    <h1 class="step-title">Ton projet en détail.</h1>
+    <p class="step-sub">Dis-moi exactement ce dont tu as besoin — je calcule une estimation sur mesure.</p>
+
+    <div class="field">
+      <p class="field-section">Services souhaités *</p>
+      <div class="check-grid">
+        <div class="check-item"><input type="checkbox" id="s1" name="services" value="Stratégie de contenu"><label for="s1"><span class="check-service-icon">🧭</span> Stratégie de contenu</label></div>
+        <div class="check-item"><input type="checkbox" id="s2" name="services" value="Reels / Courts formats"><label for="s2"><span class="check-service-icon">📱</span> Reels / Courts formats</label></div>
+        <div class="check-item"><input type="checkbox" id="s3" name="services" value="YouTube / Long-form"><label for="s3"><span class="check-service-icon">🎬</span> YouTube / Long-form</label></div>
+        <div class="check-item"><input type="checkbox" id="s4" name="services" value="Podcast"><label for="s4"><span class="check-service-icon">🎙️</span> Podcast</label></div>
+        <div class="check-item"><input type="checkbox" id="s5" name="services" value="VSL (vidéo de vente)"><label for="s5"><span class="check-service-icon">💼</span> VSL (vidéo de vente)</label></div>
+        <div class="check-item"><input type="checkbox" id="s6" name="services" value="Meta Ads (publicités)"><label for="s6"><span class="check-service-icon">📢</span> Meta Ads</label></div>
+      </div>
+    </div>
+
+    <div class="field" id="volume-field">
+      <label>Volume mensuel souhaité</label>
+      <div class="volume-wrap" id="volumeWrap">
+        <button type="button" class="vol-btn" data-val="1 à 2 vidéos / mois">1–2 vidéos</button>
+        <button type="button" class="vol-btn" data-val="3 à 4 vidéos / mois">3–4 vidéos</button>
+        <button type="button" class="vol-btn" data-val="5 à 8 vidéos / mois">5–8 vidéos</button>
+        <button type="button" class="vol-btn" data-val="9 vidéos et plus / mois">9+ vidéos</button>
+        <button type="button" class="vol-btn" data-val="À définir ensemble">À définir</button>
+      </div>
+      <input type="hidden" id="volume" name="volume" value="">
+    </div>
+
+    <div class="field">
+      <label for="budget">Budget mensuel envisagé</label>
+      <select id="budget" name="budget">
+        <option value="" disabled selected>Sélectionne une fourchette</option>
+        <option>Je découvre, pas encore défini</option>
+        <option>Moins de 500 €/mois</option>
+        <option>500 – 1 000 €/mois</option>
+        <option>1 000 – 2 000 €/mois</option>
+        <option>2 000 €/mois et plus</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="message">Détails supplémentaires <span style="color:var(--muted);font-weight:400;">(optionnel)</span></label>
+      <textarea id="message" name="message" placeholder="Décris ton projet, tes attentes, des exemples de contenus qui t'inspirent, ou toute info utile…"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-prev" onclick="prevStep(4)">← Retour</button>
+      <button class="btn-next" onclick="nextStep(4)">Voir mon estimation →</button>
+    </div>
+  </div>
+
+  <!-- ── ÉTAPE 5 — RÉCAPITULATIF + ESTIMATION ── -->
+  <div class="step" id="step-5">
+    <h1 class="step-title">Ton estimation.</h1>
+    <p class="step-sub">Voici un récapitulatif de ton brief et une fourchette de prix indicative.</p>
+
+    <div class="price-box">
+      <div class="price-label">Investissement mensuel estimé</div>
+      <div class="price-amount" id="priceAmount">—</div>
+      <div class="price-period" id="pricePeriod">par mois</div>
+      <div class="price-detail" id="priceDetail"></div>
+      <p class="price-disclaimer">💡 Cette estimation est indicative et basée sur tes réponses. Le tarif final sera défini lors de notre échange, en fonction des détails de ton projet.</p>
+    </div>
+
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <!-- Champs cachés pour Netlify -->
+    <form id="briefForm" name="brief" netlify style="display:none;">
+      <input type="hidden" name="form-name" value="brief">
+    </form>
+
+    <div class="btn-row">
+      <button class="btn-prev" onclick="prevStep(5)">← Modifier</button>
+      <button class="btn-next" id="submitBtn" onclick="submitBrief()">Envoyer mon brief ✉️</button>
+    </div>
+  </div>
+
+</div><!-- /form-outer -->
+
+<!-- SUCCESS -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">🎉</div>
+  <h2 class="success-title">Brief envoyé !</h2>
+  <p class="success-sub">J'ai bien reçu ton brief. Je te reviens dans les 24h avec une proposition personnalisée.</p>
+  <a href="/" class="success-link">← Retour au site</a>
+</div>
+
+<script>
+  // ─── CONFIG TARIFS (modifie selon tes prix) ───
+  const TARIFS = {
+    strategie:   900,   // €/mois
+    reels_low:   400,   // 1-4 reels/mois
+    reels_mid:   650,   // 5-8 reels/mois
+    reels_high:  900,   // 9+ reels/mois
+    youtube_low: 500,   // 1-2 vidéos/mois
+    youtube_mid: 800,   // 3-4 vidéos/mois
+    youtube_high:1100,  // 5+/mois
+    podcast_low: 350,   // 1-4 épisodes/mois
+    podcast_high:600,   // 5+/mois
+    vsl:         650,   // à l'unité
+    ads_low:     400,   // 1-4 pubs/mois
+    ads_high:    700,   // 5+/mois
+    remise_combo:0.12,  // 12% si plusieurs services
+  };
+
+  let currentStep = 1;
+  const TOTAL_STEPS = 4; // 5ème = récap
+
+  const STEPS_LABELS = ['Profil', 'Situation', 'Objectif', 'Projet'];
+
+  function updateProgress(step) {
+    const pct = Math.round(((step - 1) / TOTAL_STEPS) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressLabel').textContent =
+      step <= TOTAL_STEPS ? `Étape ${step} sur ${TOTAL_STEPS} — ${STEPS_LABELS[step-1]}` : 'Récapitulatif';
+    document.getElementById('progressWrap').style.display = step > TOTAL_STEPS ? 'none' : '';
+  }
+
+  function getVal(name) {
+    const el = document.querySelector(`[name="${name}"]:checked`) ||
+               document.querySelector(`[name="${name}"]`);
+    if (!el) return '';
+    if (el.type === 'radio') {
+      const checked = document.querySelector(`[name="${name}"]:checked`);
+      return checked ? checked.value : '';
+    }
+    return el.value;
+  }
+
+  function getChecked(name) {
+    return [...document.querySelectorAll(`[name="${name}"]:checked`)].map(e => e.value);
+  }
+
+  function validateStep(step) {
+    if (step === 1) {
+      const prenom = document.getElementById('prenom').value.trim();
+      const email  = document.getElementById('email').value.trim();
+      const activite = getVal('activite');
+      const plateforme = getVal('plateforme');
+      if (!prenom || !email || !activite || !plateforme) {
+        alert('Merci de remplir tous les champs obligatoires.');
+        return false;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Adresse email invalide.');
+        return false;
+      }
+    }
+    if (step === 2) {
+      if (!getVal('communaute') || !getVal('regularite') || !getVal('douleur')) {
+        alert('Merci de répondre à toutes les questions.');
+        return false;
+      }
+    }
+    if (step === 3) {
+      if (!getVal('objectif') || !getVal('horizon')) {
+        alert('Merci de répondre à toutes les questions.');
+        return false;
+      }
+    }
+    if (step === 4) {
+      if (getChecked('services').length === 0) {
+        alert('Sélectionne au moins un service.');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function nextStep(from) {
+    if (!validateStep(from)) return;
+    document.getElementById('step-' + from).classList.remove('active');
+    currentStep = from + 1;
+    if (currentStep === 5) buildRecap();
+    const next = document.getElementById('step-' + currentStep);
+    next.classList.add('active');
+    next.style.animation = 'none';
+    requestAnimationFrame(() => { next.style.animation = ''; });
+    updateProgress(currentStep);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function prevStep(from) {
+    document.getElementById('step-' + from).classList.remove('active');
+    currentStep = from - 1;
+    document.getElementById('step-' + currentStep).classList.add('active');
+    updateProgress(currentStep);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Volume buttons ──
+  document.querySelectorAll('.vol-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.vol-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('volume').value = btn.dataset.val;
+    });
+  });
+
+  // ── Pricing calc ──
+  function calcPrice() {
+    const services = getChecked('services');
+    const volume   = document.getElementById('volume').value;
+    let total = 0;
+    const lines = [];
+
+    if (services.includes('Stratégie de contenu')) {
+      total += TARIFS.strategie;
+      lines.push({ label: 'Stratégie de contenu', val: TARIFS.strategie });
+    }
+    if (services.includes('Reels / Courts formats')) {
+      const p = volume.includes('5–8') || volume.includes('5 à 8') ? TARIFS.reels_mid
+               : volume.includes('9') ? TARIFS.reels_high : TARIFS.reels_low;
+      total += p; lines.push({ label: 'Reels / Courts formats', val: p });
+    }
+    if (services.includes('YouTube / Long-form')) {
+      const p = volume.includes('3–4') || volume.includes('3 à 4') ? TARIFS.youtube_mid
+               : volume.includes('5') || volume.includes('9') ? TARIFS.youtube_high : TARIFS.youtube_low;
+      total += p; lines.push({ label: 'YouTube / Long-form', val: p });
+    }
+    if (services.includes('Podcast')) {
+      const p = volume.includes('5') || volume.includes('9') ? TARIFS.podcast_high : TARIFS.podcast_low;
+      total += p; lines.push({ label: 'Podcast', val: p });
+    }
+    if (services.includes('VSL (vidéo de vente)')) {
+      total += TARIFS.vsl; lines.push({ label: 'VSL (vidéo de vente)', val: TARIFS.vsl, unit: '/ unité' });
+    }
+    if (services.includes('Meta Ads (publicités)')) {
+      const p = volume.includes('5') || volume.includes('9') ? TARIFS.ads_high : TARIFS.ads_low;
+      total += p; lines.push({ label: 'Meta Ads', val: p });
+    }
+
+    // Remise combo si plusieurs services
+    let remise = 0;
+    if (services.length >= 2) {
+      remise = Math.round(total * TARIFS.remise_combo);
+      total -= remise;
+    }
+
+    return { total, lines, remise };
+  }
+
+  function buildRecap() {
+    const { total, lines, remise } = calcPrice();
+
+    // Prix
+    const fmt = v => v.toLocaleString('fr-FR') + ' €';
+    document.getElementById('priceAmount').textContent = fmt(total);
+    const vsl = getChecked('services').includes('VSL (vidéo de vente)') && getChecked('services').length === 1;
+    document.getElementById('pricePeriod').textContent = vsl ? 'à l\'unité' : 'par mois';
+
+    let detailHtml = lines.map(l =>
+      `<div class="price-line"><span class="price-line-label">${l.label}</span><span class="price-line-val">${l.val.toLocaleString('fr-FR')} €${l.unit ? ' '+l.unit : ''}</span></div>`
+    ).join('');
+    if (remise > 0) {
+      detailHtml += `<div class="price-line"><span class="price-line-label" style="color:#16a34a;">Remise multi-services</span><span class="price-line-val" style="color:#16a34a;">− ${remise.toLocaleString('fr-FR')} €</span></div>`;
+    }
+    document.getElementById('priceDetail').innerHTML = detailHtml;
+
+    // Résumé
+    const rows = [
+      ['Prénom',       document.getElementById('prenom').value],
+      ['Email',        document.getElementById('email').value],
+      ['Activité',     getVal('activite')],
+      ['Plateforme',   getVal('plateforme')],
+      ['Communauté',   getVal('communaute')],
+      ['Régularité',   getVal('regularite')],
+      ['Douleur',      getVal('douleur')],
+      ['Objectif',     getVal('objectif')],
+      ['Horizon',      getVal('horizon')],
+      ['Services',     getChecked('services').join(', ')],
+      ['Volume',       document.getElementById('volume').value || 'Non précisé'],
+      ['Budget',       document.getElementById('budget').value || 'Non précisé'],
+      ['Estimation',   fmt(total) + (vsl ? ' / unité' : ' / mois')],
+    ];
+    document.getElementById('summaryGrid').innerHTML = rows.map(([k, v]) =>
+      `<div class="summary-item"><span class="summary-key">${k}</span><span class="summary-val">${v || '—'}</span></div>`
+    ).join('');
+  }
+
+  // ── Submit ──
+  function submitBrief() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Envoi…';
+
+    const { total } = calcPrice();
+    const vsl = getChecked('services').includes('VSL (vidéo de vente)') && getChecked('services').length === 1;
+    const estimation = total.toLocaleString('fr-FR') + ' €' + (vsl ? ' / unité' : ' / mois');
+
+    const fields = {
+      'form-name':  'brief',
+      'Prénom':      document.getElementById('prenom').value,
+      'Email':       document.getElementById('email').value,
+      'Activité':    getVal('activite'),
+      'Plateforme':  getVal('plateforme'),
+      'Communauté':  getVal('communaute'),
+      'Régularité':  getVal('regularite'),
+      'Douleur principale': getVal('douleur'),
+      'Objectif':    getVal('objectif'),
+      'Horizon':     getVal('horizon'),
+      'Services':    getChecked('services').join(', '),
+      'Volume':      document.getElementById('volume').value || 'Non précisé',
+      'Budget envisagé': document.getElementById('budget').value || 'Non précisé',
+      'Estimation':  estimation,
+      'Message':     document.getElementById('message').value || '',
+    };
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(fields).toString()
+    })
+    .then(() => {
+      document.querySelector('.form-outer').style.display = 'none';
+      document.getElementById('successScreen').classList.add('visible');
+      document.getElementById('progressWrap').style.display = 'none';
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Erreur — réessaie';
+    });
+  }
+
+  // Init
+  updateProgress(1);
+</script>
+</body>
+</html>

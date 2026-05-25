@@ -343,6 +343,33 @@
     .btn-pill:hover { transform: scale(0.96); opacity: 0.82; }
 
     /* ─── CONTACT ─── */
+    .brief-cta {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; margin-top: 48px; padding: 28px 36px;
+      border: 1px solid var(--line); border-radius: 20px;
+      background: rgba(37,36,34,0.03);
+      transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+    }
+    .brief-cta:hover { background: rgba(37,36,34,0.06); border-color: rgba(37,36,34,0.25); }
+    .brief-cta-text { display: flex; flex-direction: column; gap: 4px; }
+    .brief-cta-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .brief-cta-title { font-size: 18px; font-weight: 600; letter-spacing: -0.03em; color: var(--text); }
+    .brief-cta-desc { font-size: 14px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+    .btn-pill-outline {
+      flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 26px; border-radius: 100px;
+      border: 1.5px solid var(--text); background: transparent;
+      font-family: inherit; font-size: 15px; color: var(--text);
+      font-weight: 500; text-decoration: none; cursor: pointer;
+      transition: background 0.25s var(--ease), color 0.25s var(--ease), transform 0.3s var(--ease);
+      letter-spacing: -0.01em; white-space: nowrap;
+    }
+    .btn-pill-outline:hover { background: var(--text); color: var(--bg); transform: scale(0.97); }
+    @media (max-width: 600px) {
+      .brief-cta { flex-direction: column; align-items: flex-start; padding: 22px 20px; }
+      .btn-pill-outline { width: 100%; justify-content: center; }
+    }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; margin-top: 60px; }
     .contact-form { display: flex; flex-direction: column; gap: 32px; }
     .form-group { display: flex; flex-direction: column; }
@@ -707,7 +734,18 @@
   <div class="container">
     <p class="section-label reveal">Contact</p>
     <h2 class="section-h2 reveal d1">Discutons de ton projet.</h2>
-    <div class="contact-grid">
+
+    <!-- Brief CTA -->
+    <a href="/brief.html" class="brief-cta reveal d2" style="display:flex; text-decoration:none;">
+      <div class="brief-cta-text">
+        <span class="brief-cta-label">Tu sais déjà ce que tu veux ?</span>
+        <span class="brief-cta-title">Remplis un brief complet →</span>
+        <span class="brief-cta-desc">Décris ton projet en détail et reçois une estimation tarifaire personnalisée.</span>
+      </div>
+      <span class="btn-pill-outline">Faire mon brief</span>
+    </a>
+
+    <div class="contact-grid" style="margin-top:48px;">
       <!-- Calendly LEFT -->
       <div class="reveal d2">
         <div class="calendly-wrapper">
