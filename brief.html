@@ -279,14 +279,13 @@
     </div>
 
     <div class="field">
-      <label>Plateforme principale *</label>
+      <label>Plateforme(s) principale(s) * <span style="color:var(--muted);font-weight:400;font-size:12px;">Plusieurs choix possibles</span></label>
       <div class="choices cols-3">
-        <div class="choice-card"><input type="radio" name="plateforme" id="p1" value="Instagram"><label for="p1"><span class="choice-icon">📸</span><span class="choice-title">Instagram</span></label></div>
-        <div class="choice-card"><input type="radio" name="plateforme" id="p2" value="YouTube"><label for="p2"><span class="choice-icon">▶️</span><span class="choice-title">YouTube</span></label></div>
-        <div class="choice-card"><input type="radio" name="plateforme" id="p3" value="LinkedIn"><label for="p3"><span class="choice-icon">💼</span><span class="choice-title">LinkedIn</span></label></div>
-        <div class="choice-card"><input type="radio" name="plateforme" id="p4" value="TikTok"><label for="p4"><span class="choice-icon">🎵</span><span class="choice-title">TikTok</span></label></div>
-        <div class="choice-card"><input type="radio" name="plateforme" id="p5" value="Podcast"><label for="p5"><span class="choice-icon">🎙️</span><span class="choice-title">Podcast</span></label></div>
-        <div class="choice-card"><input type="radio" name="plateforme" id="p6" value="Plusieurs plateformes"><label for="p6"><span class="choice-icon">🌐</span><span class="choice-title">Plusieurs</span></label></div>
+        <div class="choice-card"><input type="checkbox" name="plateforme" id="p1" value="YouTube"><label for="p1"><span class="choice-icon">▶️</span><span class="choice-title">YouTube</span></label></div>
+        <div class="choice-card"><input type="checkbox" name="plateforme" id="p2" value="Instagram"><label for="p2"><span class="choice-icon">📸</span><span class="choice-title">Instagram</span></label></div>
+        <div class="choice-card"><input type="checkbox" name="plateforme" id="p3" value="LinkedIn"><label for="p3"><span class="choice-icon">💼</span><span class="choice-title">LinkedIn</span></label></div>
+        <div class="choice-card"><input type="checkbox" name="plateforme" id="p4" value="TikTok"><label for="p4"><span class="choice-icon">🎵</span><span class="choice-title">TikTok</span></label></div>
+        <div class="choice-card"><input type="checkbox" name="plateforme" id="p5" value="Podcast"><label for="p5"><span class="choice-icon">🎙️</span><span class="choice-title">Podcast</span></label></div>
       </div>
     </div>
 
@@ -470,6 +469,16 @@
     </div>
 
     <div class="field">
+      <label>Modalités de paiement</label>
+      <div class="vol-tags" id="paymentTags">
+        <button type="button" class="vol-tag active" data-payment="1">Paiement en 1 fois</button>
+        <button type="button" class="vol-tag" data-payment="2">2 fois (50 % · 50 %)</button>
+        <button type="button" class="vol-tag" data-payment="3">3 fois (mensuel)</button>
+      </div>
+      <input type="hidden" id="paymentOption" name="paiement" value="1">
+    </div>
+
+    <div class="field">
       <label for="budget">Budget mensuel envisagé</label>
       <select id="budget" name="budget">
         <option value="" disabled selected>Sélectionne une fourchette</option>
@@ -546,7 +555,12 @@
     motion_per_min:   280,   // Motion design /min
     urgency_long:     250,   // Supplément urgence /vidéo longue
     urgency_short:     80,   // Supplément urgence /vidéo courte
-    remise_combo:    0.12,   // 12% remise multi-services
+  };
+
+  // Map detail-id → svcVols key (pour reset au décoché)
+  const DETAIL_TO_SVC = {
+    'svc-youtube': 'youtube', 'svc-vsl': 'vsl', 'svc-reels': 'reels',
+    'svc-ads': 'ads', 'svc-podcast': 'podcast', 'svc-motion': 'motion',
   };
 
   let currentStep = 1;
@@ -580,7 +594,7 @@
     if (step === 1) {
       const prenom = document.getElementById('prenom').value.trim();
       const email  = document.getElementById('email').value.trim();
-      if (!prenom || !email || !getVal('activite') || !getVal('plateforme')) {
+      if (!prenom || !email || !getVal('activite') || getChecked('plateforme').length === 0) {
         alert('Merci de remplir tous les champs obligatoires.'); return false;
       }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -621,13 +635,35 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ─── SERVICE CHECKBOXES → toggle sub-panels ───
+  // ─── SERVICE CHECKBOXES → toggle sub-panels + reset vol on uncheck ───
   document.querySelectorAll('[name="services"]').forEach(cb => {
     cb.addEventListener('change', () => {
-      const el = document.getElementById(cb.dataset.detail);
+      const detailId = cb.dataset.detail;
+      const el = document.getElementById(detailId);
       if (!el) return;
       el.style.display = cb.checked ? 'block' : 'none';
-      if (cb.checked) { el.style.animation = 'none'; requestAnimationFrame(() => { el.style.animation = ''; }); }
+      if (cb.checked) {
+        el.style.animation = 'none';
+        requestAnimationFrame(() => { el.style.animation = ''; });
+      } else {
+        // Purge stored volume + reset buttons visually
+        const svcKey = DETAIL_TO_SVC[detailId];
+        if (svcKey) {
+          delete svcVols[svcKey];
+          document.querySelectorAll(`.vol-tag[data-svc="${svcKey}"]`).forEach(b => b.classList.remove('active'));
+        }
+      }
+    });
+  });
+
+  // ─── PAYMENT BUTTONS ───
+  let paymentChoice = 1;
+  document.querySelectorAll('#paymentTags .vol-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#paymentTags .vol-tag').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      paymentChoice = parseInt(btn.dataset.payment);
+      document.getElementById('paymentOption').value = paymentChoice;
     });
   });
 
@@ -721,17 +757,12 @@
       lines.push({ type: 'fixed', label: `Motion design (~${mins} min)`, price, badge: '' });
     }
 
-    // Combo discount (sur services production, hors audit)
-    const prodCount = services.filter(s => s !== 'Audit stratégique').length;
-    let remise = 0;
-    if (prodCount >= 2) { remise = Math.round(base * TARIFS.remise_combo); base -= remise; }
-
-    return { total: base, lines, remise, isUrgent };
+    return { total: base, lines, isUrgent };
   }
 
   // ─── BUILD RECAP ───
   function buildRecap() {
-    const { total, lines, remise, isUrgent } = calcPrice();
+    const { total, lines, isUrgent } = calcPrice();
     const fmt = v => v.toLocaleString('fr-FR') + ' €';
     const svcs = getChecked('services');
     const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
@@ -740,6 +771,8 @@
     document.getElementById('pricePeriod').textContent = isVSLOnly ? 'à l\'unité' : 'par mois';
 
     let html = '';
+
+    // ── Détail par service ──
     lines.forEach(l => {
       if (l.type === 'fixed') {
         html += `<div class="price-svc-block">
@@ -762,24 +795,37 @@
       }
     });
 
-    if (remise > 0) {
+    // ── Paiement en plusieurs fois ──
+    if (paymentChoice > 1) {
+      const perInstall = Math.floor(total / paymentChoice);
+      const lastInstall = total - perInstall * (paymentChoice - 1);
+      const installRows = Array.from({ length: paymentChoice }, (_, i) => {
+        const amount = i === paymentChoice - 1 ? lastInstall : perInstall;
+        const label  = paymentChoice === 2
+          ? (i === 0 ? 'Acompte (50%)' : 'Solde (50%)')
+          : `Versement ${i + 1}`;
+        return `<div class="price-svc-row"><span class="price-svc-row-label">${label}</span><span class="price-svc-row-val">${fmt(amount)}</span></div>`;
+      }).join('');
       html += `<div class="price-svc-block">
-        <div class="price-green-row"><span>🎁 Remise multi-services (−12%)</span><span>−${fmt(remise)}</span></div>
+        <div class="price-svc-name">💳 Paiement en ${paymentChoice} fois</div>
+        ${installRows}
       </div>`;
     }
 
     document.getElementById('priceDetail').innerHTML = html;
 
-    // Summary
-    const volStr = Object.entries(svcVols).length
+    // ── Résumé réponses ──
+    const volStr = Object.keys(svcVols).length
       ? Object.entries(svcVols).map(([k, v]) => `${k}: ${v}`).join(' · ')
       : 'Non précisés';
+
+    const payLabels = { 1: '1 paiement', 2: '2 fois (50%/50%)', 3: '3 fois (mensuel)' };
 
     const rows = [
       ['Prénom',     document.getElementById('prenom').value],
       ['Email',      document.getElementById('email').value],
       ['Activité',   getVal('activite')],
-      ['Plateforme', getVal('plateforme')],
+      ['Plateforme', getChecked('plateforme').join(', ')],
       ['Communauté', getVal('communaute')],
       ['Régularité', getVal('regularite')],
       ['Douleur',    getVal('douleur')],
@@ -788,6 +834,7 @@
       ['Services',   svcs.join(', ')],
       ['Volumes',    volStr],
       ['Budget',     document.getElementById('budget').value || 'Non précisé'],
+      ['Paiement',   payLabels[paymentChoice] || '1 paiement'],
       ['Estimation', fmt(total) + (isVSLOnly ? ' / unité' : ' / mois')],
     ];
 
@@ -806,6 +853,7 @@
     const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
     const estimation = total.toLocaleString('fr-FR') + ' €' + (isVSLOnly ? ' / unité' : ' / mois');
     const volStr = Object.entries(svcVols).map(([k, v]) => `${k}: ${v}`).join(', ') || 'Non précisés';
+    const payLabels = { 1: '1 paiement', 2: '2 fois (50%/50%)', 3: '3 fois (mensuel)' };
 
     fetch('/', {
       method: 'POST',
@@ -815,7 +863,7 @@
         'Prénom':             document.getElementById('prenom').value,
         'Email':              document.getElementById('email').value,
         'Activité':           getVal('activite'),
-        'Plateforme':         getVal('plateforme'),
+        'Plateforme':         getChecked('plateforme').join(', '),
         'Communauté':         getVal('communaute'),
         'Régularité':         getVal('regularite'),
         'Douleur principale': getVal('douleur'),
@@ -824,6 +872,7 @@
         'Services':           svcs.join(', '),
         'Volumes':            volStr,
         'Budget envisagé':    document.getElementById('budget').value || 'Non précisé',
+        'Paiement':           payLabels[paymentChoice] || '1 paiement',
         'Estimation':         estimation,
         'Urgence':            isUrgent ? 'Oui' : 'Non',
         'Message':            document.getElementById('message').value || '',
