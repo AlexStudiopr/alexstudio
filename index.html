@@ -987,8 +987,18 @@
     if (playBtn) {
       playBtn.addEventListener('click', e => {
         e.stopPropagation();
-        if (vid.paused) vid.play().catch(() => {});
-        else vid.pause();
+        if (vid.paused) {
+          muteAllExcept(vid);
+          vid.pause();
+          vid.removeAttribute('muted');
+          vid.muted  = false;
+          vid.volume = slider && parseFloat(slider.value) > 0 ? parseFloat(slider.value) : 0.5;
+          if (slider) slider.value = vid.volume;
+          updateVolIconFor(vid, volBtn);
+          vid.play().catch(() => {});
+        } else {
+          vid.pause();
+        }
       });
     }
 
@@ -1006,11 +1016,21 @@
       openFullscreen(vid);
     });
 
-    // Clic sur la zone vidéo (hors contrôles) → play/pause
+    // Clic sur la zone vidéo (hors contrôles) → play/pause avec son
     card.querySelector('.rc-media').addEventListener('click', e => {
       if (e.target.closest('.rc-vol') || e.target.closest('.rc-overlay')) return;
-      if (vid.paused) vid.play().catch(() => {});
-      else vid.pause();
+      if (vid.paused) {
+        muteAllExcept(vid);
+        vid.pause();
+        vid.removeAttribute('muted');
+        vid.muted  = false;
+        vid.volume = slider && parseFloat(slider.value) > 0 ? parseFloat(slider.value) : 0.5;
+        if (slider) slider.value = vid.volume;
+        updateVolIconFor(vid, volBtn);
+        vid.play().catch(() => {});
+      } else {
+        vid.pause();
+      }
     });
 
     // Slider volume
