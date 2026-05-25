@@ -218,6 +218,27 @@
     .success-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); text-decoration: none; transition: color .2s; }
     .success-link:hover { color: var(--text); }
 
+    /* ── RANGE SLIDER (motion design) ── */
+    .slider-wrap { display: flex; flex-direction: column; gap: 14px; }
+    .slider-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+    .slider-val { font-size: 28px; font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+    .slider-unit { font-size: 13px; color: var(--muted); }
+    .slider-ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); padding: 0 1px; }
+    .slider-range {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; border-radius: 2px; outline: none; cursor: pointer;
+      background: var(--line);
+    }
+    .slider-range::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%;
+      background: var(--text); cursor: pointer;
+      box-shadow: 0 2px 10px rgba(37,36,34,0.25);
+    }
+    .slider-range::-moz-range-thumb {
+      width: 24px; height: 24px; border: none; border-radius: 50%;
+      background: var(--text); cursor: pointer;
+    }
+
     /* ── MISC ── */
     .field-section { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-weight: 600; }
 
@@ -286,6 +307,7 @@
         <div class="choice-card"><input type="checkbox" name="plateforme" id="p3" value="LinkedIn"><label for="p3"><span class="choice-icon">💼</span><span class="choice-title">LinkedIn</span></label></div>
         <div class="choice-card"><input type="checkbox" name="plateforme" id="p4" value="TikTok"><label for="p4"><span class="choice-icon">🎵</span><span class="choice-title">TikTok</span></label></div>
         <div class="choice-card"><input type="checkbox" name="plateforme" id="p5" value="Podcast"><label for="p5"><span class="choice-icon">🎙️</span><span class="choice-title">Podcast</span></label></div>
+        <div class="choice-card"><input type="checkbox" name="plateforme" id="p6" value="Autre"><label for="p6"><span class="choice-icon">🌐</span><span class="choice-title">Autre</span></label></div>
       </div>
     </div>
 
@@ -455,14 +477,21 @@
         </div>
 
         <div class="svc-detail" id="svc-motion" style="display:none;">
-          <div class="svc-detail-head"><span class="svc-detail-head-icon">✨</span>Volume estimé — Motion design</div>
-          <div class="vol-tags" id="vt-motion">
-            <button type="button" class="vol-tag" data-svc="motion" data-val="2">1–3 min</button>
-            <button type="button" class="vol-tag" data-svc="motion" data-val="5">3–7 min</button>
-            <button type="button" class="vol-tag" data-svc="motion" data-val="10">7–15 min</button>
-            <button type="button" class="vol-tag" data-svc="motion" data-val="20">15+ min</button>
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">✨</span>Motion design — Minutes par vidéo longue</div>
+          <div class="slider-wrap">
+            <div class="slider-meta">
+              <div>
+                <span class="slider-val" id="motionSliderVal">3</span>
+                <span class="slider-unit"> min / vidéo longue</span>
+              </div>
+              <span class="slider-unit" id="motionSliderPrice" style="font-weight:600;color:var(--text);">840 €</span>
+            </div>
+            <input type="range" class="slider-range" id="motionSlider" min="1" max="10" step="1" value="3">
+            <div class="slider-ticks">
+              <span>1 min</span><span>5 min</span><span>10 min</span>
+            </div>
           </div>
-          <p class="svc-detail-note">💡 Tarif : <strong>280 €/min</strong> de motion design (titres animés, transitions, graphiques, séquences After Effects).</p>
+          <p class="svc-detail-note" id="motionSliderNote">💡 <strong>280 €/min</strong> · Supplément au montage, facturé séparément · Calculé sur le nombre de vidéos longues commandées (YouTube + VSL + Podcast)</p>
         </div>
 
       </div>
@@ -552,8 +581,9 @@
     podcast_long:     300,   // Podcast > 1h (200 + 1×100)
     ads_short:         40,   // Ad < 1 min
     ads_long:          60,   // Ad > 1 min
-    motion_per_min:   280,   // Motion design /min
-    urgency_long:     250,   // Supplément urgence /vidéo longue
+    motion_per_min:   280,   // Motion design €/min
+    urgency_long:     250,   // Supplément urgence /vidéo longue (YouTube, Podcast)
+    urgency_vsl:      400,   // Supplément urgence /VSL
     urgency_short:     80,   // Supplément urgence /vidéo courte
   };
 
@@ -649,8 +679,14 @@
         // Purge stored volume + reset buttons visually
         const svcKey = DETAIL_TO_SVC[detailId];
         if (svcKey) {
-          delete svcVols[svcKey];
-          document.querySelectorAll(`.vol-tag[data-svc="${svcKey}"]`).forEach(b => b.classList.remove('active'));
+          if (svcKey === 'motion') {
+            // reset slider to default but keep svcVols.motion (slider always has a value)
+            motionSlider.value = 3;
+            updateMotionSlider();
+          } else {
+            delete svcVols[svcKey];
+            document.querySelectorAll(`.vol-tag[data-svc="${svcKey}"]`).forEach(b => b.classList.remove('active'));
+          }
         }
       }
     });
@@ -667,8 +703,8 @@
     });
   });
 
-  // ─── VOL TAG clicks ───
-  document.querySelectorAll('.vol-tag').forEach(btn => {
+  // ─── VOL TAG clicks (tous sauf motion qui utilise un slider) ───
+  document.querySelectorAll('.vol-tag[data-svc]').forEach(btn => {
     btn.addEventListener('click', () => {
       const svc = btn.dataset.svc;
       document.querySelectorAll(`.vol-tag[data-svc="${svc}"]`).forEach(b => b.classList.remove('active'));
@@ -676,6 +712,26 @@
       svcVols[svc] = parseFloat(btn.dataset.val);
     });
   });
+
+  // ─── MOTION SLIDER ───
+  const motionSlider = document.getElementById('motionSlider');
+  function updateMotionSlider() {
+    const mins = parseInt(motionSlider.value);
+    svcVols.motion = mins;
+    document.getElementById('motionSliderVal').textContent = mins;
+    // Calcule le prix estimé (sur vidéos longues cochées)
+    const svcsNow = getChecked('services');
+    let longVids = 0;
+    if (svcsNow.includes('YouTube / Long-Form')) longVids += (svcVols.youtube || 1);
+    if (svcsNow.includes('VSL (vidéo de vente)')) longVids += (svcVols.vsl || 1);
+    if (svcsNow.includes('Podcast')) longVids += (svcVols.podcast || 1);
+    if (longVids === 0) longVids = 1;
+    const price = mins * longVids * TARIFS.motion_per_min;
+    document.getElementById('motionSliderPrice').textContent =
+      '≈ ' + price.toLocaleString('fr-FR') + ' €';
+  }
+  motionSlider.addEventListener('input', updateMotionSlider);
+  svcVols.motion = parseInt(motionSlider.value); // valeur par défaut
 
   // ─── DEFAULT VOL ───
   function vol(svc, def) { return svcVols[svc] !== undefined ? svcVols[svc] : def; }
@@ -710,12 +766,12 @@
       const v = vol('vsl', 1);
       const priceShort = v * TARIFS.vsl_short;
       const priceLong  = v * TARIFS.vsl_mid;
-      const urg = isUrgent ? v * TARIFS.urgency_long : 0;
+      const urg = isUrgent ? v * TARIFS.urgency_vsl : 0;
       base += priceShort + urg;
       lines.push({ type: 'dual', label: 'VSL (vidéo de vente)', badge: `${v} VSL`,
         short: priceShort, long: priceLong, labelShort: '< 3 min', labelLong: '3–10 min',
         perShort: TARIFS.vsl_short, perLong: TARIFS.vsl_mid, v, urg,
-        urgLabel: `⚡ Urgence (${v} × 250 €)` });
+        urgLabel: `⚡ Urgence (${v} × 400 €)` });
     }
     if (services.includes('Reels / Courts formats')) {
       const v = vol('reels', 4);
@@ -751,10 +807,21 @@
         urgLabel: `⚡ Urgence (${v} × 250 €)` });
     }
     if (services.includes('Motion design')) {
-      const mins = vol('motion', 5);
-      const price = mins * TARIFS.motion_per_min;
+      const minsPerVid = svcVols.motion !== undefined ? svcVols.motion : 3;
+      let longVids = 0;
+      if (services.includes('YouTube / Long-Form')) longVids += vol('youtube', 1);
+      if (services.includes('VSL (vidéo de vente)'))  longVids += vol('vsl', 1);
+      if (services.includes('Podcast'))               longVids += vol('podcast', 1);
+      if (longVids === 0) longVids = 1;
+      const totalMins = minsPerVid * longVids;
+      const price = totalMins * TARIFS.motion_per_min;
       base += price;
-      lines.push({ type: 'fixed', label: `Motion design (~${mins} min)`, price, badge: '' });
+      lines.push({
+        type: 'motion',
+        label: 'Motion design',
+        badge: `${minsPerVid} min/vidéo × ${longVids} vidéo${longVids > 1 ? 's' : ''} longue${longVids > 1 ? 's' : ''}`,
+        minsPerVid, longVids, totalMins, price,
+      });
     }
 
     return { total: base, lines, isUrgent };
@@ -774,6 +841,19 @@
 
     // ── Détail par service ──
     lines.forEach(l => {
+      if (l.type === 'motion') {
+        html += `<div class="price-svc-block">
+          <div class="price-svc-name">Motion design <span class="price-svc-badge">${l.badge}</span></div>
+          <div class="price-svc-row">
+            <span class="price-svc-row-label">${l.minsPerVid} min × ${l.longVids} vidéo${l.longVids > 1 ? 's' : ''} × 280 €/min</span>
+            <span class="price-svc-row-val">${fmt(l.price)}</span>
+          </div>
+          <div class="price-svc-row">
+            <span class="price-svc-row-label" style="color:var(--muted);font-style:italic;">Supplément au montage, facturé séparément</span>
+          </div>
+        </div>`;
+        return;
+      }
       if (l.type === 'fixed') {
         html += `<div class="price-svc-block">
           <div class="price-svc-name">${l.label}${l.badge ? ` <span class="price-svc-badge">${l.badge}</span>` : ''}</div>
