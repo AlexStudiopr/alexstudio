@@ -717,7 +717,7 @@
         </div>
       </div>
       <!-- Form RIGHT -->
-      <form class="contact-form reveal d3" id="contactForm" novalidate>
+      <form class="contact-form reveal d3" id="contactForm" name="contact" netlify novalidate>
         <div class="form-group">
           <label for="f-nom">Nom</label>
           <input type="text" id="f-nom" name="nom" placeholder="Ton prénom" autocomplete="given-name"/>
@@ -1109,13 +1109,32 @@
     }
   })(0);
 
-  // ─── FORM ───
+  // ─── FORM — Netlify Forms ───
   document.getElementById('contactForm').addEventListener('submit', e => {
     e.preventDefault();
-    const btn = e.target.querySelector('.btn-pill');
-    btn.textContent = 'Message envoyé ✓';
+    const form = e.target;
+    const btn  = form.querySelector('.btn-pill');
+    btn.textContent = 'Envoi…';
     btn.disabled = true;
-    btn.style.opacity = '0.55';
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'form-name': 'contact',
+        'nom':    form.querySelector('[name=nom]').value,
+        'email':  form.querySelector('[name=email]').value,
+        'projet': form.querySelector('[name=projet]').value,
+      }).toString()
+    })
+    .then(() => {
+      btn.textContent  = 'Message envoyé ✓';
+      btn.style.opacity = '0.55';
+    })
+    .catch(() => {
+      btn.textContent = 'Erreur — réessaie';
+      btn.disabled = false;
+    });
   });
 </script>
 </body>
