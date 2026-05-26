@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brief Client — Alex.Studio</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -640,6 +641,17 @@
 </div>
 
 <script>
+  // ═══════════════════════════════════════════════════════════
+  // EMAILJS CONFIG — remplis ces 3 valeurs depuis emailjs.com
+  // Guide : voir commentaires en bas du fichier
+  // ═══════════════════════════════════════════════════════════
+  const EJS = {
+    publicKey:  '',   // Account > General > Public Key
+    serviceId:  '',   // Email Services > ton service Gmail
+    templateId: '',   // Email Templates > "AlexStudio Brief"
+  };
+  // ═══════════════════════════════════════════════════════════
+
   // ─── TARIFS ───
   const TARIFS = {
     strategie:        900,   // €/mois
@@ -1009,13 +1021,17 @@
     const volStr = Object.entries(svcVols).map(([k, v]) => `${k}: ${v}`).join(', ') || 'Non précisés';
     const payLabels = { 1: '1 paiement', 2: '2 fois (50%/50%)', 3: '3 fois (mensuel)' };
 
-    fetch('/', {
+    const clientName  = document.getElementById('prenom').value;
+    const clientEmail = document.getElementById('email').value;
+
+    // ── 1. Netlify (backup données brutes) ──
+    const netlifyPromise = fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         'form-name':         'brief',
-        'Prénom':             document.getElementById('prenom').value,
-        'Email':              document.getElementById('email').value,
+        'Prénom':             clientName,
+        'Email':              clientEmail,
         'Activité':           getVal('activite'),
         'Plateforme':         getChecked('plateforme').join(', '),
         'Communauté':         getVal('communaute'),
@@ -1031,13 +1047,175 @@
         'Urgence':            isUrgent ? 'Oui' : 'Non',
         'Message':            document.getElementById('message').value || '',
       }).toString()
-    })
+    });
+
+    // ── 2. EmailJS (devis formaté HTML) ──
+    let emailPromise = Promise.resolve();
+    if (EJS.publicKey && EJS.serviceId && EJS.templateId) {
+      emailjs.init({ publicKey: EJS.publicKey });
+      emailPromise = emailjs.send(EJS.serviceId, EJS.templateId, {
+        client_name:  clientName  || 'Client',
+        client_email: clientEmail || '',
+        html_body:    generateDevisHTML(),
+      }).catch(e => console.warn('EmailJS error:', e));
+    }
+
+    Promise.all([netlifyPromise, emailPromise])
     .then(() => {
       document.querySelector('.form-outer').style.display = 'none';
       document.getElementById('successScreen').classList.add('visible');
       document.getElementById('progressWrap').style.display = 'none';
     })
     .catch(() => { btn.disabled = false; btn.textContent = 'Erreur — réessaie'; });
+  }
+
+  // ─── GÉNÉRATION HTML EMAIL DEVIS ───
+  function generateDevisHTML() {
+    const { total, lines, isUrgent } = calcPrice();
+    const fmt  = v => v.toLocaleString('fr-FR') + ' €';
+    const svcs = getChecked('services');
+    const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
+    const prenom = document.getElementById('prenom').value || '';
+    const email  = document.getElementById('email').value  || '';
+    const date   = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
+    const payLabels = { 1:'1 paiement', 2:'2 fois (50%/50%)', 3:'3 fois (mensuel)' };
+    const bg   = '#fffcf2', line = '#ccc5b9', muted = '#403d39', text = '#252422';
+    const alt  = '#f7f5ee', sub  = '#e5e0d6';
+
+    // ── lignes de services ──
+    let svcRows = '';
+    lines.forEach(l => {
+      const sep = `<tr><td colspan="2" style="border-top:1px solid ${sub};"></td></tr>`;
+      const badge = s => `<span style="font-size:10px;background:#ede9df;padding:2px 8px;border-radius:4px;color:${muted};text-transform:uppercase;letter-spacing:.05em;margin-left:6px;">${s}</span>`;
+      if (l.type === 'motion') {
+        svcRows += sep + `
+          <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">Motion design ${badge(l.badge)}</td></tr>
+          <tr>
+            <td style="padding:3px 0;font-size:13px;color:${muted};">${l.minsPerVid} min × ${l.longVids} vidéo${l.longVids>1?'s':''} × 280 €/min</td>
+            <td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(l.price)}</td>
+          </tr>
+          <tr><td colspan="2" style="font-size:12px;color:#9d9591;font-style:italic;padding-bottom:6px;">Supplément au montage, facturé séparément</td></tr>`;
+      } else if (l.type === 'fixed') {
+        svcRows += sep + `
+          <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">${l.label} ${l.badge ? badge(l.badge) : ''}</td></tr>
+          <tr>
+            <td style="padding:3px 0;font-size:13px;color:${muted};">Forfait</td>
+            <td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(l.price)}</td>
+          </tr>`;
+      } else {
+        svcRows += sep + `
+          <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">${l.label} ${badge(l.badge)}</td></tr>
+          <tr>
+            <td style="padding:3px 0;font-size:13px;color:${muted};">${l.labelShort} — ${l.v} × ${fmt(l.perShort)}</td>
+            <td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(l.short)}/mois</td>
+          </tr>
+          <tr>
+            <td style="font-size:13px;color:#9d9591;font-style:italic;padding:3px 0;">${l.labelLong} — ${l.v} × à partir de ${fmt(l.perLong)}</td>
+            <td style="text-align:right;font-size:13px;color:#9d9591;font-style:italic;">à partir de ${fmt(l.long)}/mois</td>
+          </tr>
+          ${l.urg > 0 ? `<tr>
+            <td style="font-size:13px;color:#c2651a;padding:3px 0;">⚡ ${l.urgLabel}</td>
+            <td style="text-align:right;font-size:13px;font-weight:600;color:#c2651a;">+${fmt(l.urg)}</td>
+          </tr>` : ''}`;
+      }
+    });
+
+    // ── paiement ──
+    let payRows = '';
+    if (paymentChoice > 1) {
+      const per  = Math.floor(total / paymentChoice);
+      const last = total - per * (paymentChoice - 1);
+      const installs = Array.from({ length: paymentChoice }, (_, i) => {
+        const amt   = i === paymentChoice - 1 ? last : per;
+        const label = paymentChoice === 2 ? (i === 0 ? 'Acompte (50%)' : 'Solde (50%)') : `Versement ${i+1}`;
+        return `<tr>
+          <td style="padding:3px 0;font-size:13px;color:${muted};">${label}</td>
+          <td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(amt)}</td>
+        </tr>`;
+      }).join('');
+      payRows = `<tr><td colspan="2" style="border-top:1px solid ${sub};"></td></tr>
+        <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">💳 Paiement en ${paymentChoice} fois</td></tr>
+        ${installs}`;
+    }
+
+    // ── récap réponses ──
+    const volStr = Object.keys(svcVols).length
+      ? Object.entries(svcVols).map(([k,v])=>`${k}: ${v}`).join(' · ')
+      : 'Non précisés';
+    const answers = [
+      ['Activité',         getVal('activite')],
+      ['Plateforme(s)',    getChecked('plateforme').join(', ')],
+      ['Communauté',       getVal('communaute')],
+      ['Régularité',       getVal('regularite')],
+      ['Douleur',          getVal('douleur')],
+      ['Objectif',         getVal('objectif')],
+      ['Horizon',          getVal('horizon')],
+      ['Services',         svcs.join(', ')],
+      ['Volumes',          volStr],
+      ['Budget envisagé',  document.getElementById('budget').value || 'Non précisé'],
+      ['Paiement',         payLabels[paymentChoice] || '1 paiement'],
+      ['Message',          document.getElementById('message').value || '—'],
+    ];
+    const answerRows = answers.map(([k,v], i) => `
+      <tr style="background:${i%2===0 ? bg : alt};">
+        <td style="padding:11px 18px;font-size:13px;color:${muted};width:170px;border-right:1px solid ${sub};">${k}</td>
+        <td style="padding:11px 18px;font-size:13px;font-weight:500;color:${text};">${v||'—'}</td>
+      </tr>`).join('');
+
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:24px;background:#f0ede6;font-family:-apple-system,Helvetica Neue,Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:${bg};border-radius:16px;overflow:hidden;border:1px solid ${line};">
+
+  <!-- HEADER -->
+  <tr><td style="padding:32px 40px 28px;border-bottom:2px solid ${text};">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td><div style="font-size:22px;font-weight:800;letter-spacing:-0.04em;color:${text};">Alex.Studio</div>
+          <div style="font-size:11px;color:${muted};margin-top:5px;text-transform:uppercase;letter-spacing:.08em;">Devis client · ${date}</div></td>
+      <td style="text-align:right;"><div style="font-size:15px;font-weight:700;color:${text};">${prenom}</div>
+          <div style="font-size:13px;color:${muted};margin-top:3px;">${email}</div></td>
+    </tr></table>
+  </td></tr>
+
+  <!-- DEVIS -->
+  <tr><td style="padding:32px 40px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1.5px solid ${line};border-radius:14px;overflow:hidden;">
+      <tr><td style="padding:30px 28px 0;">
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:${muted};">Investissement estimé (base)</div>
+        <div style="font-size:52px;font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:${text};margin-top:6px;">${fmt(total)}</div>
+        <div style="font-size:14px;color:${muted};margin-top:4px;padding-bottom:20px;">${isVSLOnly ? "à l'unité" : 'par mois'}</div>
+      </td></tr>
+      <tr><td style="padding:0 28px 8px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid ${sub};">
+          ${svcRows}
+          ${payRows}
+          <tr><td colspan="2" style="height:16px;"></td></tr>
+        </table>
+      </td></tr>
+      <tr><td style="padding:16px 28px 24px;background:${alt};border-top:1px solid ${sub};">
+        <div style="font-size:12px;color:#9d9591;line-height:1.6;">💡 Cette estimation est indicative. Le tarif final sera défini lors de notre échange selon la durée réelle des vidéos et les détails du projet.</div>
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <!-- RÉCAP -->
+  <tr><td style="padding:28px 40px 0;">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:${muted};font-weight:600;margin-bottom:10px;">Réponses du client</div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1.5px solid ${line};border-radius:12px;overflow:hidden;">
+      ${answerRows}
+    </table>
+  </td></tr>
+
+  <!-- FOOTER -->
+  <tr><td style="padding:24px 40px;margin-top:28px;">
+    <div style="font-size:12px;color:${muted};border-top:1px solid ${sub};padding-top:20px;line-height:1.6;">
+      <strong style="color:${text};">Alex.Studio</strong> · alexstudio.fr · hello@alex.studio
+    </div>
+  </td></tr>
+
+</table>
+</td></tr></table>
+</body></html>`;
   }
 
   // ─── DOWNLOAD DEVIS PDF ───
