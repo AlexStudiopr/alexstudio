@@ -239,6 +239,44 @@
       background: var(--text); cursor: pointer;
     }
 
+    /* ── DOWNLOAD PDF BUTTON ── */
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--text);
+      border: 1.5px solid var(--line); border-radius: 50px; padding: 14px 26px;
+      font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-download:hover { border-color: var(--text); background: rgba(37,36,34,0.04); }
+
+    /* ── PRINT HEADER / FOOTER (invisible à l'écran, visibles à l'impression) ── */
+    .print-header, .print-footer { display: none; }
+
+    /* ── STYLES D'IMPRESSION ── */
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { background: white !important; }
+      .nav, .progress-wrap, .step-sub, .btn-row, .btn-download,
+      #step-1, #step-2, #step-3, #step-4 { display: none !important; }
+      .form-outer { padding: 36px 48px !important; max-width: 100% !important; margin: 0 !important; }
+      #step-5 { display: block !important; animation: none !important; }
+      #step-5 > .step-title { display: none !important; }
+      .price-box {
+        box-shadow: none !important; border: 1.5px solid #ccc5b9 !important;
+        page-break-inside: avoid; padding: 28px !important;
+      }
+      .summary-grid { page-break-inside: avoid; box-shadow: none !important; }
+      .print-header {
+        display: flex !important; justify-content: space-between; align-items: flex-start;
+        margin-bottom: 40px; padding-bottom: 24px; border-bottom: 2px solid #252422;
+      }
+      .print-footer {
+        display: block !important; margin-top: 32px; padding-top: 16px;
+        border-top: 1px solid #ccc5b9; font-size: 11px; color: #403d39; line-height: 1.6;
+      }
+      .success-screen { display: none !important; }
+    }
+
     /* ── MISC ── */
     .field-section { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-weight: 600; }
 
@@ -535,6 +573,18 @@
     <h1 class="step-title">Ton estimation.</h1>
     <p class="step-sub">Récapitulatif de ton brief et fourchette de prix indicative selon tes choix.</p>
 
+    <!-- Header visible uniquement à l'impression -->
+    <div class="print-header">
+      <div>
+        <div style="font-size:24px;font-weight:800;letter-spacing:-.04em;color:#252422;">Alex.Studio</div>
+        <div style="font-size:12px;color:#403d39;margin-top:5px;letter-spacing:.04em;text-transform:uppercase;">Devis client · <span id="printDate"></span></div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:15px;font-weight:700;color:#252422;" id="printClientName"></div>
+        <div style="font-size:13px;color:#403d39;" id="printClientEmail"></div>
+      </div>
+    </div>
+
     <div class="price-box">
       <div class="price-label">Investissement estimé (base)</div>
       <div class="price-amount" id="priceAmount">—</div>
@@ -544,6 +594,12 @@
     </div>
 
     <div class="summary-grid" id="summaryGrid"></div>
+
+    <!-- Footer visible uniquement à l'impression -->
+    <div class="print-footer">
+      <p>Ce devis est indicatif. Les tarifs sont calculés sur la base des informations fournies. Le montant final sera confirmé lors de notre échange selon la durée réelle des vidéos et les détails du projet.</p>
+      <p style="margin-top:6px;font-weight:600;">Alex.Studio · alexstudio.fr · hello@alex.studio</p>
+    </div>
 
     <!-- Formulaire fantôme : Netlify scanne ces champs au build pour savoir quoi inclure dans le mail -->
     <form id="briefForm" name="brief" netlify style="display:none;">
@@ -569,6 +625,7 @@
     <div class="btn-row">
       <button class="btn-prev" onclick="prevStep(5)">← Modifier</button>
       <button class="btn-next" id="submitBtn" onclick="submitBrief()">Envoyer mon brief ✉️</button>
+      <button type="button" class="btn-download" onclick="downloadDevis()">⬇ PDF</button>
     </div>
   </div>
 
@@ -981,6 +1038,19 @@
       document.getElementById('progressWrap').style.display = 'none';
     })
     .catch(() => { btn.disabled = false; btn.textContent = 'Erreur — réessaie'; });
+  }
+
+  // ─── DOWNLOAD DEVIS PDF ───
+  function downloadDevis() {
+    // Remplit le header d'impression avec les infos client et la date
+    const prenom = document.getElementById('prenom').value || '';
+    const email  = document.getElementById('email').value  || '';
+    document.getElementById('printClientName').textContent  = prenom;
+    document.getElementById('printClientEmail').textContent = email;
+    document.getElementById('printDate').textContent = new Date().toLocaleDateString('fr-FR', {
+      day: '2-digit', month: 'long', year: 'numeric'
+    });
+    window.print();
   }
 
   updateProgress(1);
