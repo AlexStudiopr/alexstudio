@@ -1,0 +1,29 @@
+name: Veille Instagram Hebdo
+
+on:
+  schedule:
+    - cron: '0 5 * * 6'   # Samedi 7h Paris (UTC+2 en été)
+  workflow_dispatch:       # Lancement manuel depuis GitHub si besoin
+
+jobs:
+  veille:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      - name: Générer et publier la veille
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          NOTION_PARENT_PAGE_ID: "36de32c9-5992-8114-91b7-d0475047c3af"
+        run: python scripts/veille.py
