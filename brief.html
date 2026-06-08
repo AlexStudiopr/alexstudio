@@ -1051,13 +1051,20 @@
 
     // ── 2. EmailJS (devis formaté HTML) ──
     let emailPromise = Promise.resolve();
-    if (EJS.publicKey && EJS.serviceId && EJS.templateId) {
-      emailjs.init({ publicKey: EJS.publicKey });
-      emailPromise = emailjs.send(EJS.serviceId, EJS.templateId, {
-        client_name:  clientName  || 'Client',
-        client_email: clientEmail || '',
-        html_body:    generateDevisHTML(),
-      }).catch(e => console.warn('EmailJS error:', e));
+    if (typeof emailjs !== 'undefined' && EJS.publicKey && EJS.serviceId && EJS.templateId) {
+      try {
+        emailjs.init({ publicKey: EJS.publicKey });
+        emailPromise = emailjs.send(EJS.serviceId, EJS.templateId, {
+          client_name:  clientName  || 'Client',
+          client_email: clientEmail || '',
+          html_body:    generateDevisHTML(),
+        }).then(() => console.log('EmailJS OK ✅'))
+          .catch(e => alert('EmailJS erreur: ' + (e.text || e.message || JSON.stringify(e))));
+      } catch(e) {
+        alert('EmailJS init erreur: ' + e.message);
+      }
+    } else {
+      alert('EmailJS non chargé ou config manquante — typeof emailjs: ' + typeof emailjs);
     }
 
     Promise.all([netlifyPromise, emailPromise])
