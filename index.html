@@ -91,18 +91,8 @@
     }
     .vsl-inner {
       width: 100%; height: 100%;
-      background: linear-gradient(145deg, #1c1a18 0%, #252422 60%, #1a1917 100%);
-      display: flex; align-items: center; justify-content: center;
+      background: #1c1a18;
     }
-    .vsl-play-btn {
-      width: 80px; height: 80px; border-radius: 999px;
-      border: 1.5px solid rgba(255,252,242,0.75);
-      backdrop-filter: blur(4px); display: flex;
-      align-items: center; justify-content: center;
-      cursor: pointer; background: transparent;
-      transition: transform 0.35s var(--ease), background 0.3s;
-    }
-    .vsl-play-btn:hover { transform: scale(1.1); background: rgba(255,252,242,0.08); }
     .scroll-hint {
       position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
       font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
@@ -228,10 +218,11 @@
       display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
     }
-    .rc-media video {
+    .rc-media video,
+    .rc-media iframe {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
-      object-fit: cover; pointer-events: none;
+      object-fit: cover; border: none;
     }
     .rc-media--land { aspect-ratio: 16/9; }
     .rc-media--port { aspect-ratio: 9/16; }
@@ -480,11 +471,7 @@
     </div>
     <div class="hero-vsl" id="heroVSL" aria-hidden="true">
       <div class="vsl-inner">
-        <button class="vsl-play-btn" aria-label="Regarder la vidéo de présentation">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
-          </svg>
-        </button>
+        <iframe src="https://www.youtube.com/embed/CyUoeerElhc?autoplay=1&mute=1&loop=1&playlist=CyUoeerElhc&rel=0&modestbranding=1&playsinline=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Alex.Studio — Présentation"></iframe>
       </div>
     </div>
     <div class="scroll-hint" id="scrollHint" aria-hidden="true">Scroll</div>
@@ -575,31 +562,7 @@
 
       <div class="rc">
         <div class="rc-media rc-media--land">
-          <video src="https://alexstudio.b-cdn.net/VSL%20Cl%C3%A9mentGeynet.mp4" muted loop playsinline preload="metadata" crossorigin="anonymous"></video>
-          <div class="rc-overlay">
-            <button class="rc-play-btn" title="Lecture / Pause">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
-              </svg>
-            </button>
-            <button class="rc-fs-btn" title="Plein écran">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          <div class="rc-seek">
-            <input type="range" class="rc-seek-range" min="0" max="1" step="0.001" value="0">
-          </div>
-          <div class="rc-vol">
-            <button class="rc-vol-btn" title="Muet / Son">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
-                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </button>
-            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
-          </div>
+          <iframe src="https://www.youtube.com/embed/iTbhSovoRj4?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="VSL — Clément Geynet"></iframe>
         </div>
         <div class="rc-info">
           <p class="rc-format">VSL</p>
@@ -610,31 +573,7 @@
 
       <div class="rc">
         <div class="rc-media rc-media--land">
-          <video src="https://alexstudio.b-cdn.net/Intro1.mp4" muted loop playsinline preload="metadata" crossorigin="anonymous"></video>
-          <div class="rc-overlay">
-            <button class="rc-play-btn" title="Lecture / Pause">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
-              </svg>
-            </button>
-            <button class="rc-fs-btn" title="Plein écran">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          <div class="rc-seek">
-            <input type="range" class="rc-seek-range" min="0" max="1" step="0.001" value="0">
-          </div>
-          <div class="rc-vol">
-            <button class="rc-vol-btn" title="Muet / Son">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
-                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </button>
-            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
-          </div>
+          <iframe src="https://www.youtube.com/embed/RQW9zndGHQ4?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="YouTube · Intro Podcast — Mathéo Vidal"></iframe>
         </div>
         <div class="rc-info">
           <p class="rc-format">YouTube · Intro Podcast</p>
@@ -645,31 +584,7 @@
 
       <div class="rc">
         <div class="rc-media rc-media--land">
-          <video src="https://alexstudio.b-cdn.net/Tunnel%20de%20vente%20WA.mp4" muted loop playsinline preload="metadata" crossorigin="anonymous"></video>
-          <div class="rc-overlay">
-            <button class="rc-play-btn" title="Lecture / Pause">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
-              </svg>
-            </button>
-            <button class="rc-fs-btn" title="Plein écran">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          <div class="rc-seek">
-            <input type="range" class="rc-seek-range" min="0" max="1" step="0.001" value="0">
-          </div>
-          <div class="rc-vol">
-            <button class="rc-vol-btn" title="Muet / Son">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
-                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </button>
-            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
-          </div>
+          <iframe src="https://www.youtube.com/embed/QORFSI9H_vE?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Vidéo tunnel de vente — Clément Geynet"></iframe>
         </div>
         <div class="rc-info">
           <p class="rc-format">Vidéo tunnel de vente</p>
@@ -685,31 +600,7 @@
 
       <div class="rc">
         <div class="rc-media rc-media--port">
-          <video src="https://alexstudio.b-cdn.net/Reel3.mp4" muted loop playsinline preload="metadata" crossorigin="anonymous"></video>
-          <div class="rc-overlay">
-            <button class="rc-play-btn" title="Lecture / Pause">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
-              </svg>
-            </button>
-            <button class="rc-fs-btn" title="Plein écran">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          <div class="rc-seek">
-            <input type="range" class="rc-seek-range" min="0" max="1" step="0.001" value="0">
-          </div>
-          <div class="rc-vol">
-            <button class="rc-vol-btn" title="Muet / Son">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
-                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </button>
-            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
-          </div>
+          <iframe src="https://www.youtube.com/embed/F-u3eLLcXRg?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Instagram Reel — Mathéo Vidal"></iframe>
         </div>
         <div class="rc-info">
           <p class="rc-format">Instagram · Reel</p>
@@ -720,31 +611,7 @@
 
       <div class="rc">
         <div class="rc-media rc-media--port">
-          <video src="https://alexstudio.b-cdn.net/Ads2%201080.mp4" muted loop playsinline preload="metadata" crossorigin="anonymous"></video>
-          <div class="rc-overlay">
-            <button class="rc-play-btn" title="Lecture / Pause">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 5.14v14.72L19 12 8 5.14z" fill="rgba(255,252,242,0.9)"/>
-              </svg>
-            </button>
-            <button class="rc-fs-btn" title="Plein écran">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" stroke="rgba(255,252,242,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          <div class="rc-seek">
-            <input type="range" class="rc-seek-range" min="0" max="1" step="0.001" value="0">
-          </div>
-          <div class="rc-vol">
-            <button class="rc-vol-btn" title="Muet / Son">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,252,242,0.9)"/>
-                <path class="vol-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="rgba(255,252,242,0.9)" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </button>
-            <input type="range" class="rc-vol-range" min="0" max="1" step="0.02" value="0">
-          </div>
+          <iframe src="https://www.youtube.com/embed/YUT7hv-9waY?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Meta Ads — Clément Geynet"></iframe>
         </div>
         <div class="rc-info">
           <p class="rc-format">Meta Ads</p>
