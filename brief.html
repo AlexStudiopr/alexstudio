@@ -163,6 +163,19 @@
     .brief-pill:hover { border-color: #8a8480; color: var(--text); }
     .brief-pill.on { border-color: var(--text); background: rgba(37,36,34,0.06); color: var(--text); }
     .brief-pill.urg.on { border-color: #c2651a; background: rgba(194,101,26,0.06); color: #c2651a; }
+    .brief-vid-min {
+      display: flex; align-items: center; gap: 4px;
+      border: 1.5px solid var(--line); border-radius: 8px;
+      padding: 5px 10px; flex-shrink: 0; background: var(--bg);
+    }
+    .brief-vid-min input[type="number"] {
+      width: 34px; border: none; background: transparent; text-align: center;
+      font-size: 13px; font-weight: 600; outline: none; color: var(--text);
+      font-family: inherit; padding: 0; -moz-appearance: textfield;
+    }
+    .brief-vid-min input[type="number"]::-webkit-outer-spin-button,
+    .brief-vid-min input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .brief-vid-min span { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
     /* ── PRICE BOX ── */
     .price-box {
@@ -469,7 +482,7 @@
         <!-- Podcast -->
         <div class="svc-detail" id="svc-podcast" style="display:none;">
           <div class="svc-detail-head"><span class="svc-detail-head-icon">🎙️</span>Podcast vidéo</div>
-          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Pour chaque épisode : choisis la durée, si tu veux du motion design, et si c'est urgent.</p>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Pour chaque épisode : choisis la durée, si tu veux une intro animée, et si c'est urgent.</p>
           <div class="vol-tags" id="vt-podcast">
             <button type="button" class="vol-tag" data-svc="podcast" data-val="1">1 épisode</button>
             <button type="button" class="vol-tag" data-svc="podcast" data-val="2">2 épisodes</button>
@@ -477,7 +490,7 @@
             <button type="button" class="vol-tag" data-svc="podcast" data-val="4">4 épisodes</button>
           </div>
           <div class="brief-vid-table" id="podcast-brief-rows"></div>
-          <p class="svc-detail-note">💡 <strong>200 €/épisode</strong> (< 1h) · <strong>dès 300 €</strong> (> 1h) · Motion design : <strong>+280 €/min</strong> · Urgence : <strong>+250 €/épisode</strong></p>
+          <p class="svc-detail-note">💡 <strong>200 €/épisode</strong> (< 1h) · <strong>dès 300 €</strong> (> 1h) · Intro animée : <strong>sur devis</strong> · Urgence : <strong>+250 €/épisode</strong></p>
         </div>
 
       </div>
@@ -609,7 +622,7 @@
     { id:'vsl',     vidLabel:'VSL',     rowsId:'vsl-brief-rows',     durations:VSL_DUR,   motionType:'minutes', urgPrice:400, motionEst:840 },
     { id:'reels',   vidLabel:'Reel',    rowsId:'reels-brief-rows',   durations:REELS_DUR, motionType:'checkbox', urgPrice:80, motionEst:40 },
     { id:'ads',     vidLabel:'Pub',     rowsId:'ads-brief-rows',     durations:ADS_DUR,   motionType:'checkbox', urgPrice:80, motionEst:40 },
-    { id:'podcast', vidLabel:'Épisode', rowsId:'podcast-brief-rows', durations:POD_DUR,   motionType:'minutes', urgPrice:250, motionEst:840 },
+    { id:'podcast', vidLabel:'Épisode', rowsId:'podcast-brief-rows', durations:POD_DUR,   motionType:'none', hasIntro:true, urgPrice:250 },
   ];
 
   // ── STATE ──
@@ -733,20 +746,37 @@
     // Sync state
     if (!briefVidState[svcId]) briefVidState[svcId] = [];
     while (briefVidState[svcId].length < vol)
-      briefVidState[svcId].push({ dur: cfg.durations[0].v, motion: false, urgence: false });
+      briefVidState[svcId].push({ dur: cfg.durations[0].v, motion: cfg.motionType === 'minutes' ? 0 : false, intro: false, urgence: false });
     briefVidState[svcId] = briefVidState[svcId].slice(0, vol);
 
     el.innerHTML = briefVidState[svcId].map((st, i) => {
       const durOpts = cfg.durations.map(d =>
         `<option value="${d.v}"${st.dur === d.v ? ' selected' : ''}>${d.label}</option>`
       ).join('');
+
+      let motionCell = '';
+      if (cfg.motionType === 'minutes') {
+        motionCell = `<div class="brief-vid-min">
+          <input type="number" min="0" max="10" value="${st.motion || 0}"
+            oninput="onBriefMotion('${svcId}',${i},+this.value)">
+          <span>min motion</span>
+        </div>`;
+      } else if (cfg.motionType === 'checkbox') {
+        motionCell = `<button type="button" class="brief-pill${st.motion ? ' on' : ''}"
+          onclick="toggleBriefField('${svcId}',${i},'motion',this)">✨ Motion</button>`;
+      }
+
+      const introCell = cfg.hasIntro
+        ? `<button type="button" class="brief-pill${st.intro ? ' on' : ''}"
+            onclick="toggleBriefField('${svcId}',${i},'intro',this)">🎬 Intro animée</button>`
+        : '';
+
       return `
         <div class="brief-vid-row" id="brief-row-${svcId}-${i}">
           <span class="brief-vid-label">${cfg.vidLabel} ${i + 1}</span>
           <select class="brief-vid-dur" onchange="onBriefDur('${svcId}',${i},this.value)">${durOpts}</select>
           <div class="brief-vid-checks">
-            <button type="button" class="brief-pill${st.motion ? ' on' : ''}"
-              onclick="toggleBriefField('${svcId}',${i},'motion',this)">✨ Motion</button>
+            ${motionCell}${introCell}
             <button type="button" class="brief-pill urg${st.urgence ? ' on' : ''}"
               onclick="toggleBriefField('${svcId}',${i},'urgence',this)">⚡ Urgent</button>
           </div>
@@ -756,6 +786,9 @@
 
   function onBriefDur(svcId, idx, val) {
     if (briefVidState[svcId]?.[idx]) briefVidState[svcId][idx].dur = val;
+  }
+  function onBriefMotion(svcId, idx, val) {
+    if (briefVidState[svcId]?.[idx]) briefVidState[svcId][idx].motion = val;
   }
 
   function toggleBriefField(svcId, idx, field, btn) {
@@ -795,13 +828,17 @@
       vids.forEach((vid, i) => {
         const durOpt = cfg.durations.find(d => d.v === vid.dur) || cfg.durations[0];
         const montage = durOpt.price;
-        const motion  = vid.motion ? cfg.motionEst : 0;
+        const motion  = cfg.motionType === 'minutes'
+          ? (vid.motion || 0) * TARIFS.motion_per_min
+          : cfg.motionType === 'checkbox' ? (vid.motion ? TARIFS.motion_short : 0) : 0;
         const urgence = vid.urgence ? cfg.urgPrice : 0;
         const total   = montage + motion + urgence;
         svcTotal += total;
 
         let parts = [durOpt.label];
-        if (vid.motion)  parts.push(cfg.motionType === 'checkbox' ? 'Motion' : 'Motion (est. 3 min)');
+        if (cfg.motionType === 'minutes' && vid.motion > 0) parts.push(`Motion ${vid.motion} min`);
+        if (cfg.motionType === 'checkbox' && vid.motion)    parts.push('Motion');
+        if (vid.intro)   parts.push('Intro animée');
         if (vid.urgence) parts.push('⚡ Urgent');
         vidDetails.push({ label: `${cfg.vidLabel} ${i+1} — ${parts.join(' + ')}`, total });
       });
@@ -865,7 +902,9 @@
         return cfg.id + ': ' + briefVidState[cfg.id].map((v, i) => {
           const dur = cfg.durations.find(d => d.v === v.dur)?.label || '';
           let parts = [dur];
-          if (v.motion) parts.push('Motion');
+          if (cfg.motionType === 'minutes' && v.motion > 0) parts.push(`Motion ${v.motion}min`);
+          if (cfg.motionType === 'checkbox' && v.motion)    parts.push('Motion');
+          if (v.intro)   parts.push('Intro animée');
           if (v.urgence) parts.push('Urgent');
           return `${cfg.vidLabel} ${i+1} (${parts.join(', ')})`;
         }).join(' / ');
@@ -1013,7 +1052,9 @@
         return briefVidState[cfg.id].map((v, i) => {
           const dur = cfg.durations.find(d => d.v === v.dur)?.label || '';
           let parts = [dur];
-          if (v.motion) parts.push('Motion');
+          if (cfg.motionType === 'minutes' && v.motion > 0) parts.push(`Motion ${v.motion}min`);
+          if (cfg.motionType === 'checkbox' && v.motion)    parts.push('Motion');
+          if (v.intro)   parts.push('Intro animée');
           if (v.urgence) parts.push('Urgent');
           return `${cfg.vidLabel} ${i+1} (${parts.join(', ')})`;
         }).join(' / ');
