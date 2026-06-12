@@ -80,14 +80,8 @@
       user-select: none;
       box-shadow: 0 6px 24px rgba(37,36,34,0.09), 0 2px 6px rgba(37,36,34,0.05);
     }
-    .choice-card label:hover {
-      border-color: #8a8480; transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(37,36,34,0.14), 0 3px 10px rgba(37,36,34,0.07);
-    }
-    .choice-card input:checked + label {
-      border-color: var(--text); background: rgba(37,36,34,0.04);
-      box-shadow: 0 8px 32px rgba(37,36,34,0.13), 0 2px 8px rgba(37,36,34,0.07);
-    }
+    .choice-card label:hover { border-color: #8a8480; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(37,36,34,0.14), 0 3px 10px rgba(37,36,34,0.07); }
+    .choice-card input:checked + label { border-color: var(--text); background: rgba(37,36,34,0.04); box-shadow: 0 8px 32px rgba(37,36,34,0.13), 0 2px 8px rgba(37,36,34,0.07); }
     .choice-icon { font-size: 26px; margin-bottom: 6px; }
     .choice-title { font-size: 14px; font-weight: 600; }
     .choice-desc { font-size: 12px; color: var(--muted); line-height: 1.4; margin-top: 2px; }
@@ -103,14 +97,10 @@
       transition: border-color .2s, background .2s, box-shadow .2s, transform .2s var(--ease);
       box-shadow: 0 4px 16px rgba(37,36,34,0.08), 0 1px 4px rgba(37,36,34,0.05);
     }
-    .check-item label:hover {
-      border-color: #8a8480; transform: translateY(-1px);
-      box-shadow: 0 8px 28px rgba(37,36,34,0.13), 0 2px 7px rgba(37,36,34,0.06);
-    }
+    .check-item label:hover { border-color: #8a8480; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(37,36,34,0.13), 0 2px 7px rgba(37,36,34,0.06); }
     .check-item label::before {
       content: ''; width: 18px; height: 18px; flex-shrink: 0;
-      border: 1.5px solid var(--line); border-radius: 5px;
-      transition: background .15s, border-color .15s;
+      border: 1.5px solid var(--line); border-radius: 5px; transition: background .15s, border-color .15s;
     }
     .check-item input:checked + label { border-color: var(--text); background: rgba(37,36,34,0.04); }
     .check-item input:checked + label::before {
@@ -128,29 +118,51 @@
       box-shadow: 0 4px 16px rgba(37,36,34,0.07), 0 1px 4px rgba(37,36,34,0.04);
       animation: stepIn .3s var(--ease) both;
     }
-    .svc-detail-head {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 13px; font-weight: 600; color: var(--text);
-      margin-bottom: 14px; letter-spacing: -.01em;
-    }
+    .svc-detail-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 14px; letter-spacing: -.01em; }
     .svc-detail-head-icon { font-size: 16px; }
     .svc-detail-note { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 
     /* ── VOL TAGS ── */
-    .vol-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .vol-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
     .vol-tag {
       border: 1.5px solid var(--line); border-radius: 10px;
       padding: 9px 18px; font-size: 13px; font-weight: 500;
       cursor: pointer; background: var(--bg); color: var(--text);
       transition: border-color .2s, background .2s, box-shadow .2s;
-      box-shadow: 0 2px 8px rgba(37,36,34,0.06);
-      font-family: inherit;
+      box-shadow: 0 2px 8px rgba(37,36,34,0.06); font-family: inherit;
     }
     .vol-tag:hover { border-color: #8a8480; }
-    .vol-tag.active {
-      border-color: var(--text); background: rgba(37,36,34,0.06);
-      box-shadow: 0 4px 14px rgba(37,36,34,0.10);
+    .vol-tag.active { border-color: var(--text); background: rgba(37,36,34,0.06); box-shadow: 0 4px 14px rgba(37,36,34,0.10); }
+
+    /* ── BRIEF PER-VIDEO ROWS ── */
+    .brief-vid-table { display: flex; flex-direction: column; gap: 8px; }
+    .brief-vid-row {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+      padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px;
+      background: var(--bg); transition: border-color .2s;
     }
+    .brief-vid-row:hover { border-color: #8a8480; }
+    .brief-vid-label { font-size: 12.5px; font-weight: 600; min-width: 62px; flex-shrink: 0; }
+    .brief-vid-dur {
+      flex: 1; min-width: 130px; padding: 7px 28px 7px 10px; border: 1.5px solid var(--line);
+      border-radius: 8px; background: var(--bg); color: var(--text);
+      font-family: inherit; font-size: 12.5px; cursor: pointer; outline: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23403d39' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+    }
+    .brief-vid-dur:focus { border-color: var(--text); }
+    .brief-vid-checks { display: flex; gap: 6px; flex-shrink: 0; }
+    .brief-pill {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border: 1.5px solid var(--line); border-radius: 8px;
+      font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit;
+      background: var(--bg); color: var(--muted);
+      transition: all .15s; user-select: none; white-space: nowrap;
+    }
+    .brief-pill:hover { border-color: #8a8480; color: var(--text); }
+    .brief-pill.on { border-color: var(--text); background: rgba(37,36,34,0.06); color: var(--text); }
+    .brief-pill.urg.on { border-color: #c2651a; background: rgba(194,101,26,0.06); color: #c2651a; }
 
     /* ── PRICE BOX ── */
     .price-box {
@@ -162,23 +174,15 @@
     .price-amount { font-size: 56px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-bottom: 4px; }
     .price-period { font-size: 14px; color: var(--muted); }
     .price-detail { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--line); }
-
     .price-svc-block { padding: 18px 0; border-bottom: 1px solid var(--line); }
     .price-svc-block:last-child { border-bottom: none; padding-bottom: 0; }
-    .price-svc-name {
-      font-size: 13px; font-weight: 700; letter-spacing: -.01em;
-      margin-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    }
-    .price-svc-badge {
-      font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
-      background: rgba(37,36,34,0.08); border-radius: 6px; padding: 2px 8px; color: var(--muted);
-    }
+    .price-svc-name { font-size: 13px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .price-svc-badge { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; background: rgba(37,36,34,0.08); border-radius: 6px; padding: 2px 8px; color: var(--muted); }
     .price-svc-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; }
     .price-svc-row-label { color: var(--muted); }
     .price-svc-row-val { font-weight: 600; }
     .price-svc-row-val.alt { color: var(--muted); font-weight: 500; font-style: italic; }
     .price-urgency-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; color: #b45309; }
-    .price-green-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; color: #16a34a; }
     .price-disclaimer { font-size: 12px; color: var(--muted); margin-top: 24px; line-height: 1.55; }
 
     /* ── SUMMARY ── */
@@ -219,27 +223,6 @@
     .success-link { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); text-decoration: none; transition: color .2s; }
     .success-link:hover { color: var(--text); }
 
-    /* ── RANGE SLIDER (motion design) ── */
-    .slider-wrap { display: flex; flex-direction: column; gap: 14px; }
-    .slider-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-    .slider-val { font-size: 28px; font-weight: 800; letter-spacing: -.04em; line-height: 1; }
-    .slider-unit { font-size: 13px; color: var(--muted); }
-    .slider-ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); padding: 0 1px; }
-    .slider-range {
-      -webkit-appearance: none; appearance: none;
-      width: 100%; height: 4px; border-radius: 2px; outline: none; cursor: pointer;
-      background: var(--line);
-    }
-    .slider-range::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%;
-      background: var(--text); cursor: pointer;
-      box-shadow: 0 2px 10px rgba(37,36,34,0.25);
-    }
-    .slider-range::-moz-range-thumb {
-      width: 24px; height: 24px; border: none; border-radius: 50%;
-      background: var(--text); cursor: pointer;
-    }
-
     /* ── DOWNLOAD PDF BUTTON ── */
     .btn-download {
       display: inline-flex; align-items: center; gap: 8px;
@@ -250,10 +233,8 @@
     }
     .btn-download:hover { border-color: var(--text); background: rgba(37,36,34,0.04); }
 
-    /* ── PRINT HEADER / FOOTER (invisible à l'écran, visibles à l'impression) ── */
+    /* ── PRINT ── */
     .print-header, .print-footer { display: none; }
-
-    /* ── STYLES D'IMPRESSION ── */
     @media print {
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       body { background: white !important; }
@@ -262,23 +243,13 @@
       .form-outer { padding: 36px 48px !important; max-width: 100% !important; margin: 0 !important; }
       #step-5 { display: block !important; animation: none !important; }
       #step-5 > .step-title { display: none !important; }
-      .price-box {
-        box-shadow: none !important; border: 1.5px solid #ccc5b9 !important;
-        page-break-inside: avoid; padding: 28px !important;
-      }
+      .price-box { box-shadow: none !important; border: 1.5px solid #ccc5b9 !important; page-break-inside: avoid; padding: 28px !important; }
       .summary-grid { page-break-inside: avoid; box-shadow: none !important; }
-      .print-header {
-        display: flex !important; justify-content: space-between; align-items: flex-start;
-        margin-bottom: 40px; padding-bottom: 24px; border-bottom: 2px solid #252422;
-      }
-      .print-footer {
-        display: block !important; margin-top: 32px; padding-top: 16px;
-        border-top: 1px solid #ccc5b9; font-size: 11px; color: #403d39; line-height: 1.6;
-      }
+      .print-header { display: flex !important; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 2px solid #252422; }
+      .print-footer { display: block !important; margin-top: 32px; padding-top: 16px; border-top: 1px solid #ccc5b9; font-size: 11px; color: #403d39; line-height: 1.6; }
       .success-screen { display: none !important; }
     }
 
-    /* ── MISC ── */
     .field-section { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-weight: 600; }
 
     @media (max-width: 640px) {
@@ -300,7 +271,6 @@
   <a href="/" class="nav-back">← Retour au site</a>
 </nav>
 
-<!-- PROGRESS -->
 <div class="progress-wrap" id="progressWrap">
   <div class="progress-header">
     <span class="progress-step-label" id="progressLabel">Étape 1 sur 4</span>
@@ -309,25 +279,16 @@
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 </div>
 
-<!-- FORM -->
 <div class="form-outer">
 
-  <!-- ── ÉTAPE 1 — PROFIL ── -->
+  <!-- ── ÉTAPE 1 ── -->
   <div class="step active" id="step-1">
     <h1 class="step-title">Parlons de toi.</h1>
     <p class="step-sub">Quelques infos pour que je comprenne qui tu es et ce que tu fais.</p>
-
     <div class="field-row">
-      <div class="field">
-        <label for="prenom">Prénom *</label>
-        <input type="text" id="prenom" name="prenom" placeholder="Thomas" autocomplete="given-name" required>
-      </div>
-      <div class="field">
-        <label for="email">Email *</label>
-        <input type="email" id="email" name="email" placeholder="thomas@gmail.com" autocomplete="email" required>
-      </div>
+      <div class="field"><label for="prenom">Prénom *</label><input type="text" id="prenom" name="prenom" placeholder="Thomas" autocomplete="given-name" required></div>
+      <div class="field"><label for="email">Email *</label><input type="email" id="email" name="email" placeholder="thomas@gmail.com" autocomplete="email" required></div>
     </div>
-
     <div class="field">
       <label>Ton activité *</label>
       <div class="choices cols-2">
@@ -337,7 +298,6 @@
         <div class="choice-card"><input type="radio" name="activite" id="a4" value="Agence / Marque"><label for="a4"><span class="choice-icon">🏢</span><span class="choice-title">Agence / Marque</span><span class="choice-desc">Tu représentes une structure ou une équipe</span></label></div>
       </div>
     </div>
-
     <div class="field">
       <label>Plateforme(s) principale(s) * <span style="color:var(--muted);font-weight:400;font-size:12px;">Plusieurs choix possibles</span></label>
       <div class="choices cols-3">
@@ -349,17 +309,13 @@
         <div class="choice-card"><input type="checkbox" name="plateforme" id="p6" value="Autre"><label for="p6"><span class="choice-icon">🌐</span><span class="choice-title">Autre</span></label></div>
       </div>
     </div>
-
-    <div class="btn-row">
-      <button class="btn-next" onclick="nextStep(1)">Continuer →</button>
-    </div>
+    <div class="btn-row"><button class="btn-next" onclick="nextStep(1)">Continuer →</button></div>
   </div>
 
-  <!-- ── ÉTAPE 2 — SITUATION ── -->
+  <!-- ── ÉTAPE 2 ── -->
   <div class="step" id="step-2">
     <h1 class="step-title">Où tu en es aujourd'hui.</h1>
     <p class="step-sub">Je veux comprendre ta situation réelle pour construire la bonne stratégie.</p>
-
     <div class="field">
       <label>Taille de ta communauté *</label>
       <div class="choices cols-2">
@@ -369,7 +325,6 @@
         <div class="choice-card"><input type="radio" name="communaute" id="c4" value="Grande audience (100 000+ abonnés)"><label for="c4"><span class="choice-icon">🔥</span><span class="choice-title">Grande audience</span><span class="choice-desc">100 000+ abonnés</span></label></div>
       </div>
     </div>
-
     <div class="field">
       <label>Tu publies du contenu régulièrement ? *</label>
       <div class="choices cols-3">
@@ -378,7 +333,6 @@
         <div class="choice-card"><input type="radio" name="regularite" id="r3" value="Oui, régulièrement"><label for="r3"><span class="choice-icon">✅</span><span class="choice-title">Régulièrement</span></label></div>
       </div>
     </div>
-
     <div class="field">
       <label>Ta douleur principale *</label>
       <div class="choices cols-2">
@@ -388,18 +342,16 @@
         <div class="choice-card"><input type="radio" name="douleur" id="d4" value="Qualité visuelle insuffisante"><label for="d4"><span class="choice-icon">🎨</span><span class="choice-title">Qualité insuffisante</span><span class="choice-desc">Mes vidéos ne reflètent pas mon niveau</span></label></div>
       </div>
     </div>
-
     <div class="btn-row">
       <button class="btn-prev" onclick="prevStep(2)">← Retour</button>
       <button class="btn-next" onclick="nextStep(2)">Continuer →</button>
     </div>
   </div>
 
-  <!-- ── ÉTAPE 3 — OBJECTIF ── -->
+  <!-- ── ÉTAPE 3 ── -->
   <div class="step" id="step-3">
     <h1 class="step-title">Ce que tu veux accomplir.</h1>
     <p class="step-sub">Ton objectif dicte tout — la stratégie, les formats, le rythme.</p>
-
     <div class="field">
       <label>Ton objectif principal *</label>
       <div class="choices cols-2">
@@ -409,17 +361,15 @@
         <div class="choice-card"><input type="radio" name="objectif" id="o4" value="Construire mon personal brand sur le long terme"><label for="o4"><span class="choice-icon">👑</span><span class="choice-title">Personal brand</span><span class="choice-desc">Devenir une référence dans mon domaine</span></label></div>
       </div>
     </div>
-
     <div class="field">
       <label>Dans quel délai veux-tu démarrer ? *</label>
       <div class="choices cols-2">
-        <div class="choice-card"><input type="radio" name="horizon" id="h1" value="Le plus vite possible (urgence)"><label for="h1"><span class="choice-icon">🚨</span><span class="choice-title">Le plus vite possible</span><span class="choice-desc">J'ai un lancement ou une deadline — supplément urgence appliqué</span></label></div>
+        <div class="choice-card"><input type="radio" name="horizon" id="h1" value="Le plus vite possible (urgence)"><label for="h1"><span class="choice-icon">🚨</span><span class="choice-title">Le plus vite possible</span><span class="choice-desc">J'ai un lancement ou une deadline</span></label></div>
         <div class="choice-card"><input type="radio" name="horizon" id="h2" value="Dans 1 à 3 mois"><label for="h2"><span class="choice-icon">📅</span><span class="choice-title">1 – 3 mois</span><span class="choice-desc">Je veux démarrer rapidement mais sereinement</span></label></div>
         <div class="choice-card"><input type="radio" name="horizon" id="h3" value="Dans 3 à 6 mois"><label for="h3"><span class="choice-icon">🗓️</span><span class="choice-title">3 – 6 mois</span><span class="choice-desc">Je veux construire sur le long terme</span></label></div>
         <div class="choice-card"><input type="radio" name="horizon" id="h4" value="Je planifie pour la suite (6 mois+)"><label for="h4"><span class="choice-icon">🌅</span><span class="choice-title">6 mois et plus</span><span class="choice-desc">Je prépare l'avenir de ma marque</span></label></div>
       </div>
     </div>
-
     <div class="btn-row">
       <button class="btn-prev" onclick="prevStep(3)">← Retour</button>
       <button class="btn-next" onclick="nextStep(3)">Continuer →</button>
@@ -429,7 +379,7 @@
   <!-- ── ÉTAPE 4 — PROJET ── -->
   <div class="step" id="step-4">
     <h1 class="step-title">Ton projet en détail.</h1>
-    <p class="step-sub">Sélectionne tes services — les options de volume s'affichent pour chacun.</p>
+    <p class="step-sub">Sélectionne tes services, choisis le volume et configure chaque vidéo.</p>
 
     <div class="field">
       <p class="field-section">Services souhaités *</p>
@@ -440,97 +390,94 @@
         <div class="check-item"><input type="checkbox" id="s-vsl" name="services" value="VSL (vidéo de vente)" data-detail="svc-vsl"><label for="s-vsl"><span class="check-service-icon">💼</span> VSL (vidéo de vente)</label></div>
         <div class="check-item"><input type="checkbox" id="s-reels" name="services" value="Reels / Courts formats" data-detail="svc-reels"><label for="s-reels"><span class="check-service-icon">📱</span> Reels / Courts formats</label></div>
         <div class="check-item"><input type="checkbox" id="s-ads" name="services" value="Meta Ads (publicités)" data-detail="svc-ads"><label for="s-ads"><span class="check-service-icon">📢</span> Meta Ads</label></div>
-        <div class="check-item"><input type="checkbox" id="s-podcast" name="services" value="Podcast" data-detail="svc-podcast"><label for="s-podcast"><span class="check-service-icon">🎙️</span> Podcast</label></div>
-        <div class="check-item"><input type="checkbox" id="s-motion" name="services" value="Motion design" data-detail="svc-motion"><label for="s-motion"><span class="check-service-icon">✨</span> Motion design</label></div>
+        <div class="check-item"><input type="checkbox" id="s-podcast" name="services" value="Podcast vidéo" data-detail="svc-podcast"><label for="s-podcast"><span class="check-service-icon">🎙️</span> Podcast vidéo</label></div>
       </div>
 
-      <!-- Sub-volume panels, revealed on checkbox check -->
       <div class="svc-details-wrap" id="svcDetailsWrap">
 
+        <!-- Stratégie -->
         <div class="svc-detail" id="svc-strategie" style="display:none;">
-          <div class="svc-detail-head"><span class="svc-detail-head-icon">🧭</span>Stratégie de contenu — Accompagnement mensuel</div>
-          <p style="font-size:13px;color:var(--muted);line-height:1.55;">Positionnement, piliers de contenu, calendrier éditorial 90 jours, scripts, plan mensuel et reporting. Forfait mensuel fixe.</p>
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">🧭</span>Stratégie de contenu — Forfait mensuel</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.55;">Positionnement, piliers de contenu, calendrier éditorial 90 jours, scripts, plan mensuel et reporting.</p>
+          <p class="svc-detail-note">💡 <strong>900 €/mois</strong></p>
         </div>
 
+        <!-- Audit -->
         <div class="svc-detail" id="svc-audit" style="display:none;">
           <div class="svc-detail-head"><span class="svc-detail-head-icon">🔍</span>Audit stratégique — Prestation one-shot</div>
           <p style="font-size:13px;color:var(--muted);line-height:1.55;">Analyse complète du compte, benchmark 5 concurrents, 10 actions prioritaires. Livrable : Loom 15–20 min + document écrit.</p>
+          <p class="svc-detail-note">💡 <strong>350 €</strong> — one-shot</p>
         </div>
 
+        <!-- YouTube -->
         <div class="svc-detail" id="svc-youtube" style="display:none;">
-          <div class="svc-detail-head"><span class="svc-detail-head-icon">🎬</span>Volume mensuel — YouTube Long-Form</div>
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">🎬</span>YouTube / Long-Form</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Pour chaque vidéo : choisis la durée, si tu veux du motion design, et si c'est urgent.</p>
           <div class="vol-tags" id="vt-youtube">
             <button type="button" class="vol-tag" data-svc="youtube" data-val="1">1 vidéo</button>
             <button type="button" class="vol-tag" data-svc="youtube" data-val="2">2 vidéos</button>
             <button type="button" class="vol-tag" data-svc="youtube" data-val="3">3 vidéos</button>
             <button type="button" class="vol-tag" data-svc="youtube" data-val="4">4 vidéos</button>
-            <button type="button" class="vol-tag" data-svc="youtube" data-val="5">5+ vidéos</button>
+            <button type="button" class="vol-tag" data-svc="youtube" data-val="5">5 vidéos</button>
           </div>
-          <p class="svc-detail-note">💡 Tarif : <strong>250 €/vidéo</strong> (moins de 10 min) · <strong>250 € + 30 €/min suppl.</strong> (plus de 10 min) · Supplément urgence : <strong>+250 €/vidéo</strong></p>
+          <div class="brief-vid-table" id="yt-brief-rows"></div>
+          <p class="svc-detail-note">💡 Dès <strong>250 €/vidéo</strong> · Motion design : <strong>+280 €/min</strong> · Urgence : <strong>+250 €/vidéo</strong></p>
         </div>
 
+        <!-- VSL -->
         <div class="svc-detail" id="svc-vsl" style="display:none;">
-          <div class="svc-detail-head"><span class="svc-detail-head-icon">💼</span>Volume — VSL (vidéo de vente)</div>
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">💼</span>VSL (vidéo de vente)</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Pour chaque VSL : choisis la durée, si tu veux du motion design, et si c'est urgent.</p>
           <div class="vol-tags" id="vt-vsl">
             <button type="button" class="vol-tag" data-svc="vsl" data-val="1">1 VSL</button>
             <button type="button" class="vol-tag" data-svc="vsl" data-val="2">2 VSL</button>
             <button type="button" class="vol-tag" data-svc="vsl" data-val="3">3 VSL</button>
           </div>
-          <p class="svc-detail-note">💡 Tarif : <strong>300 €</strong> (moins de 3 min) · <strong>300 € + 35 €/min suppl.</strong> (3–10 min) · <strong>600 € + 30 €/min suppl.</strong> (plus de 10 min) · Supplément urgence : <strong>+250 €/VSL</strong></p>
+          <div class="brief-vid-table" id="vsl-brief-rows"></div>
+          <p class="svc-detail-note">💡 Dès <strong>300 €/VSL</strong> · Motion design : <strong>+280 €/min</strong> · Urgence : <strong>+400 €/VSL</strong></p>
         </div>
 
+        <!-- Reels -->
         <div class="svc-detail" id="svc-reels" style="display:none;">
-          <div class="svc-detail-head"><span class="svc-detail-head-icon">📱</span>Volume mensuel — Reels / Courts formats</div>
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">📱</span>Reels / Courts formats</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Pour chaque reel : choisis la durée, si tu veux du motion design, et si c'est urgent.</p>
           <div class="vol-tags" id="vt-reels">
-            <button type="button" class="vol-tag" data-svc="reels" data-val="2">1–2 reels</button>
-            <button type="button" class="vol-tag" data-svc="reels" data-val="4">3–4 reels</button>
-            <button type="button" class="vol-tag" data-svc="reels" data-val="6">5–6 reels</button>
-            <button type="button" class="vol-tag" data-svc="reels" data-val="8">7–8 reels</button>
-            <button type="button" class="vol-tag" data-svc="reels" data-val="12">9–12 reels</button>
-            <button type="button" class="vol-tag" data-svc="reels" data-val="15">13+ reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="2">2 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="4">4 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="6">6 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="8">8 reels</button>
+            <button type="button" class="vol-tag" data-svc="reels" data-val="10">10 reels</button>
           </div>
-          <p class="svc-detail-note">💡 Tarif : <strong>40 €/reel</strong> (moins de 1 min) · <strong>60 €/reel</strong> (plus de 1 min) · Supplément urgence : <strong>+80 €/reel</strong></p>
+          <div class="brief-vid-table" id="reels-brief-rows"></div>
+          <p class="svc-detail-note">💡 <strong>60 €/reel</strong> (< 1 min) · <strong>80 €/reel</strong> (> 1 min) · Motion : <strong>+40 €</strong> · Urgence : <strong>+80 €</strong></p>
         </div>
 
+        <!-- Ads -->
         <div class="svc-detail" id="svc-ads" style="display:none;">
-          <div class="svc-detail-head"><span class="svc-detail-head-icon">📢</span>Volume mensuel — Meta Ads</div>
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">📢</span>Meta Ads (publicités)</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Pour chaque publicité : choisis la durée, si tu veux du motion design, et si c'est urgent.</p>
           <div class="vol-tags" id="vt-ads">
-            <button type="button" class="vol-tag" data-svc="ads" data-val="2">1–2 pubs</button>
-            <button type="button" class="vol-tag" data-svc="ads" data-val="4">3–4 pubs</button>
-            <button type="button" class="vol-tag" data-svc="ads" data-val="6">5–6 pubs</button>
-            <button type="button" class="vol-tag" data-svc="ads" data-val="8">7–8 pubs</button>
-            <button type="button" class="vol-tag" data-svc="ads" data-val="10">9+ pubs</button>
+            <button type="button" class="vol-tag" data-svc="ads" data-val="2">2 pubs</button>
+            <button type="button" class="vol-tag" data-svc="ads" data-val="4">4 pubs</button>
+            <button type="button" class="vol-tag" data-svc="ads" data-val="6">6 pubs</button>
+            <button type="button" class="vol-tag" data-svc="ads" data-val="8">8 pubs</button>
           </div>
-          <p class="svc-detail-note">💡 Tarif : <strong>40 €/pub</strong> (moins de 1 min) · <strong>60 €/pub</strong> (plus de 1 min) · Supplément urgence : <strong>+80 €/pub</strong></p>
+          <div class="brief-vid-table" id="ads-brief-rows"></div>
+          <p class="svc-detail-note">💡 <strong>60 €/pub</strong> (< 1 min) · <strong>80 €/pub</strong> (> 1 min) · Motion : <strong>+40 €</strong> · Urgence : <strong>+80 €</strong></p>
         </div>
 
+        <!-- Podcast -->
         <div class="svc-detail" id="svc-podcast" style="display:none;">
-          <div class="svc-detail-head"><span class="svc-detail-head-icon">🎙️</span>Volume mensuel — Podcast</div>
+          <div class="svc-detail-head"><span class="svc-detail-head-icon">🎙️</span>Podcast vidéo</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Pour chaque épisode : choisis la durée, si tu veux du motion design, et si c'est urgent.</p>
           <div class="vol-tags" id="vt-podcast">
             <button type="button" class="vol-tag" data-svc="podcast" data-val="1">1 épisode</button>
             <button type="button" class="vol-tag" data-svc="podcast" data-val="2">2 épisodes</button>
-            <button type="button" class="vol-tag" data-svc="podcast" data-val="3">3–4 épisodes</button>
-            <button type="button" class="vol-tag" data-svc="podcast" data-val="5">5+ épisodes</button>
+            <button type="button" class="vol-tag" data-svc="podcast" data-val="3">3 épisodes</button>
+            <button type="button" class="vol-tag" data-svc="podcast" data-val="4">4 épisodes</button>
           </div>
-          <p class="svc-detail-note">💡 Tarif : <strong>200 €/épisode</strong> (moins de 1h) · <strong>300 € avec intro animée</strong> · <strong>+100 €/heure suppl.</strong> (plus de 1h) · Supplément urgence : <strong>+250 €/épisode</strong></p>
-        </div>
-
-        <div class="svc-detail" id="svc-motion" style="display:none;">
-          <div class="svc-detail-head"><span class="svc-detail-head-icon">✨</span>Motion design — Minutes par vidéo longue</div>
-          <div class="slider-wrap">
-            <div class="slider-meta">
-              <div>
-                <span class="slider-val" id="motionSliderVal">3</span>
-                <span class="slider-unit"> min / vidéo longue</span>
-              </div>
-              <span class="slider-unit" id="motionSliderPrice" style="font-weight:600;color:var(--text);">840 €</span>
-            </div>
-            <input type="range" class="slider-range" id="motionSlider" min="1" max="10" step="1" value="3">
-            <div class="slider-ticks">
-              <span>1 min</span><span>5 min</span><span>10 min</span>
-            </div>
-          </div>
-          <p class="svc-detail-note" id="motionSliderNote">💡 <strong>280 €/min</strong> · Supplément au montage, facturé séparément · Calculé sur le nombre de vidéos longues commandées (YouTube + VSL + Podcast)</p>
+          <div class="brief-vid-table" id="podcast-brief-rows"></div>
+          <p class="svc-detail-note">💡 <strong>200 €/épisode</strong> (< 1h) · <strong>dès 300 €</strong> (> 1h) · Motion design : <strong>+280 €/min</strong> · Urgence : <strong>+250 €/épisode</strong></p>
         </div>
 
       </div>
@@ -560,7 +507,7 @@
 
     <div class="field">
       <label for="message">Détails supplémentaires <span style="color:var(--muted);font-weight:400;">(optionnel)</span></label>
-      <textarea id="message" name="message" placeholder="Décris ton projet, tes attentes, des exemples de contenus qui t'inspirent, ou toute info utile…"></textarea>
+      <textarea id="message" name="message" placeholder="Décris ton projet, tes attentes, des exemples de contenus qui t'inspirent…"></textarea>
     </div>
 
     <div class="btn-row">
@@ -574,11 +521,10 @@
     <h1 class="step-title">Ton estimation.</h1>
     <p class="step-sub">Récapitulatif de ton brief et fourchette de prix indicative selon tes choix.</p>
 
-    <!-- Header visible uniquement à l'impression -->
     <div class="print-header">
       <div>
         <div style="font-size:24px;font-weight:800;letter-spacing:-.04em;color:#252422;">Alex.Studio</div>
-        <div style="font-size:12px;color:#403d39;margin-top:5px;letter-spacing:.04em;text-transform:uppercase;">Devis client · <span id="printDate"></span></div>
+        <div style="font-size:12px;color:#403d39;margin-top:5px;letter-spacing:.04em;text-transform:uppercase;">Brief client · <span id="printDate"></span></div>
       </div>
       <div style="text-align:right;">
         <div style="font-size:15px;font-weight:700;color:#252422;" id="printClientName"></div>
@@ -591,18 +537,16 @@
       <div class="price-amount" id="priceAmount">—</div>
       <div class="price-period" id="pricePeriod">par mois</div>
       <div class="price-detail" id="priceDetail"></div>
-      <p class="price-disclaimer">💡 Cette estimation est indicative. Le tarif final sera défini lors de notre échange, en fonction de la durée réelle des vidéos et des détails de ton projet.</p>
+      <p class="price-disclaimer">💡 Cette estimation est indicative. Le tarif final sera défini lors de notre échange, selon la durée réelle des vidéos et les détails du projet.</p>
     </div>
 
     <div class="summary-grid" id="summaryGrid"></div>
 
-    <!-- Footer visible uniquement à l'impression -->
     <div class="print-footer">
-      <p>Ce devis est indicatif. Les tarifs sont calculés sur la base des informations fournies. Le montant final sera confirmé lors de notre échange selon la durée réelle des vidéos et les détails du projet.</p>
+      <p>Ce devis est indicatif. Les tarifs sont calculés sur la base des informations fournies. Le montant final sera confirmé lors de notre échange.</p>
       <p style="margin-top:6px;font-weight:600;">Alex.Studio · alexstudio.fr · hello@alex.studio</p>
     </div>
 
-    <!-- Formulaire fantôme : Netlify scanne ces champs au build pour savoir quoi inclure dans le mail -->
     <form id="briefForm" name="brief" netlify style="display:none;">
       <input type="hidden" name="form-name" value="brief">
       <input type="hidden" name="Prénom">
@@ -615,11 +559,10 @@
       <input type="hidden" name="Objectif">
       <input type="hidden" name="Horizon">
       <input type="hidden" name="Services">
-      <input type="hidden" name="Volumes">
+      <input type="hidden" name="Détail vidéos">
       <input type="hidden" name="Budget envisagé">
       <input type="hidden" name="Paiement">
       <input type="hidden" name="Estimation">
-      <input type="hidden" name="Urgence">
       <input type="hidden" name="Message">
     </form>
 
@@ -630,9 +573,8 @@
     </div>
   </div>
 
-</div><!-- /form-outer -->
+</div>
 
-<!-- SUCCESS -->
 <div class="success-screen" id="successScreen">
   <div class="success-icon">🎉</div>
   <h2 class="success-title">Brief envoyé !</h2>
@@ -641,50 +583,54 @@
 </div>
 
 <script>
-  // ═══════════════════════════════════════════════════════════
-  // EMAILJS CONFIG — remplis ces 3 valeurs depuis emailjs.com
-  // Guide : voir commentaires en bas du fichier
-  // ═══════════════════════════════════════════════════════════
+  // ── EMAILJS ──
   const EJS = {
     publicKey:  'bFY9kiUYxIf1xvVEh',
     serviceId:  'service_zk0z2k9',
     templateId: 'template_4a0vv2g',
   };
-  // ═══════════════════════════════════════════════════════════
 
-  // ─── TARIFS ───
+  // ── TARIFS ──
   const TARIFS = {
-    strategie:        900,   // €/mois
-    audit:            350,   // one-shot
-    yt_short:         250,   // YouTube < 10 min / vidéo
-    yt_long:          310,   // YouTube > 10 min (estimation ~12 min : 250 + 2×30)
-    reel_short:        60,   // Reel < 1 min
-    reel_long:         80,   // Reel > 1 min
-    vsl_short:        300,   // VSL < 3 min
-    vsl_mid:          405,   // VSL 3–10 min (300 + 3×35)
-    vsl_long:         750,   // VSL > 10 min (600 + 5×30, ~15 min)
-    podcast_short:    200,   // Podcast < 1h
-    podcast_long:     300,   // Podcast > 1h (200 + 1×100)
-    ads_short:         60,   // Ad < 1 min
-    ads_long:          80,   // Ad > 1 min
-    motion_per_min:   280,   // Motion design €/min
-    urgency_long:     250,   // Supplément urgence /vidéo longue (YouTube, Podcast)
-    urgency_vsl:      400,   // Supplément urgence /VSL
-    urgency_short:     80,   // Supplément urgence /vidéo courte
+    strategie: 900, audit: 350,
+    motion_per_min: 280, motion_short: 40,
+    urgency_long: 250, urgency_vsl: 400, urgency_short: 80,
   };
 
-  // Map detail-id → svcVols key (pour reset au décoché)
-  const DETAIL_TO_SVC = {
-    'svc-youtube': 'youtube', 'svc-vsl': 'vsl', 'svc-reels': 'reels',
-    'svc-ads': 'ads', 'svc-podcast': 'podcast', 'svc-motion': 'motion',
-  };
+  // Options de durée (label + prix base)
+  const YT_DUR    = [{ v:'yt_s',label:'< 10 min',price:250},{v:'yt_15',label:'~15 min',price:400},{v:'yt_20',label:'~20 min',price:550},{v:'yt_30',label:'~30 min',price:850},{v:'yt_45',label:'~45 min',price:1200}];
+  const VSL_DUR   = [{ v:'vsl_s',label:'< 3 min',price:300},{v:'vsl_5',label:'~5 min',price:370},{v:'vsl_8',label:'~8 min',price:475},{v:'vsl_12',label:'~12 min',price:660},{v:'vsl_15',label:'~15 min',price:750}];
+  const REELS_DUR = [{ v:'r_s',label:'< 1 min',price:60},{v:'r_l',label:'> 1 min',price:80}];
+  const ADS_DUR   = [{ v:'a_s',label:'< 1 min',price:60},{v:'a_l',label:'> 1 min',price:80}];
+  const POD_DUR   = [{ v:'pod_s',label:'< 1h',price:200},{v:'pod_2h',label:'~2h',price:300},{v:'pod_3h',label:'~3h',price:400},{v:'pod_4h',label:'~4h',price:500}];
 
+  const ALL_SVC_CFG = [
+    { id:'youtube', vidLabel:'Vidéo',   rowsId:'yt-brief-rows',      durations:YT_DUR,    motionType:'minutes', urgPrice:250, motionEst:840 },
+    { id:'vsl',     vidLabel:'VSL',     rowsId:'vsl-brief-rows',     durations:VSL_DUR,   motionType:'minutes', urgPrice:400, motionEst:840 },
+    { id:'reels',   vidLabel:'Reel',    rowsId:'reels-brief-rows',   durations:REELS_DUR, motionType:'checkbox', urgPrice:80, motionEst:40 },
+    { id:'ads',     vidLabel:'Pub',     rowsId:'ads-brief-rows',     durations:ADS_DUR,   motionType:'checkbox', urgPrice:80, motionEst:40 },
+    { id:'podcast', vidLabel:'Épisode', rowsId:'podcast-brief-rows', durations:POD_DUR,   motionType:'minutes', urgPrice:250, motionEst:840 },
+  ];
+
+  // ── STATE ──
   let currentStep = 1;
   const TOTAL_STEPS = 4;
   const STEPS_LABELS = ['Profil', 'Situation', 'Objectif', 'Projet'];
-  const svcVols = {};
+  let paymentChoice = 1;
+  // État par vidéo pour chaque service
+  const briefVidState = { youtube:[], vsl:[], reels:[], ads:[], podcast:[] };
+  const svcVols = {}; // nombre de vidéos par service
 
-  // ─── PROGRESS ───
+  // ── HELPERS ──
+  function getVal(name) {
+    const checked = document.querySelector(`[name="${name}"]:checked`);
+    if (checked) return checked.value;
+    const el = document.querySelector(`[name="${name}"]`);
+    return el ? el.value : '';
+  }
+  function getChecked(name) { return [...document.querySelectorAll(`[name="${name}"]:checked`)].map(e => e.value); }
+
+  // ── PROGRESS ──
   function updateProgress(step) {
     const pct = Math.round(((step - 1) / TOTAL_STEPS) * 100);
     document.getElementById('progressFill').style.width = pct + '%';
@@ -694,42 +640,21 @@
     document.getElementById('progressWrap').style.display = step > TOTAL_STEPS ? 'none' : '';
   }
 
-  function getVal(name) {
-    const checked = document.querySelector(`[name="${name}"]:checked`);
-    if (checked) return checked.value;
-    const el = document.querySelector(`[name="${name}"]`);
-    return el ? el.value : '';
-  }
-
-  function getChecked(name) {
-    return [...document.querySelectorAll(`[name="${name}"]:checked`)].map(e => e.value);
-  }
-
-  // ─── VALIDATION ───
+  // ── VALIDATION ──
   function validateStep(step) {
     if (step === 1) {
       const prenom = document.getElementById('prenom').value.trim();
       const email  = document.getElementById('email').value.trim();
-      if (!prenom || !email || !getVal('activite') || getChecked('plateforme').length === 0) {
-        alert('Merci de remplir tous les champs obligatoires.'); return false;
-      }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert('Adresse email invalide.'); return false;
-      }
+      if (!prenom || !email || !getVal('activite') || getChecked('plateforme').length === 0) { alert('Merci de remplir tous les champs obligatoires.'); return false; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Adresse email invalide.'); return false; }
     }
-    if (step === 2 && (!getVal('communaute') || !getVal('regularite') || !getVal('douleur'))) {
-      alert('Merci de répondre à toutes les questions.'); return false;
-    }
-    if (step === 3 && (!getVal('objectif') || !getVal('horizon'))) {
-      alert('Merci de répondre à toutes les questions.'); return false;
-    }
-    if (step === 4 && getChecked('services').length === 0) {
-      alert('Sélectionne au moins un service.'); return false;
-    }
+    if (step === 2 && (!getVal('communaute') || !getVal('regularite') || !getVal('douleur'))) { alert('Merci de répondre à toutes les questions.'); return false; }
+    if (step === 3 && (!getVal('objectif') || !getVal('horizon'))) { alert('Merci de répondre à toutes les questions.'); return false; }
+    if (step === 4 && getChecked('services').length === 0) { alert('Sélectionne au moins un service.'); return false; }
     return true;
   }
 
-  // ─── NAVIGATION ───
+  // ── NAVIGATION ──
   function nextStep(from) {
     if (!validateStep(from)) return;
     document.getElementById('step-' + from).classList.remove('active');
@@ -742,7 +667,6 @@
     updateProgress(currentStep);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
   function prevStep(from) {
     document.getElementById('step-' + from).classList.remove('active');
     currentStep = from - 1;
@@ -751,7 +675,7 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ─── SERVICE CHECKBOXES → toggle sub-panels + reset vol on uncheck ───
+  // ── SERVICE CHECKBOXES ──
   document.querySelectorAll('[name="services"]').forEach(cb => {
     cb.addEventListener('change', () => {
       const detailId = cb.dataset.detail;
@@ -762,24 +686,21 @@
         el.style.animation = 'none';
         requestAnimationFrame(() => { el.style.animation = ''; });
       } else {
-        // Purge stored volume + reset buttons visually
-        const svcKey = DETAIL_TO_SVC[detailId];
-        if (svcKey) {
-          if (svcKey === 'motion') {
-            // reset slider to default but keep svcVols.motion (slider always has a value)
-            motionSlider.value = 3;
-            updateMotionSlider();
-          } else {
-            delete svcVols[svcKey];
-            document.querySelectorAll(`.vol-tag[data-svc="${svcKey}"]`).forEach(b => b.classList.remove('active'));
-          }
-        }
+        // Reset
+        const svcKey = detailId.replace('svc-', '');
+        delete svcVols[svcKey];
+        briefVidState[svcKey] = [];
+        const rowsEl = document.getElementById(svcKey === 'youtube' ? 'yt-brief-rows' :
+          svcKey === 'vsl' ? 'vsl-brief-rows' :
+          svcKey === 'reels' ? 'reels-brief-rows' :
+          svcKey === 'ads' ? 'ads-brief-rows' : 'podcast-brief-rows');
+        if (rowsEl) rowsEl.innerHTML = '';
+        document.querySelectorAll(`.vol-tag[data-svc="${svcKey}"]`).forEach(b => b.classList.remove('active'));
       }
     });
   });
 
-  // ─── PAYMENT BUTTONS ───
-  let paymentChoice = 1;
+  // ── PAYMENT ──
   document.querySelectorAll('#paymentTags .vol-tag').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('#paymentTags .vol-tag').forEach(b => b.classList.remove('active'));
@@ -789,133 +710,112 @@
     });
   });
 
-  // ─── VOL TAG clicks (tous sauf motion qui utilise un slider) ───
+  // ── VOL TAGS → render per-video rows ──
   document.querySelectorAll('.vol-tag[data-svc]').forEach(btn => {
     btn.addEventListener('click', () => {
       const svc = btn.dataset.svc;
       document.querySelectorAll(`.vol-tag[data-svc="${svc}"]`).forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      svcVols[svc] = parseFloat(btn.dataset.val);
+      svcVols[svc] = parseInt(btn.dataset.val);
+      renderBriefVidRows(svc);
     });
   });
 
-  // ─── MOTION SLIDER ───
-  const motionSlider = document.getElementById('motionSlider');
-  function updateMotionSlider() {
-    const mins = parseInt(motionSlider.value);
-    svcVols.motion = mins;
-    document.getElementById('motionSliderVal').textContent = mins;
-    // Calcule le prix estimé (sur vidéos longues cochées)
-    const svcsNow = getChecked('services');
-    let longVids = 0;
-    if (svcsNow.includes('YouTube / Long-Form')) longVids += (svcVols.youtube || 1);
-    if (svcsNow.includes('VSL (vidéo de vente)')) longVids += (svcVols.vsl || 1);
-    if (svcsNow.includes('Podcast')) longVids += (svcVols.podcast || 1);
-    if (longVids === 0) longVids = 1;
-    const price = mins * longVids * TARIFS.motion_per_min;
-    document.getElementById('motionSliderPrice').textContent =
-      '≈ ' + price.toLocaleString('fr-FR') + ' €';
+  // ── RENDER PER-VIDEO ROWS ──
+  function renderBriefVidRows(svcId) {
+    const cfg = ALL_SVC_CFG.find(c => c.id === svcId);
+    if (!cfg) return;
+    const el = document.getElementById(cfg.rowsId);
+    if (!el) return;
+    const vol = svcVols[svcId] || 0;
+    if (vol === 0) { el.innerHTML = ''; return; }
+
+    // Sync state
+    if (!briefVidState[svcId]) briefVidState[svcId] = [];
+    while (briefVidState[svcId].length < vol)
+      briefVidState[svcId].push({ dur: cfg.durations[0].v, motion: false, urgence: false });
+    briefVidState[svcId] = briefVidState[svcId].slice(0, vol);
+
+    el.innerHTML = briefVidState[svcId].map((st, i) => {
+      const durOpts = cfg.durations.map(d =>
+        `<option value="${d.v}"${st.dur === d.v ? ' selected' : ''}>${d.label}</option>`
+      ).join('');
+      return `
+        <div class="brief-vid-row" id="brief-row-${svcId}-${i}">
+          <span class="brief-vid-label">${cfg.vidLabel} ${i + 1}</span>
+          <select class="brief-vid-dur" onchange="onBriefDur('${svcId}',${i},this.value)">${durOpts}</select>
+          <div class="brief-vid-checks">
+            <button type="button" class="brief-pill${st.motion ? ' on' : ''}"
+              onclick="toggleBriefField('${svcId}',${i},'motion',this)">✨ Motion</button>
+            <button type="button" class="brief-pill urg${st.urgence ? ' on' : ''}"
+              onclick="toggleBriefField('${svcId}',${i},'urgence',this)">⚡ Urgent</button>
+          </div>
+        </div>`;
+    }).join('');
   }
-  motionSlider.addEventListener('input', updateMotionSlider);
-  svcVols.motion = parseInt(motionSlider.value); // valeur par défaut
 
-  // ─── DEFAULT VOL ───
-  function vol(svc, def) { return svcVols[svc] !== undefined ? svcVols[svc] : def; }
+  function onBriefDur(svcId, idx, val) {
+    if (briefVidState[svcId]?.[idx]) briefVidState[svcId][idx].dur = val;
+  }
 
-  // ─── PRICE CALC ───
+  function toggleBriefField(svcId, idx, field, btn) {
+    if (!briefVidState[svcId]?.[idx]) return;
+    briefVidState[svcId][idx][field] = !briefVidState[svcId][idx][field];
+    btn.classList.toggle('on', briefVidState[svcId][idx][field]);
+  }
+
+  // ── CALCUL ──
   function calcPrice() {
     const services = getChecked('services');
-    const isUrgent = getVal('horizon').includes('Le plus vite possible');
-    const lines = [];
     let base = 0;
+    const lines = [];
 
     if (services.includes('Stratégie de contenu')) {
       base += TARIFS.strategie;
-      lines.push({ type: 'fixed', label: 'Stratégie de contenu', price: TARIFS.strategie, badge: '/mois' });
+      lines.push({ type:'fixed', label:'Stratégie de contenu', price: TARIFS.strategie, badge:'/mois' });
     }
     if (services.includes('Audit stratégique')) {
       base += TARIFS.audit;
-      lines.push({ type: 'fixed', label: 'Audit stratégique', price: TARIFS.audit, badge: 'one-shot' });
-    }
-    if (services.includes('YouTube / Long-Form')) {
-      const v = vol('youtube', 1);
-      const priceShort = v * TARIFS.yt_short;
-      const priceLong  = v * TARIFS.yt_long;
-      const urg = isUrgent ? v * TARIFS.urgency_long : 0;
-      base += priceShort + urg;
-      lines.push({ type: 'dual', label: 'YouTube Long-Form', badge: `${v} vidéo${v > 1 ? 's' : ''}/mois`,
-        short: priceShort, long: priceLong, labelShort: '< 10 min', labelLong: '> 10 min',
-        perShort: TARIFS.yt_short, perLong: TARIFS.yt_long, v, urg,
-        urgLabel: `⚡ Urgence (${v} × 250 €)` });
-    }
-    if (services.includes('VSL (vidéo de vente)')) {
-      const v = vol('vsl', 1);
-      const priceShort = v * TARIFS.vsl_short;
-      const priceLong  = v * TARIFS.vsl_mid;
-      const urg = isUrgent ? v * TARIFS.urgency_vsl : 0;
-      base += priceShort + urg;
-      lines.push({ type: 'dual', label: 'VSL (vidéo de vente)', badge: `${v} VSL`,
-        short: priceShort, long: priceLong, labelShort: '< 3 min', labelLong: '3–10 min',
-        perShort: TARIFS.vsl_short, perLong: TARIFS.vsl_mid, v, urg,
-        urgLabel: `⚡ Urgence (${v} × 400 €)` });
-    }
-    if (services.includes('Reels / Courts formats')) {
-      const v = vol('reels', 4);
-      const priceShort = v * TARIFS.reel_short;
-      const priceLong  = v * TARIFS.reel_long;
-      const urg = isUrgent ? v * TARIFS.urgency_short : 0;
-      base += priceShort + urg;
-      lines.push({ type: 'dual', label: 'Reels / Courts formats', badge: `${v} reels/mois`,
-        short: priceShort, long: priceLong, labelShort: '< 1 min', labelLong: '> 1 min',
-        perShort: TARIFS.reel_short, perLong: TARIFS.reel_long, v, urg,
-        urgLabel: `⚡ Urgence (${v} × 80 €)` });
-    }
-    if (services.includes('Meta Ads (publicités)')) {
-      const v = vol('ads', 4);
-      const priceShort = v * TARIFS.ads_short;
-      const priceLong  = v * TARIFS.ads_long;
-      const urg = isUrgent ? v * TARIFS.urgency_short : 0;
-      base += priceShort + urg;
-      lines.push({ type: 'dual', label: 'Meta Ads', badge: `${v} pubs/mois`,
-        short: priceShort, long: priceLong, labelShort: '< 1 min', labelLong: '> 1 min',
-        perShort: TARIFS.ads_short, perLong: TARIFS.ads_long, v, urg,
-        urgLabel: `⚡ Urgence (${v} × 80 €)` });
-    }
-    if (services.includes('Podcast')) {
-      const v = vol('podcast', 1);
-      const priceShort = v * TARIFS.podcast_short;
-      const priceLong  = v * TARIFS.podcast_long;
-      const urg = isUrgent ? v * TARIFS.urgency_long : 0;
-      base += priceShort + urg;
-      lines.push({ type: 'dual', label: 'Podcast', badge: `${v} épisode${v > 1 ? 's' : ''}/mois`,
-        short: priceShort, long: priceLong, labelShort: '< 1h', labelLong: '> 1h',
-        perShort: TARIFS.podcast_short, perLong: TARIFS.podcast_long, v, urg,
-        urgLabel: `⚡ Urgence (${v} × 250 €)` });
-    }
-    if (services.includes('Motion design')) {
-      const minsPerVid = svcVols.motion !== undefined ? svcVols.motion : 3;
-      let longVids = 0;
-      if (services.includes('YouTube / Long-Form')) longVids += vol('youtube', 1);
-      if (services.includes('VSL (vidéo de vente)'))  longVids += vol('vsl', 1);
-      if (services.includes('Podcast'))               longVids += vol('podcast', 1);
-      if (longVids === 0) longVids = 1;
-      const totalMins = minsPerVid * longVids;
-      const price = totalMins * TARIFS.motion_per_min;
-      base += price;
-      lines.push({
-        type: 'motion',
-        label: 'Motion design',
-        badge: `${minsPerVid} min/vidéo × ${longVids} vidéo${longVids > 1 ? 's' : ''} longue${longVids > 1 ? 's' : ''}`,
-        minsPerVid, longVids, totalMins, price,
-      });
+      lines.push({ type:'fixed', label:'Audit stratégique', price: TARIFS.audit, badge:'one-shot' });
     }
 
-    return { total: base, lines, isUrgent };
+    ALL_SVC_CFG.forEach(cfg => {
+      const svcName = {
+        youtube:'YouTube / Long-Form', vsl:'VSL (vidéo de vente)',
+        reels:'Reels / Courts formats', ads:'Meta Ads (publicités)', podcast:'Podcast vidéo'
+      }[cfg.id];
+      if (!services.includes(svcName)) return;
+
+      const vids = briefVidState[cfg.id] || [];
+      if (!vids.length) return;
+
+      let svcTotal = 0;
+      const vidDetails = [];
+
+      vids.forEach((vid, i) => {
+        const durOpt = cfg.durations.find(d => d.v === vid.dur) || cfg.durations[0];
+        const montage = durOpt.price;
+        const motion  = vid.motion ? cfg.motionEst : 0;
+        const urgence = vid.urgence ? cfg.urgPrice : 0;
+        const total   = montage + motion + urgence;
+        svcTotal += total;
+
+        let parts = [durOpt.label];
+        if (vid.motion)  parts.push(cfg.motionType === 'checkbox' ? 'Motion' : 'Motion (est. 3 min)');
+        if (vid.urgence) parts.push('⚡ Urgent');
+        vidDetails.push({ label: `${cfg.vidLabel} ${i+1} — ${parts.join(' + ')}`, total });
+      });
+
+      base += svcTotal;
+      lines.push({ type:'pervid', label: svcName, price: svcTotal, vidDetails });
+    });
+
+    return { total: base, lines };
   }
 
-  // ─── BUILD RECAP ───
+  // ── BUILD RECAP ──
   function buildRecap() {
-    const { total, lines, isUrgent } = calcPrice();
+    const { total, lines } = calcPrice();
     const fmt = v => v.toLocaleString('fr-FR') + ' €';
     const svcs = getChecked('services');
     const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
@@ -924,69 +824,54 @@
     document.getElementById('pricePeriod').textContent = isVSLOnly ? 'à l\'unité' : 'par mois';
 
     let html = '';
-
-    // ── Détail par service ──
     lines.forEach(l => {
-      if (l.type === 'motion') {
-        html += `<div class="price-svc-block">
-          <div class="price-svc-name">Motion design <span class="price-svc-badge">${l.badge}</span></div>
-          <div class="price-svc-row">
-            <span class="price-svc-row-label">${l.minsPerVid} min × ${l.longVids} vidéo${l.longVids > 1 ? 's' : ''} × 280 €/min</span>
-            <span class="price-svc-row-val">${fmt(l.price)}</span>
-          </div>
-          <div class="price-svc-row">
-            <span class="price-svc-row-label" style="color:var(--muted);font-style:italic;">Supplément au montage, facturé séparément</span>
-          </div>
-        </div>`;
-        return;
-      }
       if (l.type === 'fixed') {
         html += `<div class="price-svc-block">
           <div class="price-svc-name">${l.label}${l.badge ? ` <span class="price-svc-badge">${l.badge}</span>` : ''}</div>
           <div class="price-svc-row"><span class="price-svc-row-label">Forfait</span><span class="price-svc-row-val">${fmt(l.price)}</span></div>
         </div>`;
       } else {
+        const vidRows = l.vidDetails.map(vd =>
+          `<div class="price-svc-row">
+            <span class="price-svc-row-label">${vd.label}</span>
+            <span class="price-svc-row-val">${fmt(vd.total)}</span>
+          </div>`
+        ).join('');
         html += `<div class="price-svc-block">
-          <div class="price-svc-name">${l.label} <span class="price-svc-badge">${l.badge}</span></div>
-          <div class="price-svc-row">
-            <span class="price-svc-row-label">${l.labelShort} — ${l.v} × ${fmt(l.perShort)}</span>
-            <span class="price-svc-row-val">${fmt(l.short)}/mois</span>
-          </div>
-          <div class="price-svc-row">
-            <span class="price-svc-row-label">${l.labelLong} — ${l.v} × à partir de ${fmt(l.perLong)}</span>
-            <span class="price-svc-row-val alt">à partir de ${fmt(l.long)}/mois</span>
-          </div>
-          ${l.urg > 0 ? `<div class="price-urgency-row"><span>${l.urgLabel}</span><span>+${fmt(l.urg)}</span></div>` : ''}
+          <div class="price-svc-name">${l.label} <span class="price-svc-badge">${l.vidDetails.length} vidéo${l.vidDetails.length > 1 ? 's' : ''}</span></div>
+          ${vidRows}
         </div>`;
       }
     });
 
-    // ── Paiement en plusieurs fois ──
     if (paymentChoice > 1) {
-      const perInstall = Math.floor(total / paymentChoice);
-      const lastInstall = total - perInstall * (paymentChoice - 1);
-      const installRows = Array.from({ length: paymentChoice }, (_, i) => {
-        const amount = i === paymentChoice - 1 ? lastInstall : perInstall;
-        const label  = paymentChoice === 2
-          ? (i === 0 ? 'Acompte (50%)' : 'Solde (50%)')
-          : `Versement ${i + 1}`;
-        return `<div class="price-svc-row"><span class="price-svc-row-label">${label}</span><span class="price-svc-row-val">${fmt(amount)}</span></div>`;
+      const per = Math.floor(total / paymentChoice);
+      const last = total - per * (paymentChoice - 1);
+      const rows = Array.from({ length: paymentChoice }, (_, i) => {
+        const amt = i === paymentChoice - 1 ? last : per;
+        const lbl = paymentChoice === 2 ? (i === 0 ? 'Acompte (50%)' : 'Solde (50%)') : `Versement ${i+1}`;
+        return `<div class="price-svc-row"><span class="price-svc-row-label">${lbl}</span><span class="price-svc-row-val">${fmt(amt)}</span></div>`;
       }).join('');
-      html += `<div class="price-svc-block">
-        <div class="price-svc-name">💳 Paiement en ${paymentChoice} fois</div>
-        ${installRows}
-      </div>`;
+      html += `<div class="price-svc-block"><div class="price-svc-name">💳 Paiement en ${paymentChoice} fois</div>${rows}</div>`;
     }
 
     document.getElementById('priceDetail').innerHTML = html;
 
-    // ── Résumé réponses ──
-    const volStr = Object.keys(svcVols).length
-      ? Object.entries(svcVols).map(([k, v]) => `${k}: ${v}`).join(' · ')
-      : 'Non précisés';
+    // Détail vidéos pour le résumé
+    const vidDetailStr = ALL_SVC_CFG
+      .filter(cfg => briefVidState[cfg.id]?.length)
+      .map(cfg => {
+        const label = {youtube:'YouTube',vsl:'VSL',reels:'Reels',ads:'Ads',podcast:'Podcast'}[cfg.id];
+        return cfg.id + ': ' + briefVidState[cfg.id].map((v, i) => {
+          const dur = cfg.durations.find(d => d.v === v.dur)?.label || '';
+          let parts = [dur];
+          if (v.motion) parts.push('Motion');
+          if (v.urgence) parts.push('Urgent');
+          return `${cfg.vidLabel} ${i+1} (${parts.join(', ')})`;
+        }).join(' / ');
+      }).join(' | ') || 'Non précisés';
 
-    const payLabels = { 1: '1 paiement', 2: '2 fois (50%/50%)', 3: '3 fois (mensuel)' };
-
+    const payLabels = {1:'1 paiement', 2:'2 fois (50%/50%)', 3:'3 fois (mensuel)'};
     const rows = [
       ['Prénom',     document.getElementById('prenom').value],
       ['Email',      document.getElementById('email').value],
@@ -998,73 +883,75 @@
       ['Objectif',   getVal('objectif')],
       ['Horizon',    getVal('horizon')],
       ['Services',   svcs.join(', ')],
-      ['Volumes',    volStr],
+      ['Détail',     vidDetailStr],
       ['Budget',     document.getElementById('budget').value || 'Non précisé'],
       ['Paiement',   payLabels[paymentChoice] || '1 paiement'],
       ['Estimation', fmt(total) + (isVSLOnly ? ' / unité' : ' / mois')],
     ];
-
-    document.getElementById('summaryGrid').innerHTML = rows.map(([k, v]) =>
-      `<div class="summary-item"><span class="summary-key">${k}</span><span class="summary-val">${v || '—'}</span></div>`
+    document.getElementById('summaryGrid').innerHTML = rows.map(([k,v]) =>
+      `<div class="summary-item"><span class="summary-key">${k}</span><span class="summary-val">${v||'—'}</span></div>`
     ).join('');
   }
 
-  // ─── SUBMIT ───
+  // ── SUBMIT ──
   function submitBrief() {
     const btn = document.getElementById('submitBtn');
     btn.disabled = true; btn.textContent = 'Envoi…';
 
-    const { total, isUrgent } = calcPrice();
+    const { total } = calcPrice();
     const svcs = getChecked('services');
     const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
     const estimation = total.toLocaleString('fr-FR') + ' €' + (isVSLOnly ? ' / unité' : ' / mois');
-    const volStr = Object.entries(svcVols).map(([k, v]) => `${k}: ${v}`).join(', ') || 'Non précisés';
-    const payLabels = { 1: '1 paiement', 2: '2 fois (50%/50%)', 3: '3 fois (mensuel)' };
-
+    const payLabels = {1:'1 paiement', 2:'2 fois (50%/50%)', 3:'3 fois (mensuel)'};
     const clientName  = document.getElementById('prenom').value;
     const clientEmail = document.getElementById('email').value;
 
-    // ── 1. Netlify (backup données brutes) ──
+    const vidDetailStr = ALL_SVC_CFG
+      .filter(cfg => briefVidState[cfg.id]?.length)
+      .map(cfg => briefVidState[cfg.id].map((v, i) => {
+        const dur = cfg.durations.find(d => d.v === v.dur)?.label || '';
+        let parts = [dur];
+        if (v.motion) parts.push('Motion');
+        if (v.urgence) parts.push('Urgent');
+        return `${cfg.vidLabel} ${i+1} (${parts.join(', ')})`;
+      }).join(' / ')).join(' | ') || 'Non précisés';
+
     const netlifyPromise = fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        'form-name':         'brief',
-        'Prénom':             clientName,
-        'Email':              clientEmail,
-        'Activité':           getVal('activite'),
-        'Plateforme':         getChecked('plateforme').join(', '),
-        'Communauté':         getVal('communaute'),
-        'Régularité':         getVal('regularite'),
-        'Douleur principale': getVal('douleur'),
-        'Objectif':           getVal('objectif'),
-        'Horizon':            getVal('horizon'),
-        'Services':           svcs.join(', '),
-        'Volumes':            volStr,
-        'Budget envisagé':    document.getElementById('budget').value || 'Non précisé',
-        'Paiement':           payLabels[paymentChoice] || '1 paiement',
-        'Estimation':         estimation,
-        'Urgence':            isUrgent ? 'Oui' : 'Non',
-        'Message':            document.getElementById('message').value || '',
+        'form-name':        'brief',
+        'Prénom':            clientName,
+        'Email':             clientEmail,
+        'Activité':          getVal('activite'),
+        'Plateforme':        getChecked('plateforme').join(', '),
+        'Communauté':        getVal('communaute'),
+        'Régularité':        getVal('regularite'),
+        'Douleur principale':getVal('douleur'),
+        'Objectif':          getVal('objectif'),
+        'Horizon':           getVal('horizon'),
+        'Services':          svcs.join(', '),
+        'Détail vidéos':     vidDetailStr,
+        'Budget envisagé':   document.getElementById('budget').value || 'Non précisé',
+        'Paiement':          payLabels[paymentChoice] || '1 paiement',
+        'Estimation':        estimation,
+        'Message':           document.getElementById('message').value || '',
       }).toString()
     });
 
-    // ── 2. EmailJS (devis formaté HTML) ──
     let emailPromise = Promise.resolve();
     if (typeof emailjs !== 'undefined' && EJS.publicKey && EJS.serviceId && EJS.templateId) {
       try {
         emailjs.init({ publicKey: EJS.publicKey });
         emailPromise = emailjs.send(EJS.serviceId, EJS.templateId, {
-          client_name:  clientName  || 'Client',
+          client_name:  clientName || 'Client',
           client_email: clientEmail || '',
           html_body:    generateDevisHTML(),
         }).then(() => console.log('EmailJS OK ✅'))
           .catch(e => alert('EmailJS erreur: ' + (e.text || e.message || JSON.stringify(e))));
-      } catch(e) {
-        alert('EmailJS init erreur: ' + e.message);
-      }
+      } catch(e) { alert('EmailJS init erreur: ' + e.message); }
     } else {
-      alert('EmailJS non chargé ou config manquante — typeof emailjs: ' + typeof emailjs);
+      alert('EmailJS non chargé — typeof emailjs: ' + typeof emailjs);
     }
 
     Promise.all([netlifyPromise, emailPromise])
@@ -1076,165 +963,132 @@
     .catch(() => { btn.disabled = false; btn.textContent = 'Erreur — réessaie'; });
   }
 
-  // ─── GÉNÉRATION HTML EMAIL DEVIS ───
+  // ── GÉNÉRATION EMAIL HTML ──
   function generateDevisHTML() {
-    const { total, lines, isUrgent } = calcPrice();
-    const fmt  = v => v.toLocaleString('fr-FR') + ' €';
+    const { total, lines } = calcPrice();
+    const fmt = v => v.toLocaleString('fr-FR') + ' €';
     const svcs = getChecked('services');
     const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
     const prenom = document.getElementById('prenom').value || '';
     const email  = document.getElementById('email').value  || '';
     const date   = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
-    const payLabels = { 1:'1 paiement', 2:'2 fois (50%/50%)', 3:'3 fois (mensuel)' };
-    const bg   = '#fffcf2', line = '#ccc5b9', muted = '#403d39', text = '#252422';
-    const alt  = '#f7f5ee', sub  = '#e5e0d6';
+    const payLabels = {1:'1 paiement', 2:'2 fois (50%/50%)', 3:'3 fois (mensuel)'};
+    const bg='#fffcf2', line='#ccc5b9', muted='#403d39', text='#252422', alt='#f7f5ee', sub='#e5e0d6';
 
-    // ── lignes de services ──
     let svcRows = '';
     lines.forEach(l => {
       const sep = `<tr><td colspan="2" style="border-top:1px solid ${sub};"></td></tr>`;
       const badge = s => `<span style="font-size:10px;background:#ede9df;padding:2px 8px;border-radius:4px;color:${muted};text-transform:uppercase;letter-spacing:.05em;margin-left:6px;">${s}</span>`;
-      if (l.type === 'motion') {
-        svcRows += sep + `
-          <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">Motion design ${badge(l.badge)}</td></tr>
-          <tr>
-            <td style="padding:3px 0;font-size:13px;color:${muted};">${l.minsPerVid} min × ${l.longVids} vidéo${l.longVids>1?'s':''} × 280 €/min</td>
-            <td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(l.price)}</td>
-          </tr>
-          <tr><td colspan="2" style="font-size:12px;color:#9d9591;font-style:italic;padding-bottom:6px;">Supplément au montage, facturé séparément</td></tr>`;
-      } else if (l.type === 'fixed') {
+      if (l.type === 'fixed') {
         svcRows += sep + `
           <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">${l.label} ${l.badge ? badge(l.badge) : ''}</td></tr>
-          <tr>
-            <td style="padding:3px 0;font-size:13px;color:${muted};">Forfait</td>
-            <td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(l.price)}</td>
-          </tr>`;
+          <tr><td style="padding:3px 0;font-size:13px;color:${muted};">Forfait</td><td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(l.price)}</td></tr>`;
       } else {
+        const vidRows = l.vidDetails.map(vd =>
+          `<tr><td style="padding:3px 0;font-size:13px;color:${muted};">${vd.label}</td><td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(vd.total)}</td></tr>`
+        ).join('');
         svcRows += sep + `
-          <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">${l.label} ${badge(l.badge)}</td></tr>
-          <tr>
-            <td style="padding:3px 0;font-size:13px;color:${muted};">${l.labelShort} — ${l.v} × ${fmt(l.perShort)}</td>
-            <td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(l.short)}/mois</td>
-          </tr>
-          <tr>
-            <td style="font-size:13px;color:#9d9591;font-style:italic;padding:3px 0;">${l.labelLong} — ${l.v} × à partir de ${fmt(l.perLong)}</td>
-            <td style="text-align:right;font-size:13px;color:#9d9591;font-style:italic;">à partir de ${fmt(l.long)}/mois</td>
-          </tr>
-          ${l.urg > 0 ? `<tr>
-            <td style="font-size:13px;color:#c2651a;padding:3px 0;">⚡ ${l.urgLabel}</td>
-            <td style="text-align:right;font-size:13px;font-weight:600;color:#c2651a;">+${fmt(l.urg)}</td>
-          </tr>` : ''}`;
+          <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">${l.label} ${badge(l.vidDetails.length + ' vidéo' + (l.vidDetails.length > 1 ? 's' : ''))}</td></tr>
+          ${vidRows}`;
       }
     });
 
-    // ── paiement ──
     let payRows = '';
     if (paymentChoice > 1) {
-      const per  = Math.floor(total / paymentChoice);
+      const per = Math.floor(total / paymentChoice);
       const last = total - per * (paymentChoice - 1);
       const installs = Array.from({ length: paymentChoice }, (_, i) => {
-        const amt   = i === paymentChoice - 1 ? last : per;
-        const label = paymentChoice === 2 ? (i === 0 ? 'Acompte (50%)' : 'Solde (50%)') : `Versement ${i+1}`;
-        return `<tr>
-          <td style="padding:3px 0;font-size:13px;color:${muted};">${label}</td>
-          <td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(amt)}</td>
-        </tr>`;
+        const amt = i === paymentChoice - 1 ? last : per;
+        const lbl = paymentChoice === 2 ? (i===0?'Acompte (50%)':'Solde (50%)') : `Versement ${i+1}`;
+        return `<tr><td style="padding:3px 0;font-size:13px;color:${muted};">${lbl}</td><td style="text-align:right;font-size:13px;font-weight:600;color:${text};">${fmt(amt)}</td></tr>`;
       }).join('');
       payRows = `<tr><td colspan="2" style="border-top:1px solid ${sub};"></td></tr>
         <tr><td colspan="2" style="padding:14px 0 6px;font-size:13px;font-weight:700;color:${text};">💳 Paiement en ${paymentChoice} fois</td></tr>
         ${installs}`;
     }
 
-    // ── récap réponses ──
-    const volStr = Object.keys(svcVols).length
-      ? Object.entries(svcVols).map(([k,v])=>`${k}: ${v}`).join(' · ')
-      : 'Non précisés';
+    const vidDetailStr = ALL_SVC_CFG
+      .filter(cfg => briefVidState[cfg.id]?.length)
+      .map(cfg => {
+        return briefVidState[cfg.id].map((v, i) => {
+          const dur = cfg.durations.find(d => d.v === v.dur)?.label || '';
+          let parts = [dur];
+          if (v.motion) parts.push('Motion');
+          if (v.urgence) parts.push('Urgent');
+          return `${cfg.vidLabel} ${i+1} (${parts.join(', ')})`;
+        }).join(' / ');
+      }).join(' | ') || '—';
+
     const answers = [
-      ['Activité',         getVal('activite')],
-      ['Plateforme(s)',    getChecked('plateforme').join(', ')],
-      ['Communauté',       getVal('communaute')],
-      ['Régularité',       getVal('regularite')],
-      ['Douleur',          getVal('douleur')],
-      ['Objectif',         getVal('objectif')],
-      ['Horizon',          getVal('horizon')],
-      ['Services',         svcs.join(', ')],
-      ['Volumes',          volStr],
-      ['Budget envisagé',  document.getElementById('budget').value || 'Non précisé'],
-      ['Paiement',         payLabels[paymentChoice] || '1 paiement'],
-      ['Message',          document.getElementById('message').value || '—'],
+      ['Activité',        getVal('activite')],
+      ['Plateforme(s)',   getChecked('plateforme').join(', ')],
+      ['Communauté',      getVal('communaute')],
+      ['Régularité',      getVal('regularite')],
+      ['Douleur',         getVal('douleur')],
+      ['Objectif',        getVal('objectif')],
+      ['Horizon',         getVal('horizon')],
+      ['Services',        svcs.join(', ')],
+      ['Détail vidéos',   vidDetailStr],
+      ['Budget envisagé', document.getElementById('budget').value || 'Non précisé'],
+      ['Paiement',        payLabels[paymentChoice] || '1 paiement'],
+      ['Message',         document.getElementById('message').value || '—'],
     ];
-    const answerRows = answers.map(([k,v], i) => `
-      <tr style="background:${i%2===0 ? bg : alt};">
+    const answerRows = answers.map(([k,v], i) =>
+      `<tr style="background:${i%2===0?bg:alt};">
         <td style="padding:11px 18px;font-size:13px;color:${muted};width:170px;border-right:1px solid ${sub};">${k}</td>
         <td style="padding:11px 18px;font-size:13px;font-weight:500;color:${text};">${v||'—'}</td>
-      </tr>`).join('');
+      </tr>`
+    ).join('');
 
     return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:24px;background:#f0ede6;font-family:-apple-system,Helvetica Neue,Arial,sans-serif;">
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
 <table width="600" cellpadding="0" cellspacing="0" style="background:${bg};border-radius:16px;overflow:hidden;border:1px solid ${line};">
-
-  <!-- HEADER -->
   <tr><td style="padding:32px 40px 28px;border-bottom:2px solid ${text};">
     <table width="100%" cellpadding="0" cellspacing="0"><tr>
       <td><div style="font-size:22px;font-weight:800;letter-spacing:-0.04em;color:${text};">Alex.Studio</div>
-          <div style="font-size:11px;color:${muted};margin-top:5px;text-transform:uppercase;letter-spacing:.08em;">Devis client · ${date}</div></td>
+          <div style="font-size:11px;color:${muted};margin-top:5px;text-transform:uppercase;letter-spacing:.08em;">Brief client · ${date}</div></td>
       <td style="text-align:right;"><div style="font-size:15px;font-weight:700;color:${text};">${prenom}</div>
           <div style="font-size:13px;color:${muted};margin-top:3px;">${email}</div></td>
     </tr></table>
   </td></tr>
-
-  <!-- DEVIS -->
   <tr><td style="padding:32px 40px 0;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1.5px solid ${line};border-radius:14px;overflow:hidden;">
       <tr><td style="padding:30px 28px 0;">
-        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:${muted};">Investissement estimé (base)</div>
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:${muted};">Investissement estimé</div>
         <div style="font-size:52px;font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:${text};margin-top:6px;">${fmt(total)}</div>
-        <div style="font-size:14px;color:${muted};margin-top:4px;padding-bottom:20px;">${isVSLOnly ? "à l'unité" : 'par mois'}</div>
+        <div style="font-size:14px;color:${muted};margin-top:4px;padding-bottom:20px;">${isVSLOnly?"à l'unité":'par mois'}</div>
       </td></tr>
       <tr><td style="padding:0 28px 8px;">
         <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid ${sub};">
-          ${svcRows}
-          ${payRows}
+          ${svcRows}${payRows}
           <tr><td colspan="2" style="height:16px;"></td></tr>
         </table>
       </td></tr>
       <tr><td style="padding:16px 28px 24px;background:${alt};border-top:1px solid ${sub};">
-        <div style="font-size:12px;color:#9d9591;line-height:1.6;">💡 Cette estimation est indicative. Le tarif final sera défini lors de notre échange selon la durée réelle des vidéos et les détails du projet.</div>
+        <div style="font-size:12px;color:#9d9591;line-height:1.6;">💡 Estimation indicative. Le tarif final sera défini lors de notre échange selon la durée réelle des vidéos.</div>
       </td></tr>
     </table>
   </td></tr>
-
-  <!-- RÉCAP -->
   <tr><td style="padding:28px 40px 0;">
     <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:${muted};font-weight:600;margin-bottom:10px;">Réponses du client</div>
-    <table width="100%" cellpadding="0" cellspacing="0" style="border:1.5px solid ${line};border-radius:12px;overflow:hidden;">
-      ${answerRows}
-    </table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1.5px solid ${line};border-radius:12px;overflow:hidden;">${answerRows}</table>
   </td></tr>
-
-  <!-- FOOTER -->
-  <tr><td style="padding:24px 40px;margin-top:28px;">
+  <tr><td style="padding:24px 40px;">
     <div style="font-size:12px;color:${muted};border-top:1px solid ${sub};padding-top:20px;line-height:1.6;">
       <strong style="color:${text};">Alex.Studio</strong> · alexstudio.fr · hello@alex.studio
     </div>
   </td></tr>
-
 </table>
 </td></tr></table>
 </body></html>`;
   }
 
-  // ─── DOWNLOAD DEVIS PDF ───
+  // ── PDF ──
   function downloadDevis() {
-    // Remplit le header d'impression avec les infos client et la date
-    const prenom = document.getElementById('prenom').value || '';
-    const email  = document.getElementById('email').value  || '';
-    document.getElementById('printClientName').textContent  = prenom;
-    document.getElementById('printClientEmail').textContent = email;
-    document.getElementById('printDate').textContent = new Date().toLocaleDateString('fr-FR', {
-      day: '2-digit', month: 'long', year: 'numeric'
-    });
+    document.getElementById('printClientName').textContent  = document.getElementById('prenom').value || '';
+    document.getElementById('printClientEmail').textContent = document.getElementById('email').value  || '';
+    document.getElementById('printDate').textContent = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
     window.print();
   }
 
