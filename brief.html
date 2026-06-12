@@ -490,7 +490,7 @@
             <button type="button" class="vol-tag" data-svc="podcast" data-val="4">4 épisodes</button>
           </div>
           <div class="brief-vid-table" id="podcast-brief-rows"></div>
-          <p class="svc-detail-note">💡 <strong>200 €/épisode</strong> (< 1h) · <strong>dès 300 €</strong> (> 1h) · Intro animée : <strong>sur devis</strong> · Urgence : <strong>+250 €/épisode</strong></p>
+          <p class="svc-detail-note">💡 <strong>200 €/épisode</strong> (< 1h) · <strong>dès 300 €</strong> (> 1h) · Intro animée : <strong>+300 €</strong> · Urgence : <strong>+250 €/épisode</strong></p>
         </div>
 
       </div>
@@ -622,7 +622,7 @@
     { id:'vsl',     vidLabel:'VSL',     rowsId:'vsl-brief-rows',     durations:VSL_DUR,   motionType:'minutes', urgPrice:400, motionEst:840 },
     { id:'reels',   vidLabel:'Reel',    rowsId:'reels-brief-rows',   durations:REELS_DUR, motionType:'checkbox', urgPrice:80, motionEst:40 },
     { id:'ads',     vidLabel:'Pub',     rowsId:'ads-brief-rows',     durations:ADS_DUR,   motionType:'checkbox', urgPrice:80, motionEst:40 },
-    { id:'podcast', vidLabel:'Épisode', rowsId:'podcast-brief-rows', durations:POD_DUR,   motionType:'none', hasIntro:true, urgPrice:250 },
+    { id:'podcast', vidLabel:'Épisode', rowsId:'podcast-brief-rows', durations:POD_DUR,   motionType:'none', hasIntro:true, introPrice:300, urgPrice:250 },
   ];
 
   // ── STATE ──
@@ -831,8 +831,9 @@
         const motion  = cfg.motionType === 'minutes'
           ? (vid.motion || 0) * TARIFS.motion_per_min
           : cfg.motionType === 'checkbox' ? (vid.motion ? TARIFS.motion_short : 0) : 0;
+        const intro   = (vid.intro && cfg.introPrice) ? cfg.introPrice : 0;
         const urgence = vid.urgence ? cfg.urgPrice : 0;
-        const total   = montage + motion + urgence;
+        const total   = montage + motion + intro + urgence;
         svcTotal += total;
 
         let parts = [durOpt.label];
