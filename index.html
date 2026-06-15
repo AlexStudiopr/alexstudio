@@ -443,7 +443,7 @@
     }
     @media (max-width: 600px) {
       .nav-links { display: none; }
-      .hero-wrapper { height: 130vh; }
+      .hero-wrapper { height: 150vh; }
       .hero-vsl { width: 92vw; }
       .container { padding: 56px 20px; }
       .avis-section { padding: 48px 0 60px; }
@@ -761,35 +761,53 @@
   });
   setTimeout(() => sublineEl.classList.add('visible'), 300 + wordSpans.length * 80 + 100);
 
-  // ─── HERO SCROLL — texte monte, VSL entre ───
+  // ─── HERO SCROLL — texte monte, VSL entre (lissé) ───
   const heroWrapper = document.getElementById('heroWrapper');
   const heroText    = document.getElementById('heroText');
   const heroVSL     = document.getElementById('heroVSL');
   const scrollHint  = document.getElementById('scrollHint');
 
-  function easeIO(t) { return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t; }
   function easeOut3(t) { return 1 - Math.pow(1 - t, 3); }
+
+  // Le scroll définit une cible ; une boucle rAF rapproche l'affichage
+  // progressivement de cette cible → apparition fluide même si le scroll
+  // tactile est saccadé (fling). Toujours 100 % piloté par le scroll.
+  let heroTarget  = 0;   // progression réelle du scroll
+  let heroCurrent = 0;   // progression affichée (lissée)
+  let heroRafId   = null;
+
+  function applyHero(raw) {
+    const p = easeOut3(Math.max(0, Math.min(1, raw / 0.55)));
+    heroText.style.transform = `translate(-50%, calc(-50% - ${p * 160}px))`;
+    heroText.style.opacity   = String(1 - p);
+    heroVSL.style.opacity   = String(p);
+    heroVSL.style.transform = `translate(-50%, calc(-50% + ${60 * (1 - p)}vh)) scale(${0.92 + 0.08 * p})`;
+    heroVSL.style.filter    = `blur(${8 * (1 - p)}px)`;
+  }
+
+  function renderHero() {
+    heroCurrent += (heroTarget - heroCurrent) * 0.12;   // lissage
+    if (Math.abs(heroTarget - heroCurrent) < 0.0004) {
+      heroCurrent = heroTarget;
+      applyHero(heroCurrent);
+      heroRafId = null;                                  // cible atteinte → on stoppe
+      return;
+    }
+    applyHero(heroCurrent);
+    heroRafId = requestAnimationFrame(renderHero);
+  }
 
   function onHeroScroll() {
     const rect    = heroWrapper.getBoundingClientRect();
     const scrollH = heroWrapper.offsetHeight - window.innerHeight;
-    const raw     = Math.max(0, Math.min(1, -rect.top / scrollH));
-
-    scrollHint.classList.toggle('hidden', raw > 0.015);
-
-    // Texte et VSL s'animent ensemble, même timing, sans décalage
-    const tP = easeOut3(Math.max(0, Math.min(1, raw / 0.55)));
-    heroText.style.transform = `translate(-50%, calc(-50% - ${tP * 160}px))`;
-    heroText.style.opacity   = String(1 - tP);
-
-    const vP = easeOut3(Math.max(0, Math.min(1, raw / 0.55)));
-    heroVSL.style.opacity   = String(vP);
-    heroVSL.style.transform = `translate(-50%, calc(-50% + ${60 * (1 - vP)}vh)) scale(${0.92 + 0.08 * vP})`;
-    heroVSL.style.filter    = `blur(${8 * (1 - vP)}px)`;
+    heroTarget    = Math.max(0, Math.min(1, -rect.top / scrollH));
+    scrollHint.classList.toggle('hidden', heroTarget > 0.015);
+    if (!heroRafId) heroRafId = requestAnimationFrame(renderHero);
   }
 
   window.addEventListener('scroll', onHeroScroll, { passive: true });
   onHeroScroll();
+  applyHero(0);
 
   // ─── AVIS — bande infinie sans saut ───
   const AVIS = [
