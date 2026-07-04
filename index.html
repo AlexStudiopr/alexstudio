@@ -76,6 +76,7 @@
       text-align: center; width: 100%; padding: 0 48px;
       will-change: transform, opacity;
       z-index: 2;
+      pointer-events: none;   /* laisse passer les clics vers la VSL en dessous */
     }
     .hero-headline {
       font-size: clamp(36px, 5.5vw, 80px);
@@ -489,7 +490,7 @@
     </div>
     <div class="hero-vsl" id="heroVSL" aria-hidden="true">
       <div class="vsl-inner">
-        <iframe src="https://www.youtube.com/embed/CyUoeerElhc?rel=0&modestbranding=1&playsinline=1&controls=0&disablekb=1&iv_load_policy=3&fs=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="Alex.Studio — Présentation"></iframe>
+        <iframe src="https://www.youtube.com/embed/CyUoeerElhc?rel=0&modestbranding=1&playsinline=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Alex.Studio — Présentation"></iframe>
       </div>
     </div>
     <div class="scroll-hint" id="scrollHint" aria-hidden="true">Scroll</div>
@@ -773,6 +774,8 @@
     heroVSL.style.opacity   = String(p);
     heroVSL.style.transform = `translate(-50%, calc(-50% + ${60 * (1 - p)}vh)) scale(${0.92 + 0.08 * p})`;
     heroVSL.style.filter    = `blur(${8 * (1 - p)}px)`;
+    // Cliquable uniquement une fois révélée (sinon on cliquerait la VSL invisible)
+    heroVSL.style.pointerEvents = p > 0.6 ? 'auto' : 'none';
   }
 
   function renderHero() {
