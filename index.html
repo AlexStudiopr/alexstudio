@@ -171,6 +171,45 @@
     .avis-stars { font-size: 20px; color: #f0b429; letter-spacing: 3px; margin-bottom: 16px; line-height: 1; }
     .avis-name { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; margin-bottom: 5px; }
     .avis-role { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .avis-btn {
+      margin-top: 16px;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 999px;
+      border: 1.5px solid var(--text); background: transparent;
+      font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--text);
+      cursor: pointer; letter-spacing: -0.01em;
+      transition: background 0.25s var(--ease), color 0.25s var(--ease), transform 0.3s var(--ease);
+    }
+    .avis-btn:hover { background: var(--text); color: var(--bg); transform: scale(0.97); }
+    .avis-btn svg { width: 11px; height: 11px; }
+
+    /* ─── MODALE AVIS (short vertical) ─── */
+    .avis-modal {
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      background: rgba(20,19,17,0.88);
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.35s var(--ease), visibility 0.35s var(--ease);
+    }
+    .avis-modal.open { opacity: 1; visibility: visible; }
+    .avis-modal-stage {
+      position: relative; width: min(380px, 88vw); aspect-ratio: 9 / 16; max-height: 90vh;
+      border-radius: 18px; overflow: hidden; background: #000;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      transform: scale(0.96); transition: transform 0.35s var(--ease);
+    }
+    .avis-modal.open .avis-modal-stage { transform: scale(1); }
+    .avis-modal-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .avis-modal-close {
+      position: absolute; top: 20px; right: 24px;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: none; background: rgba(255,255,255,0.14); color: #fff;
+      font-size: 17px; cursor: pointer; z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .avis-modal-close:hover { background: rgba(255,255,255,0.28); }
 
     /* ─── COMMON SECTION ─── */
     .container { max-width: 1200px; margin: 0 auto; padding: 100px 48px; }
@@ -509,6 +548,12 @@
   </div>
 </section>
 
+<!-- ─── MODALE AVIS ─── -->
+<div class="avis-modal" id="avisModal" role="dialog" aria-modal="true" aria-label="Avis vidéo" aria-hidden="true">
+  <button class="avis-modal-close" id="avisModalClose" type="button" aria-label="Fermer">✕</button>
+  <div class="avis-modal-stage" id="avisModalStage"></div>
+</div>
+
 <!-- ─── APPROCHE ─── -->
 <section id="approche" aria-label="Approche">
   <div class="container">
@@ -804,20 +849,22 @@
 
   // ─── AVIS — bande infinie sans saut ───
   const AVIS = [
-    { photo: 'clients/clement.jpg',      pos: 'center top',    name: 'Clément Geynet', role: 'Entrepreneur'        },
+    { photo: 'clients/clement.jpg',      pos: 'center top',    name: 'Clément Geynet', role: 'Entrepreneur',        video: 'AgNmxyBS1zs' },
     { photo: 'clients/alexis.jpg',       pos: 'center top',    name: 'Alexis Dodin',   role: 'Créateur de contenu' },
     { photo: 'clients/matheo.png',       pos: '38% center',    name: 'Mathéo Vidal',   role: 'Entrepreneur'        },
     { photo: 'clients/KonnectLogo2.png', pos: 'center center', name: 'Konnect',         role: 'Agence'              },
   ];
+  const PLAY_MINI = `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 5.14v14.72L19 12 8 5.14z" fill="currentColor"/></svg>`;
   const avisTrack = document.getElementById('avisTrack');
-  [...AVIS, ...AVIS, ...AVIS].forEach(({ photo, pos, name, role }) => {
+  [...AVIS, ...AVIS, ...AVIS].forEach(({ photo, pos, name, role, video }) => {
     const card = document.createElement('div');
     card.className = 'avis-card';
     card.innerHTML = `
       <img class="avis-photo" src="${photo}" alt="${name}" style="object-position:${pos};" loading="lazy"/>
       <div class="avis-stars">★★★★★</div>
       <div class="avis-name">${name}</div>
-      <div class="avis-role">${role}</div>`;
+      <div class="avis-role">${role}</div>
+      ${video ? `<button type="button" class="avis-btn" data-video="${video}">${PLAY_MINI} Avis</button>` : ''}`;
     avisTrack.appendChild(card);
   });
 
@@ -846,8 +893,35 @@
   // Pause quand onglet invisible pour éviter drift
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) { cancelAnimationFrame(avisRafId); avisRafId = null; }
-    else if (!avisRafId) avisRafId = requestAnimationFrame(avisStep);
+    else if (!avisRafId && !avisModal.classList.contains('open')) avisRafId = requestAnimationFrame(avisStep);
   });
+
+  // ─── MODALE AVIS — lecture du short au clic ───
+  const avisModal = document.getElementById('avisModal');
+  const avisStage = document.getElementById('avisModalStage');
+
+  function openAvisModal(id) {
+    avisStage.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Avis vidéo"></iframe>`;
+    avisModal.classList.add('open');
+    avisModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (avisRafId) { cancelAnimationFrame(avisRafId); avisRafId = null; }   // stoppe le défilement
+  }
+  function closeAvisModal() {
+    avisModal.classList.remove('open');
+    avisModal.setAttribute('aria-hidden', 'true');
+    avisStage.innerHTML = '';                                              // coupe la lecture
+    document.body.style.overflow = '';
+    if (!document.hidden && !avisRafId) avisRafId = requestAnimationFrame(avisStep);
+  }
+
+  avisTrack.addEventListener('click', e => {
+    const btn = e.target.closest('.avis-btn');
+    if (btn) openAvisModal(btn.dataset.video);
+  });
+  document.getElementById('avisModalClose').addEventListener('click', closeAvisModal);
+  avisModal.addEventListener('click', e => { if (e.target === avisModal) closeAvisModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && avisModal.classList.contains('open')) closeAvisModal(); });
 
   // ─── REVEAL ───
   const revealObs = new IntersectionObserver(entries => {
