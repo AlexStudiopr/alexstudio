@@ -412,14 +412,12 @@
         <div class="svc-detail" id="svc-strategie" style="display:none;">
           <div class="svc-detail-head"><span class="svc-detail-head-icon">🧭</span>Stratégie de contenu — Forfait mensuel</div>
           <p style="font-size:13px;color:var(--muted);line-height:1.55;">Positionnement, piliers de contenu, calendrier éditorial 90 jours, scripts, plan mensuel et reporting.</p>
-          <p class="svc-detail-note">💡 <strong>900 €/mois</strong></p>
         </div>
 
         <!-- Audit -->
         <div class="svc-detail" id="svc-audit" style="display:none;">
           <div class="svc-detail-head"><span class="svc-detail-head-icon">🔍</span>Audit stratégique — Prestation one-shot</div>
           <p style="font-size:13px;color:var(--muted);line-height:1.55;">Analyse complète du compte, benchmark 5 concurrents, 10 actions prioritaires. Livrable : Loom 15–20 min + document écrit.</p>
-          <p class="svc-detail-note">💡 <strong>350 €</strong> — one-shot</p>
         </div>
 
         <!-- YouTube -->
@@ -434,7 +432,6 @@
             <button type="button" class="vol-tag" data-svc="youtube" data-val="5">5 vidéos</button>
           </div>
           <div class="brief-vid-table" id="yt-brief-rows"></div>
-          <p class="svc-detail-note">💡 Dès <strong>250 €/vidéo</strong> · Motion design : <strong>+280 €/min</strong> · Urgence : <strong>+250 €/vidéo</strong></p>
         </div>
 
         <!-- VSL -->
@@ -447,7 +444,6 @@
             <button type="button" class="vol-tag" data-svc="vsl" data-val="3">3 VSL</button>
           </div>
           <div class="brief-vid-table" id="vsl-brief-rows"></div>
-          <p class="svc-detail-note">💡 Dès <strong>300 €/VSL</strong> · Motion design : <strong>+280 €/min</strong> · Urgence : <strong>+400 €/VSL</strong></p>
         </div>
 
         <!-- Reels -->
@@ -462,7 +458,6 @@
             <button type="button" class="vol-tag" data-svc="reels" data-val="10">10 reels</button>
           </div>
           <div class="brief-vid-table" id="reels-brief-rows"></div>
-          <p class="svc-detail-note">💡 <strong>60 €/reel</strong> (< 1 min) · <strong>80 €/reel</strong> (> 1 min) · Motion : <strong>+40 €</strong> · Urgence : <strong>+80 €</strong></p>
         </div>
 
         <!-- Ads -->
@@ -476,7 +471,6 @@
             <button type="button" class="vol-tag" data-svc="ads" data-val="8">8 pubs</button>
           </div>
           <div class="brief-vid-table" id="ads-brief-rows"></div>
-          <p class="svc-detail-note">💡 <strong>60 €/pub</strong> (< 1 min) · <strong>80 €/pub</strong> (> 1 min) · Motion : <strong>+40 €</strong> · Urgence : <strong>+80 €</strong></p>
         </div>
 
         <!-- Podcast -->
@@ -490,7 +484,6 @@
             <button type="button" class="vol-tag" data-svc="podcast" data-val="4">4 épisodes</button>
           </div>
           <div class="brief-vid-table" id="podcast-brief-rows"></div>
-          <p class="svc-detail-note">💡 <strong>200 €/épisode</strong> (< 1h) · <strong>dès 300 €</strong> (> 1h) · Intro animée : <strong>+100 €</strong> · Urgence : <strong>+250 €/épisode</strong></p>
         </div>
 
       </div>
@@ -531,8 +524,8 @@
 
   <!-- ── ÉTAPE 5 — RÉCAPITULATIF ── -->
   <div class="step" id="step-5">
-    <h1 class="step-title">Ton estimation.</h1>
-    <p class="step-sub">Récapitulatif de ton brief et fourchette de prix indicative selon tes choix.</p>
+    <h1 class="step-title">Ta demande.</h1>
+    <p class="step-sub">Voici le récapitulatif de ton brief. Je reviens vers toi rapidement avec une proposition personnalisée.</p>
 
     <div class="print-header">
       <div>
@@ -545,18 +538,10 @@
       </div>
     </div>
 
-    <div class="price-box">
-      <div class="price-label">Investissement estimé (base)</div>
-      <div class="price-amount" id="priceAmount">—</div>
-      <div class="price-period" id="pricePeriod">par mois</div>
-      <div class="price-detail" id="priceDetail"></div>
-      <p class="price-disclaimer">💡 Cette estimation est indicative. Le tarif final sera défini lors de notre échange, selon la durée réelle des vidéos et les détails du projet.</p>
-    </div>
-
     <div class="summary-grid" id="summaryGrid"></div>
 
     <div class="print-footer">
-      <p>Ce devis est indicatif. Les tarifs sont calculés sur la base des informations fournies. Le montant final sera confirmé lors de notre échange.</p>
+      <p>Merci pour ta confiance. Je reviens vers toi sous 24h avec une proposition personnalisée et un tarif adapté à ton projet.</p>
       <p style="margin-top:6px;font-weight:600;">Alex.Studio · alexstudio.fr · hello@alex.studio</p>
     </div>
 
@@ -582,7 +567,6 @@
     <div class="btn-row">
       <button class="btn-prev" onclick="prevStep(5)">← Modifier</button>
       <button class="btn-next" id="submitBtn" onclick="submitBrief()">Envoyer mon brief ✉️</button>
-      <button type="button" class="btn-download" onclick="downloadDevis()">⬇ PDF</button>
     </div>
   </div>
 
@@ -851,55 +835,19 @@
     return { total: base, lines };
   }
 
-  // ── BUILD RECAP ──
+  // ── BUILD RECAP (client — aucun prix affiché) ──
   function buildRecap() {
-    const { total, lines } = calcPrice();
-    const fmt = v => v.toLocaleString('fr-FR') + ' €';
     const svcs = getChecked('services');
-    const isVSLOnly = svcs.length === 1 && svcs[0] === 'VSL (vidéo de vente)';
 
-    document.getElementById('priceAmount').textContent = fmt(total);
-    document.getElementById('pricePeriod').textContent = isVSLOnly ? 'à l\'unité' : 'par mois';
+    // En-tête du récap
+    document.getElementById('printClientName').textContent  = document.getElementById('prenom').value || '';
+    document.getElementById('printClientEmail').textContent = document.getElementById('email').value  || '';
+    document.getElementById('printDate').textContent = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
 
-    let html = '';
-    lines.forEach(l => {
-      if (l.type === 'fixed') {
-        html += `<div class="price-svc-block">
-          <div class="price-svc-name">${l.label}${l.badge ? ` <span class="price-svc-badge">${l.badge}</span>` : ''}</div>
-          <div class="price-svc-row"><span class="price-svc-row-label">Forfait</span><span class="price-svc-row-val">${fmt(l.price)}</span></div>
-        </div>`;
-      } else {
-        const vidRows = l.vidDetails.map(vd =>
-          `<div class="price-svc-row">
-            <span class="price-svc-row-label">${vd.label}</span>
-            <span class="price-svc-row-val">${fmt(vd.total)}</span>
-          </div>`
-        ).join('');
-        html += `<div class="price-svc-block">
-          <div class="price-svc-name">${l.label} <span class="price-svc-badge">${l.vidDetails.length} vidéo${l.vidDetails.length > 1 ? 's' : ''}</span></div>
-          ${vidRows}
-        </div>`;
-      }
-    });
-
-    if (paymentChoice > 1) {
-      const per = Math.floor(total / paymentChoice);
-      const last = total - per * (paymentChoice - 1);
-      const rows = Array.from({ length: paymentChoice }, (_, i) => {
-        const amt = i === paymentChoice - 1 ? last : per;
-        const lbl = paymentChoice === 2 ? (i === 0 ? 'Acompte (50%)' : 'Solde (50%)') : `Versement ${i+1}`;
-        return `<div class="price-svc-row"><span class="price-svc-row-label">${lbl}</span><span class="price-svc-row-val">${fmt(amt)}</span></div>`;
-      }).join('');
-      html += `<div class="price-svc-block"><div class="price-svc-name">💳 Paiement en ${paymentChoice} fois</div>${rows}</div>`;
-    }
-
-    document.getElementById('priceDetail').innerHTML = html;
-
-    // Détail vidéos pour le résumé
+    // Détail vidéos pour le résumé (choix du client, sans prix)
     const vidDetailStr = ALL_SVC_CFG
       .filter(cfg => briefVidState[cfg.id]?.length)
       .map(cfg => {
-        const label = {youtube:'YouTube',vsl:'VSL',reels:'Reels',ads:'Ads',podcast:'Podcast'}[cfg.id];
         return cfg.id + ': ' + briefVidState[cfg.id].map((v, i) => {
           const dur = cfg.durations.find(d => d.v === v.dur)?.label || '';
           let parts = [dur];
@@ -926,7 +874,6 @@
       ['Détail',     vidDetailStr],
       ['Budget',     document.getElementById('budget').value || 'Non précisé'],
       ['Paiement',   payLabels[paymentChoice] || '1 paiement'],
-      ['Estimation', fmt(total) + (isVSLOnly ? ' / unité' : ' / mois')],
     ];
     document.getElementById('summaryGrid').innerHTML = rows.map(([k,v]) =>
       `<div class="summary-item"><span class="summary-key">${k}</span><span class="summary-val">${v||'—'}</span></div>`
@@ -1124,14 +1071,6 @@
 </table>
 </td></tr></table>
 </body></html>`;
-  }
-
-  // ── PDF ──
-  function downloadDevis() {
-    document.getElementById('printClientName').textContent  = document.getElementById('prenom').value || '';
-    document.getElementById('printClientEmail').textContent = document.getElementById('email').value  || '';
-    document.getElementById('printDate').textContent = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' });
-    window.print();
   }
 
   updateProgress(1);
